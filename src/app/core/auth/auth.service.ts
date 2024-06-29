@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
-import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -68,7 +67,7 @@ export class AuthService {
                 this._authenticated = true;
 
                 // Store the user on the user service
-                this._userService.user = {id: response.id, name: response.name, email: response.email, avatar: "", status: ""};
+                this._userService.user = {id: response.id, name: response.name, email: response.email, role: response.role, avatar: "", status: ""};
                 // Return a new observable with the response
                 return of(response);
             })
@@ -81,7 +80,7 @@ export class AuthService {
     signInUsingToken(): Observable<any> {
         // Sign in using the token
         return this._httpClient
-            .post('api/auth/sign-in-with-token', {
+            .post('http://localhost:8080/auth/login-token', {
                 accessToken: this.accessToken,
             })
             .pipe(
@@ -97,15 +96,17 @@ export class AuthService {
                     // in using the token, you should generate a new one on the server
                     // side and attach it to the response object. Then the following
                     // piece of code can replace the token with the refreshed one.
-                    if (response.accessToken) {
+                    /*if (response.accessToken) {
                         this.accessToken = response.accessToken;
-                    }
+                    }*/
+                   if (!response.jwt)
+                        return of(false);
 
                     // Set the authenticated flag to true
                     this._authenticated = true;
 
                     // Store the user on the user service
-                    this._userService.user = response.user;
+                    this._userService.user = {id: response.id, name: response.name, email: response.email, role:response.role, avatar: "", status: ""};
 
                     // Return true
                     return of(true);
@@ -132,13 +133,15 @@ export class AuthService {
      *
      * @param user
      */
-    signUp(user: {
-        name: string;
+    signUp(user:{
+        nom: string;
         email: string;
         password: string;
-        company: string;
+        adresse: string;
+        tel1?: string;
+        tel2: string;
     }): Observable<any> {
-        return this._httpClient.post('api/auth/sign-up', user);
+        return this._httpClient.post('http://localhost:8080/auth/register', user);
     }
 
     /**
@@ -154,25 +157,67 @@ export class AuthService {
     }
 
     /**
+     * Check if token is expired
+     * 
+     * @param token
+     * @param offsetSeconds
+     */
+    isTokenExpired(token: string, offsetSeconds?: number): boolean {
+        this._httpClient.get('http://localhost:8080/auth/check-token', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }).subscribe((response) => {
+            return response;
+        });
+        return false;
+    }
+
+    /**
+     * check if the user has a specific role
+     * 
+     * @param role
+     * @returns Observable<boolean>
+     */
+    hasRole(role: string): Observable<boolean> {
+        return this._userService.get().pipe(
+          map(user => user.role === role)
+        );
+      }
+
+    /**
+     * Get the current user
+     * 
+     * @returns Observable<any>
+     */
+    getCurrentUser(): Observable<any> {
+        return this._userService.getDetails();
+    }
+
+    /**
      * Check the authentication status
      */
     check(): Observable<boolean> {
         // Check if the user is logged in
         if (this._authenticated) {
+            console.log("Authenticated");
             return of(true);
         }
 
         // Check the access token availability
         if (!this.accessToken) {
+            console.log("No access token");
             return of(false);
         }
 
         // Check the access token expire date
-        if (AuthUtils.isTokenExpired(this.accessToken)) {
+        if (this.isTokenExpired(this.accessToken)) {
+            console.log("Token expired");
             return of(false);
         }
 
         // If the access token exists, and it didn't expire, sign in using it
+        console.log("Sign in using token");
         return this.signInUsingToken();
     }
 }

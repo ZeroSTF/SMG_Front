@@ -7,7 +7,7 @@
         <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
             <!-- Logo -->
             <div class="w-12">
-                <img src="images/logo/logo.svg" />
+                <img src="images/logo/logo.png" />
             </div>
 
             <!-- Title -->
@@ -43,8 +43,8 @@
                 <!-- Name field -->
                 <mat-form-field class="w-full">
                     <mat-label>Full name</mat-label>
-                    <input id="name" matInput [formControlName]="'name'" />
-                    @if (signUpForm.get('name').hasError('required')) {
+                    <input id="nom" matInput [formControlName]="'nom'" />
+                    @if (signUpForm.get('nom').hasError('required')) {
                         <mat-error> Full name is required </mat-error>
                     }
                 </mat-form-field>
@@ -99,14 +99,47 @@
                     <mat-error> Password is required </mat-error>
                 </mat-form-field>
 
-                <!-- Company field -->
+                <!-- address field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Company</mat-label>
+                    <mat-label>Adresse</mat-label>
+                    <input id="adresse" matInput [formControlName]="'adresse'" />
+                    @if (signUpForm.get('adresse').hasError('required')) {
+                        <mat-error> Address is required </mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- tel1 field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Numero Fixe</mat-label>
                     <input
-                        id="company-confirm"
+                        id="tel1"
                         matInput
-                        [formControlName]="'company'"
+                        [formControlName]="'tel1'"
                     />
+                </mat-form-field>
+
+                <!-- tel2 field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Numero Mobile</mat-label>
+                    <input id="tel2" matInput [formControlName]="'tel2'" />
+                    @if (signUpForm.get('tel2').hasError('required')) {
+                        <mat-error> Phone Number is required </mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field class="w-full">
+                    <mat-label>Matricule</mat-label>
+                    <input type="file" id="mat" (change)="onFileChange($event)" accept="image/*" style="display: none;" />
+                    <input type="text" id="mat" matInput [formControlName]="'mat'" [value]="imageSrc" style="display: none;"/>
+                    <button mat-button (click)="openFileDialog()">Upload Image</button>
+                    @if(imageSrc){
+                    <div style="margin-top: 10px;">
+                        <img [src]="imageSrc" alt="Matricule Image Preview" style="max-width: 100%; max-height: 200px; object-fit: cover;"/>
+                    </div>
+                    }
+                    @if (signUpForm.get('mat').hasError('required')) {
+                        <mat-error> Matricule is required </mat-error>
+                    }
                 </mat-form-field>
 
                 <!-- ToS and PP -->

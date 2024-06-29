@@ -36,10 +36,16 @@ export class UserService {
     get(): Observable<User> {
         return this._httpClient.get<User>('http://localhost:8080/user/current').pipe(
             tap((user) => {
-                console.log(user);
                 this._user.next(user);
             })
         );
+    }
+
+    /**
+     * Get all of the current user's data
+     */
+    getDetails(): Observable<any> {
+        return this._httpClient.get('http://localhost:8080/user/currentDetails');
     }
 
     /**

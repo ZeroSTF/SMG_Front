@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgClass, NgIf } from '@angular/common';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -17,13 +17,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CommandeService } from 'app/modules/admin/dashboards/commandes/commande.service';
+import { ClientService } from 'app/modules/admin/dashboards/clients/client.service';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector     : 'commandes',
-    templateUrl  : './commandes.component.html',
+    selector     : 'clients',
+    templateUrl  : './clients.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
@@ -39,31 +39,31 @@ import { Subject, takeUntil } from 'rxjs';
         MatProgressBarModule,
         CurrencyPipe,
         DatePipe,
-        MatPaginator
+        MatPaginator,
+        NgIf
     ],
 })
-export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy 
+export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy 
 {
-    @ViewChild('commandesTable', { read: MatSort })
-    commandesTableMatSort: MatSort;
+    @ViewChild('clientsTable', { read: MatSort })
+    clientsTableMatSort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     data: any;
-    commandesDataSource: MatTableDataSource<any> =
+    clientsDataSource: MatTableDataSource<any> =
         new MatTableDataSource();
-    commandesTableColumns: string[] = [
-        'nFact',
-        'datvte',
-        'brutht',
-        'etat',
-        'pdf'
+    clientsTableColumns: string[] = [
+        'code',
+        'nom',
+        'num',
+        'conf'
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
    
     /**
      * Constructor
      */
-    constructor(private _commandeService: CommandeService, private _router: Router) {}
+    constructor(private _clientService: ClientService, private _router: Router) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -74,14 +74,14 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void {
         // Get the data
-        this._commandeService.data$
+        this._clientService.data$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 // Store the data
                 this.data = data;
 
                 // Store the table data
-                this.commandesDataSource.data =
+                this.clientsDataSource.data =
                     data;//.recentTransactions;
             });
     }
@@ -91,9 +91,9 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngAfterViewInit(): void {
         // Make the data source sortable
-        this.commandesDataSource.sort =
-            this.commandesTableMatSort;
-        this.commandesDataSource.paginator = this.paginator;
+        this.clientsDataSource.sort =
+            this.clientsTableMatSort;
+        this.clientsDataSource.paginator = this.paginator;
     }
 
     /**
@@ -143,6 +143,10 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     openPdf(nfact: string): void {
-         this._router.navigate(['/dashboards/commandes-pdf', nfact]);
+         this._router.navigate(['/dashboards/clients-pdf', nfact]);
     }
+
+    onPendingClick(client: any): void {
+        this._clientService.activate(client);
+      }
 }

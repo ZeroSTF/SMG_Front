@@ -1,9 +1,15 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
-import { LandingHomeComponent } from 'app/modules/landing/home/home.component';
+import { HomeComponent } from 'app/modules/landing/home/home.component';
+import { HomeService } from './home.service';
 
 export default [
     {
         path: '',
-        component: LandingHomeComponent,
+        component: HomeComponent,
+        resolve: {
+            data: () => inject(HomeService).getData(),
+            currentUser: () => inject(HomeService).getCurrentUser(),
+        },
     },
 ] as Routes;

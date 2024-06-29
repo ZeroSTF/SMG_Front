@@ -47,6 +47,8 @@ export class AuthSignUpComponent implements OnInit {
     signUpForm: UntypedFormGroup;
     showAlert: boolean = false;
 
+    imageSrc: string | ArrayBuffer | null = null;
+
     /**
      * Constructor
      */
@@ -66,10 +68,13 @@ export class AuthSignUpComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signUpForm = this._formBuilder.group({
-            name: ['', Validators.required],
+            nom: ['', Validators.required],
             email: ['', [Validators.required, Validators.email]],
             password: ['', Validators.required],
-            company: [''],
+            adresse: ['', Validators.required],
+            tel1: [''],
+            tel2: ['', Validators.required],
+            mat: [null, Validators.required],
             agreements: ['', Validators.requiredTrue],
         });
     }
@@ -117,4 +122,25 @@ export class AuthSignUpComponent implements OnInit {
             }
         );
     }
+
+    openFileDialog(): void {
+        const fileInput = document.getElementById('mat') as HTMLInputElement;
+        fileInput?.click();
+      }
+    
+      onFileChange(event: Event): void {
+        const input = event.target as HTMLInputElement;
+        if (input.files && input.files.length) {
+          const file = input.files[0];
+          this.signUpForm.get('mat')?.setValue(file);
+    
+          const reader = new FileReader();
+          reader.onload = () => {
+            this.imageSrc = reader.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          this.imageSrc = null;
+        }
+      }
 }

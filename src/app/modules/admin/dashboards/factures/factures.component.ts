@@ -7,6 +7,7 @@ import {
     OnInit,
     ViewChild,
     ViewEncapsulation,
+    inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -17,13 +18,14 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { CommandeService } from 'app/modules/admin/dashboards/commandes/commande.service';
-import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
+import { UserService } from 'app/core/user/user.service';
+import { FactureService } from 'app/modules/admin/dashboards/factures/facture.service';
+import { NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector     : 'commandes',
-    templateUrl  : './commandes.component.html',
+    selector: 'factures',
+    templateUrl: './factures.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
@@ -39,31 +41,33 @@ import { Subject, takeUntil } from 'rxjs';
         MatProgressBarModule,
         CurrencyPipe,
         DatePipe,
-        MatPaginator
+        MatPaginator,
     ],
 })
-export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy 
-{
-    @ViewChild('commandesTable', { read: MatSort })
-    commandesTableMatSort: MatSort;
+export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
+
+    @ViewChild('facturesTable', { read: MatSort })
+    facturesTableMatSort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     data: any;
-    commandesDataSource: MatTableDataSource<any> =
-        new MatTableDataSource();
-    commandesTableColumns: string[] = [
+    facturesDataSource: MatTableDataSource<any> = new MatTableDataSource();
+    facturesTableColumns: string[] = [
         'nFact',
         'datvte',
-        'brutht',
+        'totttc',
         'etat',
-        'pdf'
+        'pdf',
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-   
+
     /**
      * Constructor
      */
-    constructor(private _commandeService: CommandeService, private _router: Router) {}
+    constructor(
+        private _factureService: FactureService,
+        private _router: Router
+    ) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -74,15 +78,14 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void {
         // Get the data
-        this._commandeService.data$
+        this._factureService.data$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 // Store the data
                 this.data = data;
 
                 // Store the table data
-                this.commandesDataSource.data =
-                    data;//.recentTransactions;
+                this.facturesDataSource.data = data; //.recentTransactions;
             });
     }
 
@@ -91,9 +94,8 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngAfterViewInit(): void {
         // Make the data source sortable
-        this.commandesDataSource.sort =
-            this.commandesTableMatSort;
-        this.commandesDataSource.paginator = this.paginator;
+        this.facturesDataSource.sort = this.facturesTableMatSort;
+        this.facturesDataSource.paginator = this.paginator;
     }
 
     /**
@@ -119,30 +121,30 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
         return item.id || index;
     }
 
-    convertToDate(rawDate:string): string {
+    convertToDate(rawDate: string): string {
         // Assuming rawDate is in dd/MM/yyyy format
         const parts = rawDate.split('/');
         if (parts.length === 3) {
-          const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-          return formattedDate;
+            const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            return formattedDate;
         } else {
-          // Handle invalid date format
-          return '';
+            // Handle invalid date format
+            return '';
         }
-      }
+    }
 
     convertStringToDecimal(input: string): string {
         // Replace comma with dot
         const replacedString = input.replace(',', '.');
-    
+
         // Parse as float and round to 2 decimal places
         const parsedNumber = parseFloat(replacedString);
         const roundedNumber = parsedNumber.toFixed(2);
-    
+
         return roundedNumber;
     }
 
     openPdf(nfact: string): void {
-         this._router.navigate(['/dashboards/commandes-pdf', nfact]);
+        this._router.navigate(['/dashboards/factures-pdf', nfact]);
     }
 }

@@ -4,10 +4,10 @@
         <div class="flex w-full items-center justify-between">
             <div>
                 <h2 class="text-3xl font-semibold leading-8 tracking-tight">
-                    Liste des commandes
+                    Liste des factures
                 </h2>
                 <div class="text-secondary font-medium tracking-tight">
-                    Consulter vos commandes
+                    Consulter vos factures
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="mt-8 grid w-full grid-cols-1 gap-8 xl:grid-cols-3">
-            <!-- Commandes table -->
+            <!-- Factures table -->
             <div
                 class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl shadow xl:col-span-12"
             >
@@ -27,24 +27,24 @@
                         class="w-full bg-transparent"
                         mat-table
                         matSort
-                        [dataSource]="commandesDataSource"
+                        [dataSource]="facturesDataSource"
                         [trackBy]="trackByFn"
-                        #commandesTable
+                        #facturesTable
                     >
-                        <!-- Commande ID -->
+                        <!-- Facture ID -->
                         <ng-container matColumnDef="nFact">
                             <th
                                 mat-header-cell
                                 mat-sort-header
                                 *matHeaderCellDef
                             >
-                                N° Commande
+                                N° Facture
                             </th>
-                            <td mat-cell *matCellDef="let commande">
+                            <td mat-cell *matCellDef="let facture">
                                 <span
                                     class="text-secondary whitespace-nowrap pr-6 text-sm font-medium"
                                 >
-                                    {{ commande.nfact }}
+                                    {{ facture.nfact }}
                                 </span>
                             </td>
                         </ng-container>
@@ -58,15 +58,15 @@
                             >
                                 Date
                             </th>
-                            <td mat-cell *matCellDef="let commande">
+                            <td mat-cell *matCellDef="let facture">
                                 <span class="whitespace-nowrap pr-6">
-                                    {{ convertToDate(commande.datvte) | date: 'dd/MM/yyyy' }}
+                                    {{ convertToDate(facture.datvte) | date: 'dd/MM/yyyy' }}
                                 </span>
                             </td>
                         </ng-container>
 
                         <!-- Amount -->
-                        <ng-container matColumnDef="brutht">
+                        <ng-container matColumnDef="totttc">
                             <th
                                 mat-header-cell
                                 mat-sort-header
@@ -74,11 +74,11 @@
                             >
                                 Total
                             </th>
-                            <td mat-cell *matCellDef="let commande">
+                            <td mat-cell *matCellDef="let facture">
                                 <span
                                     class="whitespace-nowrap pr-6 font-medium"
                                 >
-                                    {{convertStringToDecimal(commande.brutht) }} TND
+                                    {{convertStringToDecimal(facture.totttc) }} TND
                                 </span>
                             </td>
                         </ng-container>
@@ -92,7 +92,7 @@
                             >
                                 Etat
                             </th>
-                            <td mat-cell *matCellDef="let commande">
+                            <td mat-cell *matCellDef="let facture">
                                 <span
                                     class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"
                                 >
@@ -112,10 +112,10 @@
                                 *matHeaderCellDef
                             >
                             </th>
-                            <td mat-cell *matCellDef="let commande">
+                            <td mat-cell *matCellDef="let facture">
                                 <button
                                     mat-icon-button
-                                    (click)="openPdf(commande.nfact)"
+                                    (click)="openPdf(facture.nfact)"
                                 >
                                     <mat-icon>picture_as_pdf</mat-icon>
                                 </button>
@@ -135,14 +135,14 @@
 
                         <tr
                             mat-header-row
-                            *matHeaderRowDef="commandesTableColumns"
+                            *matHeaderRowDef="facturesTableColumns"
                         ></tr>
                         <tr
                             class="order-row h-16"
                             mat-row
                             *matRowDef="
                                 let row;
-                                columns: commandesTableColumns
+                                columns: facturesTableColumns
                             "
                         ></tr>
                         <tr
@@ -154,7 +154,7 @@
                     <mat-paginator
                         [pageSizeOptions]="[5, 10, 25, 100]"
                         showFirstLastButtons
-                        aria-label="Selectionnez la page de la liste des commandes"
+                        aria-label="Selectionnez la page de la liste des factures"
                     ></mat-paginator>
                 </div>
             </div>
