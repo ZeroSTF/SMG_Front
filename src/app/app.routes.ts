@@ -81,6 +81,10 @@ export const appRoutes: Route[] = [
                 {path: 'factures', loadChildren: () => import('app/modules/admin/dashboards/factures/factures.routes')},
                 {path: 'factures-pdf/:nfact', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
                 {path: 'clients', loadChildren: () => import('app/modules/admin/dashboards/clients/clients.routes')}
+            ]},
+            {path: 'pages', children:[
+                {path: 'profile', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')},
+                {path: 'settings', loadChildren: () => import('app/modules/admin/pages/settings/settings.routes')},
             ]}
         ]
     }

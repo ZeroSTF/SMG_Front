@@ -110,4 +110,12 @@ export class UserComponent implements OnInit, OnDestroy {
     signOut(): void {
         this._router.navigate(['/sign-out']);
     }
+
+    profile(): void {
+        this._router.navigate(['pages/profile']);
+    }
+
+    settings(): void {
+        this._router.navigate(['pages/settings']);
+    }
 }
