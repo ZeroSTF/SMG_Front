@@ -26,7 +26,7 @@ const defaultNavigation: FuseNavigationItem[] = [
                 icon: 'heroicons_outline:document-text',
                 link: '/dashboards/factures'
             }
-            //add a dashboard.users if the current user is an admin
+            
         ]
     }
 ];
