@@ -48,6 +48,21 @@
                                 </span>
                             </td>
                         </ng-container>
+                        <!-- Client -->
+                        <ng-container matColumnDef="nomclt">
+                            <th
+                                mat-header-cell
+                                mat-sort-header
+                                *matHeaderCellDef
+                            >
+                                Client
+                            </th>
+                            <td mat-cell *matCellDef="let facture">
+                                <span class="whitespace-nowrap pr-6">
+                                    {{ facture.nomclt }}
+                                </span>
+                            </td>
+                        </ng-container>
 
                         <!-- Date -->
                         <ng-container matColumnDef="datvte">

@@ -7,6 +7,13 @@ import { AuthService } from '../auth/auth.service';
 
 const defaultNavigation: FuseNavigationItem[] = [
     {
+        id:'home',
+        title: 'Home',
+        type: 'basic',
+        icon: 'heroicons_outline:home',
+        link: '/home'
+    },
+    {
         id   : 'dashboards',
         title: 'Dashboards',
         type : 'group',
@@ -71,7 +78,7 @@ export class NavigationService {
     
                     if (isAdmin) {
                         // Add the dashboard.users item if the user is an admin
-                        navigation[0].children.push({
+                        navigation[1].children.push({
                             id: 'dashboard.clients',
                             title: 'Clients',
                             type: 'basic',

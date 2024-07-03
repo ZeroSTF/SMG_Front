@@ -136,4 +136,8 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
         this.navigationAppearance =
             this.navigationAppearance === 'default' ? 'dense' : 'default';
     }
+
+    home(): void {
+        this._router.navigate(['/home']);
+    }
 }

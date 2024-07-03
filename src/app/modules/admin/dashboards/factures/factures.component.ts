@@ -54,6 +54,7 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
     facturesDataSource: MatTableDataSource<any> = new MatTableDataSource();
     facturesTableColumns: string[] = [
         'nFact',
+        'nomclt',
         'datvte',
         'totttc',
         'etat',
