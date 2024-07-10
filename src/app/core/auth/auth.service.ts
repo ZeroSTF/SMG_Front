@@ -141,6 +141,7 @@ export class AuthService {
         tel1?: string;
         tel2: string;
     }): Observable<any> {
+        console.log(user);
         return this._httpClient.post('http://localhost:8080/auth/register', user);
     }
 

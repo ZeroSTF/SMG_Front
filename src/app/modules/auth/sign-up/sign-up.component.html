@@ -7,21 +7,21 @@
         <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
             <!-- Logo -->
             <div class="w-12">
-                <img src="images/logo/logo.png" />
+                <img src="images/logo/logo.svg" />
             </div>
 
             <!-- Title -->
             <div
                 class="mt-8 text-4xl font-extrabold leading-tight tracking-tight"
             >
-                Sign up
+                S'inscrire
             </div>
             <div class="mt-0.5 flex items-baseline font-medium">
-                <div>Already have an account?</div>
+                <div>Vous avez déjà un compte ?</div>
                 <a
                     class="ml-1 text-primary-500 hover:underline"
                     [routerLink]="['/sign-in']"
-                    >Sign in
+                    >Se connecter
                 </a>
             </div>
 
@@ -42,30 +42,30 @@
             <form class="mt-8" [formGroup]="signUpForm" #signUpNgForm="ngForm">
                 <!-- Name field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Full name</mat-label>
+                    <mat-label>Nom complet</mat-label>
                     <input id="nom" matInput [formControlName]="'nom'" />
                     @if (signUpForm.get('nom').hasError('required')) {
-                        <mat-error> Full name is required </mat-error>
+                        <mat-error> Le nom complet est requis. </mat-error>
                     }
                 </mat-form-field>
 
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Email address</mat-label>
+                    <mat-label>Adresse e-mail</mat-label>
                     <input id="email" matInput [formControlName]="'email'" />
                     @if (signUpForm.get('email').hasError('required')) {
-                        <mat-error> Email address is required </mat-error>
+                        <mat-error> L'adresse e-mail est requise. </mat-error>
                     }
                     @if (signUpForm.get('email').hasError('email')) {
                         <mat-error>
-                            Please enter a valid email address
+                            Veuillez entrer une adresse e-mail valide.
                         </mat-error>
                     }
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Mot de passe</mat-label>
                     <input
                         id="password"
                         matInput
@@ -96,7 +96,7 @@
                             ></mat-icon>
                         }
                     </button>
-                    <mat-error> Password is required </mat-error>
+                    <mat-error> Le mot de passe est requis. </mat-error>
                 </mat-form-field>
 
                 <!-- address field -->
@@ -104,7 +104,7 @@
                     <mat-label>Adresse</mat-label>
                     <input id="adresse" matInput [formControlName]="'adresse'" />
                     @if (signUpForm.get('adresse').hasError('required')) {
-                        <mat-error> Address is required </mat-error>
+                        <mat-error> L'adresse est requise. </mat-error>
                     }
                 </mat-form-field>
 
@@ -123,7 +123,7 @@
                     <mat-label>Numero Mobile</mat-label>
                     <input id="tel2" matInput [formControlName]="'tel2'" />
                     @if (signUpForm.get('tel2').hasError('required')) {
-                        <mat-error> Phone Number is required </mat-error>
+                        <mat-error> Le numero mobile est requis. </mat-error>
                     }
                 </mat-form-field>
 
@@ -131,14 +131,14 @@
                     <mat-label>Matricule</mat-label>
                     <input type="file" id="mat" (change)="onFileChange($event)" accept="image/*" style="display: none;" />
                     <input type="text" id="mat" matInput [formControlName]="'mat'" [value]="imageSrc" style="display: none;"/>
-                    <button mat-button (click)="openFileDialog()">Upload Image</button>
+                    <button mat-button (click)="openFileDialog()">Télécharger une image</button>
                     @if(imageSrc){
                     <div style="margin-top: 10px;">
                         <img [src]="imageSrc" alt="Matricule Image Preview" style="max-width: 100%; max-height: 200px; object-fit: cover;"/>
                     </div>
                     }
                     @if (signUpForm.get('mat').hasError('required')) {
-                        <mat-error> Matricule is required </mat-error>
+                        <mat-error> Matricule est requise. </mat-error>
                     }
                 </mat-form-field>
 
@@ -149,17 +149,17 @@
                         [color]="'primary'"
                         [formControlName]="'agreements'"
                     >
-                        <span>I agree with</span>
+                        <span>J'accepte les</span>
                         <a
                             class="ml-1 text-primary-500 hover:underline"
                             [routerLink]="['./']"
-                            >Terms
+                            >Termes
                         </a>
-                        <span>and</span>
+                        <span>et</span>
                         <a
                             class="ml-1 text-primary-500 hover:underline"
                             [routerLink]="['./']"
-                            >Privacy Policy
+                            >Politique de confidentialité
                         </a>
                     </mat-checkbox>
                 </div>
@@ -173,7 +173,7 @@
                     (click)="signUp()"
                 >
                     @if (!signUpForm.disabled) {
-                        <span> Create your free account </span>
+                        <span> Créez votre compte gratuit </span>
                     }
                     @if (signUpForm.disabled) {
                         <mat-progress-spinner
@@ -212,10 +212,9 @@
         <!-- Content -->
         <div class="relative z-10 w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
-                <div>Welcome to</div>
-                <div>our community</div>
+                <div>Bienvenue à SMG</div>
             </div>
-            <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
+            <!-- <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
                 Fuse helps developers to build organized and well coded
                 dashboards full of beautiful and rich modules. Join us and start
                 building your application today.
@@ -242,7 +241,7 @@
                 <div class="ml-4 font-medium tracking-tight text-gray-400">
                     More than 17k people joined us, it's your turn
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>

@@ -64,39 +64,35 @@ export class SettingsComponent implements OnInit, OnDestroy {
         // Setup available panels
         this.panels = [
             {
-                id: 'account',
-                icon: 'heroicons_outline:user-circle',
-                title: 'Account',
-                description:
-                    'Manage your public profile and private information',
+            id: 'account',
+            icon: 'heroicons_outline:user-circle',
+            title: 'Compte',
+            description: 'Gérez votre profil public et vos informations privées',
             },
-            {
-                id: 'security',
-                icon: 'heroicons_outline:lock-closed',
-                title: 'Security',
-                description:
-                    'Manage your password and 2-step verification preferences',
-            },
-            {
-                id: 'plan-billing',
-                icon: 'heroicons_outline:credit-card',
-                title: 'Plan & Billing',
-                description:
-                    'Manage your subscription plan, payment method and billing information',
-            },
-            {
-                id: 'notifications',
-                icon: 'heroicons_outline:bell',
-                title: 'Notifications',
-                description: "Manage when you'll be notified on which channels",
-            },
-            {
-                id: 'team',
-                icon: 'heroicons_outline:user-group',
-                title: 'Team',
-                description:
-                    'Manage your existing team and change roles/permissions',
-            },
+            // {
+            //     id: 'security',
+            //     icon: 'heroicons_outline:lock-closed',
+            //     title: 'Sécurité',
+            //     description: 'Gérez votre mot de passe et vos préférences de vérification en 2 étapes',
+            // },
+            // {
+            //     id: 'plan-billing',
+            //     icon: 'heroicons_outline:credit-card',
+            //     title: 'Plan et facturation',
+            //     description: 'Gérez votre plan d\'abonnement, votre méthode de paiement et vos informations de facturation',
+            // },
+            // {
+            //     id: 'notifications',
+            //     icon: 'heroicons_outline:bell',
+            //     title: 'Notifications',
+            //     description: 'Gérez quand et sur quels canaux vous serez notifié',
+            // },
+            // {
+            //     id: 'team',
+            //     icon: 'heroicons_outline:user-group',
+            //     title: 'Équipe',
+            //     description: 'Gérez votre équipe existante et modifiez les rôles/permissions',
+            // },
         ];
 
         // Subscribe to media changes

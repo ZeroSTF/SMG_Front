@@ -53,11 +53,9 @@ export class UserService {
      *
      * @param user
      */
-    update(user: User): Observable<any> {
-        return this._httpClient.patch<User>('api/common/user', { user }).pipe(
-            map((response) => {
-                this._user.next(response);
-            })
-        );
+    update(user: any): Observable<any> {
+        return this._httpClient.put('http://localhost:8080/user/update', user );
     }
+
+
 }

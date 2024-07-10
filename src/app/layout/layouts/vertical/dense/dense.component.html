@@ -3,7 +3,7 @@
 
 <!-- Navigation -->
 <fuse-vertical-navigation
-    class="dark bg-gray-900 print:hidden"
+    class="bg-white print:hidden"
     [appearance]="navigationAppearance"
     [mode]="isScreenSmall ? 'over' : 'side'"
     [name]="'mainNavigation'"
@@ -14,7 +14,7 @@
     <ng-container fuseVerticalNavigationContentHeader>
         <!-- Logo -->
         <div class="flex h-20 items-center justify-center" (click)="home()" style="cursor: pointer;">
-            <img class="w-8" src="images/logo/logo.png" alt="Logo image" />
+            <img class="w-8" src="images/logo/logo.svg" alt="Logo image" />
         </div>
     </ng-container>
 </fuse-vertical-navigation>
@@ -50,9 +50,9 @@
             <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <search [appearance]="'bar'"></search>
             <shortcuts></shortcuts>
-            <!--<messages></messages>
+            <!--<messages></messages>-->
             <notifications></notifications>
-            <button
+            <!--<button
                 class="lg:hidden"
                 mat-icon-button
                 (click)="quickChat.toggle()"

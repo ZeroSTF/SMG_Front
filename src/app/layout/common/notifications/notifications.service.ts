@@ -9,6 +9,8 @@ export class NotificationsService {
         Notification[]
     >(1);
 
+    private baseUrl = 'http://localhost:8080/notification/';
+
     /**
      * Constructor
      */
@@ -34,7 +36,7 @@ export class NotificationsService {
      */
     getAll(): Observable<Notification[]> {
         return this._httpClient
-            .get<Notification[]>('api/common/notifications')
+            .get<Notification[]>(this.baseUrl + 'getAllByUser')
             .pipe(
                 tap((notifications) => {
                     this._notifications.next(notifications);
@@ -78,14 +80,14 @@ export class NotificationsService {
      * @param notification
      */
     update(id: string, notification: Notification): Observable<Notification> {
+        console.log(notification);
         return this.notifications$.pipe(
             take(1),
             switchMap((notifications) =>
                 this._httpClient
-                    .patch<Notification>('api/common/notifications', {
-                        id,
-                        notification,
-                    })
+                    .put<Notification>(this.baseUrl+'update', 
+                        notification
+                    )
                     .pipe(
                         map((updatedNotification: Notification) => {
                             // Find the index of the updated notification
@@ -117,9 +119,7 @@ export class NotificationsService {
             take(1),
             switchMap((notifications) =>
                 this._httpClient
-                    .delete<boolean>('api/common/notifications', {
-                        params: { id },
-                    })
+                    .delete<boolean>(this.baseUrl + 'delete/${id}')
                     .pipe(
                         map((isDeleted: boolean) => {
                             // Find the index of the deleted notification
@@ -149,7 +149,7 @@ export class NotificationsService {
             take(1),
             switchMap((notifications) =>
                 this._httpClient
-                    .get<boolean>('api/common/notifications/mark-all-as-read')
+                    .get<boolean>(this.baseUrl + 'markAllAsRead')
                     .pipe(
                         map((isUpdated: boolean) => {
                             // Go through all notifications and set them as read

@@ -97,7 +97,6 @@ export class AuthSignUpComponent implements OnInit {
 
         // Hide the alert
         this.showAlert = false;
-
         // Sign up
         this._authService.signUp(this.signUpForm.value).subscribe(
             (response) => {

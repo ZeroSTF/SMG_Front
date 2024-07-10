@@ -5,24 +5,24 @@
         <div class="w-full">
             <div class="text-xl">Profile</div>
             <div class="text-secondary">
-                Following information is publicly displayed, be careful!
+                Les informations suivantes sont affichées publiquement, soyez prudent !
             </div>
         </div>
         <div class="mt-8 grid w-full gap-6 sm:grid-cols-4">
             <!-- Name -->
             <div class="sm:col-span-4">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                    <mat-label>Name</mat-label>
+                    <mat-label>Nom Complet</mat-label>
                     <mat-icon
                         class="icon-size-5"
                         [svgIcon]="'heroicons_solid:user'"
                         matPrefix
                     ></mat-icon>
-                    <input [formControlName]="'name'" matInput />
+                    <input [formControlName]="'nom'" matInput />
                 </mat-form-field>
             </div>
             <!-- Username -->
-            <div class="sm:col-span-4">
+            <!-- <div class="sm:col-span-4">
                 <mat-form-field
                     class="fuse-mat-emphasized-affix w-full"
                     [subscriptSizing]="'dynamic'"
@@ -31,33 +31,33 @@
                     <div class="text-secondary" matPrefix>fusetheme.com/</div>
                     <input [formControlName]="'username'" matInput />
                 </mat-form-field>
-            </div>
+            </div> -->
             <!-- Title -->
             <div class="sm:col-span-2">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                    <mat-label>Title</mat-label>
+                    <mat-label>Banque</mat-label>
                     <mat-icon
                         class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:briefcase'"
+                        [svgIcon]="'heroicons_solid:building-library'"
                         matPrefix
                     ></mat-icon>
-                    <input [formControlName]="'title'" matInput />
+                    <input [formControlName]="'banque'" matInput />
                 </mat-form-field>
             </div>
             <!-- Company -->
             <div class="sm:col-span-2">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                    <mat-label>Company</mat-label>
+                    <mat-label>Fax</mat-label>
                     <mat-icon
                         class="icon-size-5"
-                        [svgIcon]="'heroicons_solid:building-office-2'"
+                        [svgIcon]="'heroicons_solid:printer'"
                         matPrefix
                     ></mat-icon>
-                    <input [formControlName]="'company'" matInput />
+                    <input [formControlName]="'fax'" matInput />
                 </mat-form-field>
             </div>
             <!-- About -->
-            <div class="sm:col-span-4">
+            <!-- <div class="sm:col-span-4">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
                     <mat-label>About</mat-label>
                     <textarea
@@ -71,7 +71,7 @@
                     Brief description for your profile. Basic HTML and Emoji are
                     allowed.
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <!-- Divider -->
@@ -79,10 +79,9 @@
 
         <!-- Section -->
         <div class="w-full">
-            <div class="text-xl">Personal Information</div>
+            <div class="text-xl">Informations personnelles</div>
             <div class="text-secondary">
-                Communication details in case we want to connect with you. These
-                will be kept private.
+                Détails de communication au cas où nous voudrions vous contacter. Ils seront conservés de manière privée.
             </div>
         </div>
         <div class="mt-8 grid w-full gap-6 sm:grid-cols-4">
@@ -101,17 +100,41 @@
             <!-- Phone -->
             <div class="sm:col-span-2">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
-                    <mat-label>Phone</mat-label>
+                    <mat-label>Numero Fixe</mat-label>
                     <mat-icon
                         class="icon-size-5"
                         [svgIcon]="'heroicons_solid:phone'"
                         matPrefix
                     ></mat-icon>
-                    <input [formControlName]="'phone'" matInput />
+                    <input [formControlName]="'tel1'" matInput />
+                </mat-form-field>
+            </div>
+            <!-- Phone -->
+            <div class="sm:col-span-2">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>Numero Mobile</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:phone'"
+                        matPrefix
+                    ></mat-icon>
+                    <input [formControlName]="'tel2'" matInput />
+                </mat-form-field>
+            </div>
+            <!-- Adresse -->
+            <div class="sm:col-span-2">
+                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                    <mat-label>Adresse</mat-label>
+                    <mat-icon
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:map-pin'"
+                        matPrefix
+                    ></mat-icon>
+                    <input [formControlName]="'adresse'" matInput />
                 </mat-form-field>
             </div>
             <!-- Country -->
-            <div class="sm:col-span-2">
+            <!-- <div class="sm:col-span-2">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
                     <mat-label>Country</mat-label>
                     <mat-icon
@@ -128,9 +151,9 @@
                         <mat-option [value]="'italy'">Italy</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
+            </div> -->
             <!-- Language -->
-            <div class="sm:col-span-2">
+            <!-- <div class="sm:col-span-2">
                 <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
                     <mat-label>Language</mat-label>
                     <mat-icon
@@ -146,7 +169,7 @@
                         <mat-option [value]="'italian'">Italian</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
+            </div> -->
         </div>
 
         <!-- Divider -->
@@ -154,14 +177,15 @@
 
         <!-- Actions -->
         <div class="flex items-center justify-end">
-            <button mat-stroked-button type="button">Cancel</button>
+            <button mat-stroked-button type="button" (click)="annuler()">Annuler</button>
             <button
                 class="ml-4"
                 mat-flat-button
                 type="button"
                 [color]="'primary'"
+                (click)="enregistrer()"
             >
-                Save
+                Enregistrer
             </button>
         </div>
     </form>

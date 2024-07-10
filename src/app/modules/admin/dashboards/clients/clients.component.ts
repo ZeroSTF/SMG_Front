@@ -135,9 +135,9 @@ export class ClientsComponent implements OnInit, AfterViewInit, OnDestroy
         // Replace comma with dot
         const replacedString = input.replace(',', '.');
     
-        // Parse as float and round to 2 decimal places
+        // Parse as float and round to 3 decimal places
         const parsedNumber = parseFloat(replacedString);
-        const roundedNumber = parsedNumber.toFixed(2);
+        const roundedNumber = parsedNumber.toFixed(3);
     
         return roundedNumber;
     }

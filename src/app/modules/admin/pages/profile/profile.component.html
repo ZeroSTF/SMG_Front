@@ -18,7 +18,7 @@
             <div class="-mt-26 rounded-full lg:-mt-22">
                 <img
                     class="ring-bg-card h-32 w-32 rounded-full ring-4"
-                    src="images/avatars/male-04.jpg"
+                    src="images/avatars/default.jpg"
                     alt="User avatar"
                 />
             </div>
@@ -27,8 +27,8 @@
             <div
                 class="mt-4 flex flex-col items-center lg:ml-8 lg:mt-0 lg:items-start"
             >
-                <div class="text-lg font-bold leading-none">Brian Hughes</div>
-                <div class="text-secondary">London, UK</div>
+                <div class="text-lg font-bold leading-none">{{currentUser.nom}}</div>
+                <div class="text-secondary">{{currentUser.adresse}}</div>
             </div>
 
             <!-- Separator -->
@@ -51,14 +51,14 @@
             </div>
 
             <!-- Menu -->
-            <div
+            <!-- <div
                 class="mb-4 mt-8 flex items-center space-x-6 lg:m-0 lg:ml-auto"
             >
                 <a class="font-medium" [routerLink]="['./']"> Home </a>
                 <a class="text-secondary" [routerLink]="['./']"> About </a>
                 <a class="text-secondary" [routerLink]="['./']"> Followers </a>
                 <a class="text-secondary" [routerLink]="['./']"> Gallery </a>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -70,52 +70,59 @@
         <div class="mr-8 hidden flex-col items-start lg:flex">
             <!-- About me -->
             <fuse-card class="flex w-full max-w-80 flex-col p-8">
-                <div class="text-2xl font-semibold leading-tight">About Me</div>
-                <div class="mt-4">
+                <div class="text-2xl font-semibold leading-tight">Mes Détails</div>
+                <!-- <div class="mt-4">
                     I’m a friendly kitchen assistant who suffers from a severe
                     phobia of buttons.
                     <br /><br />
                     Brother of Elijah Jay Watkins, who has phobia of buttons and
                     trust issues.
-                </div>
-                <hr class="my-6 w-full border-t" />
-                <div class="flex flex-col">
+                </div> -->
+                <!-- <hr class="my-6 w-full border-t" /> -->
+                <div class="flex flex-col" style="margin-top: 5%;">
                     <div class="flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"
                             [svgIcon]="'heroicons_solid:map-pin'"
                         ></mat-icon>
-                        <span class="leading-none">London, UK</span>
+                        <span class="leading-none">{{currentUser.adresse}}</span>
                     </div>
                     <div class="mt-4 flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:briefcase'"
+                            [svgIcon]="'heroicons_solid:building-library'"
                         ></mat-icon>
                         <span class="leading-none"
-                            >ACME Corp. Lead UX Designer</span
+                            >{{currentUser.banque}}</span
                         >
                     </div>
                     <div class="mt-4 flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:cake'"
+                            [svgIcon]="'heroicons_solid:phone'"
                         ></mat-icon>
-                        <span class="leading-none">April, 24</span>
+                        <span class="leading-none">{{currentUser.tel1}}</span>
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <mat-icon
+                            class="mr-3 icon-size-5"
+                            [svgIcon]="'heroicons_solid:phone'"
+                        ></mat-icon>
+                        <span class="leading-none">{{currentUser.tel2}}</span>
                     </div>
                 </div>
                 <a
                     class="mt-8 px-6"
                     mat-flat-button
                     [color]="'primary'"
-                    [routerLink]="['./']"
+                    [routerLink]="['/pages/settings']"
                 >
-                    See complete bio
+                    Modifier mes informations
                 </a>
             </fuse-card>
 
             <!-- Followers -->
-            <fuse-card
+            <!-- <fuse-card
                 class="mt-8 flex w-full max-w-80 flex-col px-8 pb-4 pt-6"
             >
                 <div class="flex items-center justify-between">
@@ -237,10 +244,10 @@
                         See all followers
                     </a>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Gallery -->
-            <fuse-card
+            <!-- <fuse-card
                 class="mt-8 flex w-full max-w-80 flex-col px-8 pb-4 pt-6"
             >
                 <div class="flex items-center justify-between">
@@ -363,10 +370,10 @@
                         See entire gallery
                     </a>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Groups -->
-            <fuse-card
+            <!-- <fuse-card
                 class="mt-8 flex w-full max-w-80 flex-col px-8 pb-4 pt-6"
             >
                 <div class="flex items-center justify-between">
@@ -480,10 +487,10 @@
                         See all groups
                     </a>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- News -->
-            <fuse-card
+            <!-- <fuse-card
                 class="mt-8 flex w-full max-w-80 flex-col px-8 pb-4 pt-6"
             >
                 <div class="flex items-center justify-between">
@@ -554,10 +561,10 @@
                         See all news
                     </a>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Activity Feed -->
-            <fuse-card
+            <!-- <fuse-card
                 class="mt-8 flex w-full max-w-80 flex-col px-8 pb-4 pt-6"
             >
                 <div class="flex items-center justify-between">
@@ -661,19 +668,19 @@
                         See entire activity feed
                     </a>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
         </div>
 
         <!-- Column -->
         <div class="flex flex-col items-start">
             <!-- Create Post -->
             <fuse-card class="flex w-full max-w-140 flex-col p-6 pb-6 sm:p-8">
-                <div class="text-xl font-semibold">Create Post</div>
+                <div class="text-xl font-semibold">Envoyez nous un message! </div>
                 <div class="mt-8 flex flex-col items-start sm:flex-row">
                     <div class="mb-6 flex items-center sm:mb-0">
                         <img
                             class="mr-4 h-12 w-12 min-w-12 rounded-full"
-                            src="images/avatars/brian-hughes.jpg"
+                            src="images/avatars/default.jpg"
                             alt="Card cover image"
                         />
                         <div class="sm:hidden">Brian Hughes</div>
@@ -684,13 +691,13 @@
                     >
                         <textarea
                             matInput
-                            [placeholder]="'What\'s on your mind?'"
+                            [placeholder]="'À quoi pensez-vous ?'"
                             [rows]="3"
                             cdkTextareaAutosize
                         ></textarea>
                     </mat-form-field>
                 </div>
-                <div class="-mx-3 mt-6 flex items-center sm:mt-8">
+                <!-- <div class="-mx-3 mt-6 flex items-center sm:mt-8">
                     <button class="mr-1 px-3" mat-button>
                         <mat-icon
                             class="icon-size-5"
@@ -769,7 +776,7 @@
                             </span>
                         </button>
                     </mat-menu>
-                </div>
+                </div> -->
             </fuse-card>
 
             <!-- Post 1 -->
@@ -780,18 +787,18 @@
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
-                        src="images/avatars/female-01.jpg"
+                        src="images/avatars/default.jpg"
                         alt="Card cover image"
                     />
                     <div class="flex flex-col">
                         <span class="font-semibold leading-none"
-                            >Caroline Lundu</span
+                            >Riadh Chnitir</span
                         >
                         <span class="text-secondary mt-1 text-sm leading-none"
-                            >29 minutes ago</span
+                            >il y a 29 minutes</span
                         >
                     </div>
-                    <button
+                    <!-- <button
                         class="-mr-4 ml-auto"
                         mat-icon-button
                         [matMenuTriggerFor]="postCardMenu02"
@@ -800,8 +807,8 @@
                             class="icon-size-5"
                             [svgIcon]="'heroicons_solid:ellipsis-vertical'"
                         ></mat-icon>
-                    </button>
-                    <mat-menu #postCardMenu02="matMenu">
+                    </button> -->
+                    <!-- <mat-menu #postCardMenu02="matMenu">
                         <button mat-menu-item>
                             <span class="flex items-center">
                                 <mat-icon
@@ -859,7 +866,7 @@
                                 <span>Turn on notifications for this post</span>
                             </span>
                         </button>
-                    </mat-menu>
+                    </mat-menu> -->
                 </div>
                 <div class="mx-6 mb-6 mt-2 sm:mx-8">
                     Look at that sky! I so want to be there.. Can we arrange a
@@ -882,7 +889,7 @@
                         ></mat-icon>
                     </div>
                 </div>
-                <div class="mx-3 flex items-center sm:mx-5">
+                <!-- <div class="mx-3 flex items-center sm:mx-5">
                     <button class="mr-1 px-3" mat-button>
                         <mat-icon
                             class="text-red-500 icon-size-5"
@@ -906,9 +913,9 @@
                         ></mat-icon>
                         <span class="ml-2">Share</span>
                     </button>
-                </div>
-                <hr class="mx-6 mb-6 mt-4 border-b sm:mx-8" />
-                <div
+                </div> -->
+                <!-- <hr class="mx-6 mb-6 mt-4 border-b sm:mx-8" /> -->
+                <!-- <div
                     class="mx-6 mb-4 flex flex-col sm:mx-8 sm:mb-6 sm:flex-row sm:items-center"
                 >
                     <div class="flex items-center">
@@ -959,15 +966,15 @@
                             ></mat-icon>
                         </button>
                     </div>
-                </div>
+                </div> -->
 
-                <ng-container fuseCardExpansion>
+                <!-- <ng-container fuseCardExpansion>
                     <hr class="m-0 border-b" />
                     <div class="mx-4 mb-3 mt-6 flex flex-col sm:mx-8">
                         <div class="flex items-start">
                             <img
                                 class="mr-5 h-12 w-12 rounded-full"
-                                src="images/avatars/brian-hughes.jpg"
+                                src="images/avatars/default.jpg"
                                 alt="Card cover image"
                             />
                             <mat-form-field
@@ -1266,11 +1273,11 @@
                             </div>
                         </div>
                     </div>
-                </ng-container>
+                </ng-container> -->
             </fuse-card>
 
             <!-- Post 2 -->
-            <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
+            <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
                 <div class="mx-6 mb-1 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
@@ -1435,10 +1442,10 @@
                         </button>
                     </div>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Post 3 -->
-            <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
+            <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
@@ -1616,10 +1623,10 @@
                         </button>
                     </div>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Post 4 -->
-            <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
+            <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
@@ -1797,10 +1804,10 @@
                         </button>
                     </div>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Post 5 -->
-            <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
+            <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
@@ -1969,10 +1976,10 @@
                         </button>
                     </div>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
 
             <!-- Post 6 -->
-            <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
+            <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
                     <img
                         class="mr-4 h-10 w-10 rounded-full"
@@ -2149,7 +2156,7 @@
                         </button>
                     </div>
                 </div>
-            </fuse-card>
+            </fuse-card> -->
         </div>
     </div>
 </div>

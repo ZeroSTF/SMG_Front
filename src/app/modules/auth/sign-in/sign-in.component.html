@@ -7,21 +7,21 @@
         <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
             <!-- Logo -->
             <div class="w-12">
-                <img src="images/logo/logo.png" />
+                <img src="images/logo/logo.svg" />
             </div>
 
             <!-- Title -->
             <div
                 class="mt-8 text-4xl font-extrabold leading-tight tracking-tight"
             >
-                Sign in
+                Se connecter
             </div>
             <div class="mt-0.5 flex items-baseline font-medium">
-                <div>Don't have an account?</div>
+                <div>Vous n'avez pas de compte ?</div>
                 <a
                     class="ml-1 text-primary-500 hover:underline"
                     [routerLink]="['/sign-up']"
-                    >Sign up
+                    >Inscrivez-vous
                 </a>
             </div>
 
@@ -32,8 +32,7 @@
                 [showIcon]="false"
                 [type]="'info'"
             >
-                You are browsing <strong>Fuse Demo</strong>. Click on the "Sign
-                in" button to access the Demo and Documentation.
+            Vous naviguez sur <strong>SMG</strong>. Cliquez sur le bouton "Se connecter" pour accéder à votre tableau de bord.
             </fuse-alert>
 
             <!-- Alert -->
@@ -53,14 +52,14 @@
             <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
                 <!-- Email field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Email address</mat-label>
+                    <mat-label>Adresse e-mail</mat-label>
                     <input id="email" matInput [formControlName]="'email'" />
                     @if (signInForm.get('email').hasError('required')) {
-                        <mat-error> Email address is required </mat-error>
+                        <mat-error> L'adresse e-mail est requise </mat-error>
                     }
                     @if (signInForm.get('email').hasError('email')) {
                         <mat-error>
-                            Please enter a valid email address
+                            Veuillez entrer une adresse e-mail valide.
                         </mat-error>
                     }
                 </mat-form-field>
@@ -98,7 +97,7 @@
                             ></mat-icon>
                         }
                     </button>
-                    <mat-error> Password is required </mat-error>
+                    <mat-error> Le mot de passe est requis. </mat-error>
                 </mat-form-field>
 
                 <!-- Actions -->
@@ -110,12 +109,12 @@
                         [color]="'primary'"
                         [formControlName]="'rememberMe'"
                     >
-                        Remember me
+                        Se souvenir de moi
                     </mat-checkbox>
                     <a
                         class="text-md font-medium text-primary-500 hover:underline"
                         [routerLink]="['/forgot-password']"
-                        >Forgot password?
+                        >Mot de passe oublié ?
                     </a>
                 </div>
 
@@ -128,7 +127,7 @@
                     (click)="signIn()"
                 >
                     @if (!signInForm.disabled) {
-                        <span> Sign in </span>
+                        <span> Se connecter </span>
                     }
                     @if (signInForm.disabled) {
                         <mat-progress-spinner
@@ -139,14 +138,14 @@
                 </button>
 
                 <!-- Separator -->
-                <div class="mt-8 flex items-center">
+                <!-- <div class="mt-8 flex items-center">
                     <div class="mt-px flex-auto border-t"></div>
                     <div class="text-secondary mx-2">Or continue with</div>
                     <div class="mt-px flex-auto border-t"></div>
-                </div>
+                </div> -->
 
                 <!-- Single sign-on buttons -->
-                <div class="mt-8 flex items-center space-x-4">
+                <!-- <div class="mt-8 flex items-center space-x-4">
                     <button class="flex-auto" type="button" mat-stroked-button>
                         <mat-icon
                             class="icon-size-5"
@@ -165,7 +164,7 @@
                             [svgIcon]="'feather:github'"
                         ></mat-icon>
                     </button>
-                </div>
+                </div> -->
             </form>
         </div>
     </div>
@@ -196,15 +195,14 @@
         <!-- Content -->
         <div class="relative z-10 w-full max-w-2xl">
             <div class="text-7xl font-bold leading-none text-gray-100">
-                <div>Welcome to</div>
-                <div>our community</div>
+                <div>Bienvenue à SMG</div>
             </div>
-            <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
+            <!-- <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
                 Fuse helps developers to build organized and well coded
                 dashboards full of beautiful and rich modules. Join us and start
                 building your application today.
-            </div>
-            <div class="mt-8 flex items-center">
+            </div> -->
+            <!-- <div class="mt-8 flex items-center">
                 <div class="flex flex-0 items-center -space-x-1.5">
                     <img
                         class="h-10 w-10 flex-0 rounded-full object-cover ring-4 ring-gray-800 ring-offset-1 ring-offset-gray-800"
@@ -226,7 +224,7 @@
                 <div class="ml-4 font-medium tracking-tight text-gray-400">
                     More than 17k people joined us, it's your turn
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
