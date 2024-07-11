@@ -72,4 +72,5 @@ export class FacturesPDFComponent implements OnInit, OnDestroy, AfterViewInit {
   
       this.groupedVentes = Object.values(grouped);
     }
+    
 }
