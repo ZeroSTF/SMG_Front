@@ -2,8 +2,164 @@
     <!-- Main -->
     <div class="inline-block p-6 text-left sm:p-10 print:p-0">
         <!-- Invoice -->
-        <div
-            class="bg-card w-240 min-w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:p-0 print:shadow-none">
+        <div class="bg-card w-240 min-w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:p-0 print:shadow-none">
+         @if (rs) {
+            <div class="container mx-auto p-4 font-sans text-sm">
+                <div class="flex justify-between mb-4">
+                  <div>
+                    <p class="font-bold">REPUBLIQUE TUNISIENNE</p>
+                    <p>DIRECTION GENERALE</p>
+                    <p>MINISTERE DU PLAN ET DES FINANCES</p>
+                    <p>DU CONTROLE FISCAL</p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-bold">CERTIFICAT DE RETENUE</p>
+                    <p>D'IMPOT SUR REVENU OU</p>
+                    <p>IMPOT SUR LES SOCIETES</p>
+                  </div>
+                </div>
+              
+                <div class="mb-4">
+                  <p>Retenue effectuée le __________ ou pendant (1) Trimestre __________</p>
+                </div>
+              
+                <div class="border border-gray-400 p-2 mb-4">
+                  <div class="flex justify-between items-center">
+                    <p class="font-bold">A - PERSONNE OU ORGANISME PAYEUR</p>
+                    <p class="font-bold">IDENTIFIANT</p>
+                  </div>
+                  <div class="flex justify-end mt-2">
+                    <table class="w-1/2 border-collapse">
+                      <tr>
+                        <th class="border border-gray-400 px-2 py-1">Matricule Fiscal</th>
+                        <th class="border border-gray-400 px-2 py-1">Code TVA</th>
+                        <th class="border border-gray-400 px-2 py-1">Code Catégorie (2)</th>
+                        <th class="border border-gray-400 px-2 py-1">N°Etab. Secondaire</th>
+                      </tr>
+                      <tr>
+                        @if(details.piedFact.tvaclt){
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.tvaclt)[0]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.tvaclt)[1]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.tvaclt)[2]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.tvaclt)[3]}}</td>
+                        }
+                        @else{
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.patclt)[0]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.patclt)[1]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.patclt)[2]}}</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">{{makeTvaCltIntoArray(details.piedFact.patclt)[3]}}</td>
+                        }
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="mt-2">
+                    <p>Dénomination de la personne ou organisme payeur: {{ details.client.nom }}</p>
+                    <div class="flex justify-between">
+                      <p>Adresse: {{ details.client.adresse }}</p>
+                      <p>{{ details.client.code }}</p>
+                    </div>
+                  </div>
+                </div>
+              
+                <div class="border border-gray-400 p-2 mb-4">
+                  <table class="w-full border-collapse">
+                    <tr>
+                      <th class="border border-gray-400 px-2 py-1 w-1/2">B - RETENUE EFFECTUES SUR</th>
+                      <th class="border border-gray-400 px-2 py-1">MONTANT BRUT</th>
+                      <th class="border border-gray-400 px-2 py-1">RETENUE</th>
+                      <th class="border border-gray-400 px-2 py-1">MONTANT NET</th>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Retenue aux titre de marché taux 1 %</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{convertStringToDecimal(details.piedFact.totttc)}}</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{0.01*convertStringToDecimal(details.piedFact.totttc)}}</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{(convertStringToDecimal(details.piedFact.totttc)-0.01*convertStringToDecimal(details.piedFact.totttc)).toFixed(3)}}</td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Honoraires, Commissions, Courtages, Vacations et Loyers</td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Redevances</td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Revenus des Comptes Spéciaux d'épargne ouvert auprès des banques</td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Revenus des capitaux mobiles</td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                    </tr>
+                    <tr>
+                      <td class="border border-gray-400 px-2 py-1">* Revenus des bons de caisse au poteur</td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                      <td class="border border-gray-400 px-2 py-1"></td>
+                    </tr>
+                    <tr class="font-bold">
+                      <td class="border border-gray-400 px-2 py-1">TOTAL GENERAL</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{convertStringToDecimal(details.piedFact.totttc)}}</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{0.01*convertStringToDecimal(details.piedFact.totttc)}}</td>
+                      <td class="border border-gray-400 px-2 py-1 text-right">{{(convertStringToDecimal(details.piedFact.totttc)-0.01*convertStringToDecimal(details.piedFact.totttc)).toFixed(3)}}</td>
+                    </tr>
+                  </table>
+                </div>
+              
+                <div class="border border-gray-400 p-2 mb-4">
+                  <div class="flex justify-between items-center">
+                    <p class="font-bold">C - BENEFICIAIRE</p>
+                    <p class="font-bold">IDENTIFIANT</p>
+                  </div>
+                  <div class="flex justify-end mt-2">
+                    <table class="w-1/2 border-collapse">
+                      <tr>
+                        <th class="border border-gray-400 px-2 py-1">Mat.Fiscal</th>
+                        <th class="border border-gray-400 px-2 py-1">Code TVA</th>
+                        <th class="border border-gray-400 px-2 py-1">Code Catégorie</th>
+                        <th class="border border-gray-400 px-2 py-1">N°Etab.</th>
+                      </tr>
+                      <tr>
+                        <td class="border border-gray-400 px-2 py-1 text-center">736548X</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">A</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">M</td>
+                        <td class="border border-gray-400 px-2 py-1 text-center">000</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="mt-2">
+                    <p>Nom, prénom ou raison sociale: STE MOHAMED GHARIANI</p>
+                    <p>Adresse: RUE AHMED ESSIKELLI IM ANBARA 3027 SFAX</p>
+                  </div>
+                </div>
+              
+                <div class="text-center mb-4">
+                  <p>Je soussigné certifie les renseignements figurant sur le présent</p>
+                  <p>certificat et m'expose aux sanctions par la loi pour toute inexactitude</p>
+                </div>
+              
+                <div class="flex justify-end">
+                  <div class="text-right">
+                    <p>LE: {{ details.piedFact.datvte }}</p>
+                    <p>Cachet et signature du payeur</p>
+                  </div>
+                </div>
+              
+                <div class="text-xs mt-4">
+                  <p>(1) Le certificat est délivré à l'occasion de chaque payement. Toutefois pour les opérations répétitives, le certificat peut être délivré trimestriellement</p>
+                  <p>(2) Code catégorie : M personne morale-C personne physique-I industrie et commerce-P profession libérale-N employeurs non soumis à impôt sur le revenu ou sur les sociétés(administrations et établissements publics)-E établissements secondaire.</p>
+                </div>
+              </div>
+         }
+         @else {
             <div class="flex items-start">
                 <div class="grid place-items-start gap-y-12">
                     <div class="grid auto-cols-max grid-flow-col gap-x-8">
@@ -172,8 +328,7 @@
                 <div class="col-span-12" *ngFor="let group of groupedVentes">
                     <!-- BON Header -->
                     <div class="mb-4">
-                        <h3 class="text-lg font-bold">BON N°&nbsp;&nbsp;&nbsp;&nbsp;{{ group.nbon
-                            }}&nbsp;&nbsp;&nbsp;&nbsp; DU &nbsp;&nbsp;&nbsp;&nbsp;{{ group.datvte }}</h3>
+                        <h3 class="text-lg font-bold">BON N°&nbsp;&nbsp;&nbsp;&nbsp;{{ group.nbon }}&nbsp;&nbsp;&nbsp;&nbsp; DU &nbsp;&nbsp;&nbsp;&nbsp;{{ group.datvte }}</h3>
                     </div>
                     <!-- Divider -->
                     <div class="col-span-12 my-4 border-b"></div>
@@ -217,120 +372,168 @@
                 <div class="col-span-12 mt-16"></div>
 
                 <!-- Subtotal -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     MONTANT HT
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.brutht) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Tax -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     REMISE
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.totrem) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     BASE TVA 6
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.btva6) }}
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     MONTANT TVA 6
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.mtva6) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     BASE TVA 18
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.btva18) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     MONTANT TVA 18
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.mtva18) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     TOTAL TVA
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ convertStringToDecimal(details.piedFact.tottva) }} TND
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Discount -->
-                <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
                     TIMBRE
                 </div>
                 <div class="col-span-2 text-right text-lg">
                     {{ details.piedFact.timbre }}
-                </div>
+                </div> -->
 
                 <!-- Divider -->
-                <div class="col-span-12 my-3 border-b"></div>
+                <!-- <div class="col-span-12 my-3 border-b"></div> -->
 
                 <!-- Total -->
-                <div class="text-secondary col-span-10 self-center text-2xl font-medium tracking-tight">
+                <!-- <div class="text-secondary col-span-10 self-center text-2xl font-medium tracking-tight">
                     TOTAL TTC
                 </div>
                 <div class="col-span-2 text-right text-2xl font-medium">
                     {{ convertStringToDecimal(details.piedFact.totttc) }} TND
-                </div>
-            </div>
+                </div>-->
+            </div> 
 
-            <div class="mt-16">
-                <div class="font-medium">
-                    Please pay within 15 days. Thank you for your business.
+            <div class="container mx-auto p-4">
+                <div class="flex">
+                    <!-- Tax/Base/MontantTVA Table -->
+                    <table class="w-1/3 border-collapse border border-gray-300">
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Taux</th>
+                            <th class="border border-gray-300 px-4 py-2">Base</th>
+                            <th class="border border-gray-300 px-4 py-2">Montant TVA</th>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">7%</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(details.piedFact.btva6)}}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(details.piedFact.mtva6)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">13%</td>
+                            <td class="border border-gray-300 px-4 py-2"></td>
+                            <td class="border border-gray-300 px-4 py-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">19%</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(details.piedFact.btva18)}}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(details.piedFact.mtva6)}}</td>
+                        </tr>
+                    </table>
+            
+                    <!-- Signature Box -->
+                    <div class="w-1/3 border border-gray-300 p-4 ml-4">
+                        <p class="font-bold">Signature</p>
+                    </div>
+            
+                    <!-- Net a Payer Box -->
+                    <div class="w-1/3 border border-gray-300 p-4 ml-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <p class="font-bold">TOTAL H.T</p>
+                                <p class="font-bold">TOTAL T.V.A</p>
+                                <p class="font-bold">TIMBRE</p>
+                                <p class="font-bold">NET A PAYER</p>
+                            </div>
+                            <div class="text-right">
+                                <p>{{convertStringToDecimal(details.piedFact.brutht)}}</p>
+                                <p>{{convertStringToDecimal(details.piedFact.tottva)}}</p>
+                                <p>{{details.piedFact.timbre}}</p>
+                                <p class="font-bold">{{convertStringToDecimal(details.piedFact.totttc)}}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-4 flex items-start">
-                    <img class="mt-2 w-10 flex-0" src="images/logo/invoice_logo.JPG" />
-                    <div class="text-secondary ml-6 text-sm">
-                        In condimentum malesuada efficitur. Mauris volutpat
-                        placerat auctor. Ut ac congue dolor. Quisque scelerisque
-                        lacus sed feugiat fermentum. Cras aliquet facilisis
-                        pellentesque. Nunc hendrerit quam at leo commodo, a
-                        suscipit tellus dapibus. Etiam at felis volutpat est
-                        mollis lacinia. Mauris placerat sem sit amet velit
-                        mollis, in porttitor ex finibus. Proin eu nibh id libero
-                        tincidunt lacinia et eget.
+            
+                <div class="flex mt-4">
+                    <!-- Arrêtée la présente Facture Box -->
+                    <div class="w-1/2 border border-gray-300 p-4">
+                        <p class="font-bold">Arrêtée la présente Facture à la somme de :</p>
+                        <p>{{floatToFrenchWords(convertStringToDecimal(details.piedFact.totttc))}}</p>
+                    </div>
+            
+                    <!-- Condition de Vente Box -->
+                    <div class="w-1/2 border border-gray-300 p-4 ml-4">
+                        <p class="font-bold">CONDITION DE VENTE:</p>
+                        <p class="text-sm">Aucune réclamation ou restitution ne sera admise après 8 jours et doit être accompagnée d'un bon de livraison. En cas de poursuite les tribunaux de Sfax seront compétents ainsi que tous les frais honoraires seront à la charge du client.</p>
                     </div>
                 </div>
             </div>
-        </div>
+        
+        }
+    </div>
     </div>
 </div>

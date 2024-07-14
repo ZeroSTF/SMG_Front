@@ -109,7 +109,7 @@ export class ContactsService {
             take(1),
             map((contacts) => {
                 // Find the contact
-                const contact = contacts.find((item) => item.id === id) || null;
+                const contact = contacts.find((item) => item.id.toString() === id) || null;
 
                 // Update the contact
                 this._contact.next(contact);
@@ -231,6 +231,16 @@ export class ContactsService {
             )
         );
     }
+
+    /**
+   * Activate client
+   */
+  activate(user: any) {
+    user.status = 'Active';
+    this._httpClient.put(this.baseUrl+'/update', user).subscribe(() => {
+        console.log('Client activated');
+    });
+  }
 
     /**
      * Get countries

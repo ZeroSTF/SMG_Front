@@ -150,10 +150,10 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy {
                 this.contact = contact;
 
                 // Clear the emails and phoneNumbers form arrays
-                (this.contactForm.get('emails') as UntypedFormArray).clear();
-                (
-                    this.contactForm.get('phoneNumbers') as UntypedFormArray
-                ).clear();
+                // (this.contactForm.get('emails') as UntypedFormArray).clear();
+                // (
+                //     this.contactForm.get('phoneNumbers') as UntypedFormArray
+                // ).clear();
 
                 // Patch values to the form
                 this.contactForm.patchValue(contact);
@@ -161,26 +161,26 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy {
                 // Setup the emails form array
                 const emailFormGroups = [];
 
-                if (contact.emails.length > 0) {
-                    // Iterate through them
-                    contact.emails.forEach((email) => {
-                        // Create an email form group
-                        emailFormGroups.push(
-                            this._formBuilder.group({
-                                email: [email.email],
-                                label: [email.label],
-                            })
-                        );
-                    });
-                } else {
-                    // Create an email form group
-                    emailFormGroups.push(
-                        this._formBuilder.group({
-                            email: [''],
-                            label: [''],
-                        })
-                    );
-                }
+                // if (contact.emails.length > 0) {
+                //     // Iterate through them
+                //     contact.emails.forEach((email) => {
+                //         // Create an email form group
+                //         emailFormGroups.push(
+                //             this._formBuilder.group({
+                //                 email: [email.email],
+                //                 label: [email.label],
+                //             })
+                //         );
+                //     });
+                // } else {
+                //     // Create an email form group
+                //     emailFormGroups.push(
+                //         this._formBuilder.group({
+                //             email: [''],
+                //             label: [''],
+                //         })
+                //     );
+                // }
 
                 // Add the email form groups to the emails form array
                 emailFormGroups.forEach((emailFormGroup) => {
@@ -192,28 +192,28 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy {
                 // Setup the phone numbers form array
                 const phoneNumbersFormGroups = [];
 
-                if (contact.phoneNumbers.length > 0) {
-                    // Iterate through them
-                    contact.phoneNumbers.forEach((phoneNumber) => {
-                        // Create an email form group
-                        phoneNumbersFormGroups.push(
-                            this._formBuilder.group({
-                                country: [phoneNumber.country],
-                                phoneNumber: [phoneNumber.phoneNumber],
-                                label: [phoneNumber.label],
-                            })
-                        );
-                    });
-                } else {
-                    // Create a phone number form group
-                    phoneNumbersFormGroups.push(
-                        this._formBuilder.group({
-                            country: ['us'],
-                            phoneNumber: [''],
-                            label: [''],
-                        })
-                    );
-                }
+                // if (contact.phoneNumbers.length > 0) {
+                //     // Iterate through them
+                //     contact.phoneNumbers.forEach((phoneNumber) => {
+                //         // Create an email form group
+                //         phoneNumbersFormGroups.push(
+                //             this._formBuilder.group({
+                //                 country: [phoneNumber.country],
+                //                 phoneNumber: [phoneNumber.phoneNumber],
+                //                 label: [phoneNumber.label],
+                //             })
+                //         );
+                //     });
+                // } else {
+                //     // Create a phone number form group
+                //     phoneNumbersFormGroups.push(
+                //         this._formBuilder.group({
+                //             country: ['us'],
+                //             phoneNumber: [''],
+                //             label: [''],
+                //         })
+                //     );
+                // }
 
                 // Add the phone numbers form groups to the phone numbers form array
                 phoneNumbersFormGroups.forEach((phoneNumbersFormGroup) => {
@@ -295,25 +295,25 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy {
     /**
      * Update the contact
      */
-    updateContact(): void {
-        // Get the contact object
-        const contact = this.contactForm.getRawValue();
+    // updateContact(): void {
+    //     // Get the contact object
+    //     const contact = this.contactForm.getRawValue();
 
-        // Go through the contact object and clear empty values
-        contact.emails = contact.emails.filter((email) => email.email);
+    //     // Go through the contact object and clear empty values
+    //     contact.emails = contact.emails.filter((email) => email.email);
 
-        contact.phoneNumbers = contact.phoneNumbers.filter(
-            (phoneNumber) => phoneNumber.phoneNumber
-        );
+    //     contact.phoneNumbers = contact.phoneNumbers.filter(
+    //         (phoneNumber) => phoneNumber.phoneNumber
+    //     );
 
-        // Update the contact on the server
-        this._contactsService
-            .updateContact(contact.id, contact)
-            .subscribe(() => {
-                // Toggle the edit mode off
-                this.toggleEditMode(false);
-            });
-    }
+    //     // Update the contact on the server
+    //     this._contactsService
+    //         .updateContact(contact.id, contact)
+    //         .subscribe(() => {
+    //             // Toggle the edit mode off
+    //             this.toggleEditMode(false);
+    //         });
+    // }
 
     /**
      * Delete the contact
@@ -765,4 +765,8 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy {
     trackByFn(index: number, item: any): any {
         return item.id || index;
     }
+
+    activate(client: any): void {
+        this._contactsService.activate(client);
+      }
 }

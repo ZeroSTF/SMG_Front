@@ -3,6 +3,7 @@ import { initialDataResolver } from 'app/app.resolvers';
 import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
+import { RoleGuard } from './core/auth/guards/role.guard';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -79,9 +80,15 @@ export const appRoutes: Route[] = [
             {path: 'dashboards', children: [
                 {path: 'commandes', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes.routes')},
                 {path: 'factures', loadChildren: () => import('app/modules/admin/dashboards/factures/factures.routes')},
-                {path: 'factures-pdf/:nfact', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
-                {path: 'clients', loadChildren: () => import('app/modules/admin/dashboards/clients/clients.routes')},
-                {path: 'contacts', loadChildren: () => import('app/modules/admin/dashboards/contacts/contacts.routes')},
+                {path: 'factures-pdf/:nfact/:rs', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
+                {path: 'contacts',
+                    canActivate: [RoleGuard],
+                    data: { requiredRole: 'admin' },
+                    loadChildren: () => import('app/modules/admin/dashboards/clients/clients.routes')},
+                {path: 'clients',
+                    canActivate: [RoleGuard],
+                    data: { requiredRole: 'admin' },
+                    loadChildren: () => import('app/modules/admin/dashboards/contacts/contacts.routes')},
             ]},
             {path: 'pages', children:[
                 {path: 'profile', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')},

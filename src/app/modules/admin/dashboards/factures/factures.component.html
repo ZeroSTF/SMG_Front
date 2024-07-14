@@ -16,7 +16,7 @@
             <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">
             </div>
         </div>
-
+        
         <div class="mt-8 grid w-full grid-cols-1 gap-8 xl:grid-cols-3">
             <!-- Factures table -->
             <div
@@ -128,11 +128,19 @@
                             >
                             </th>
                             <td mat-cell *matCellDef="let facture">
+                                <!--pdf button-->
                                 <button
                                     mat-icon-button
                                     (click)="openPdf(facture.nfact)"
                                 >
                                     <mat-icon>picture_as_pdf</mat-icon>
+                                </button>
+                                <!--RS button-->
+                                <button
+                                    mat-icon-button
+                                    (click)="openRs(facture.nfact)"
+                                >
+                                    <mat-icon>receipt</mat-icon>
                                 </button>
                             </td>
                         </ng-container>

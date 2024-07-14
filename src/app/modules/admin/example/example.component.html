@@ -2,8 +2,41 @@
     <!-- Main -->
     <div class="flex-auto p-6 sm:p-10">
         <!-- CONTENT GOES HERE -->
-        <div
-            class="h-400 max-h-400 min-h-400 rounded-2xl border-2 border-dashed border-gray-300"
-        ></div>
+        <div class="container" style="display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        margin-top: 20px;">
+            <mat-card style="width: 100%; max-width: 500px;">
+                <mat-card-title>Generate Art</mat-card-title>
+                <mat-card-content>
+                    <form [formGroup]="form">
+                        <mat-form-field appearance="fill" style="width: 100%;">
+                            <mat-label>Prompt</mat-label>
+                            <textarea matInput formControlName="prompt" rows="5"></textarea>
+                        </mat-form-field>
+
+                        <div class="file-input-wrapper" style="position: relative;
+                        overflow: hidden;
+                        display: inline-block;">
+                            <button mat-raised-button color="accent" class="file-input-button" style="display: inline-block;">
+                                Browse
+                            </button>
+                            <input type="file" (change)="onFileSelected($event)" class="file-input" style="position: absolute;
+                            top: 0;
+                            left: 0;
+                            font-size: 100px;
+                            text-align: right;
+                            opacity: 0;
+                            cursor: pointer;"/>
+                        </div>
+                        <div *ngIf="selectedImage">
+                            <img [src]="selectedImage" alt="Image preview" class="image-preview" style="width: 100%; margin-top: 16px;" />
+                        </div>
+
+                        <button mat-raised-button color="primary" (click)="generateArt()">Generate Art</button>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </div>

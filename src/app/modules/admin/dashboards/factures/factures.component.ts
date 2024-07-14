@@ -17,7 +17,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { UserService } from 'app/core/user/user.service';
 import { FactureService } from 'app/modules/admin/dashboards/factures/facture.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -146,6 +146,13 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     openPdf(nfact: string): void {
-        this._router.navigate(['/dashboards/factures-pdf', nfact]);
+        this._router.navigate(['/dashboards/factures-pdf', nfact, false]);
+    }
+
+    openRs(nfact: string): void {
+        const navigationExtras: NavigationExtras = {
+            state: { rs: true }
+        };
+        this._router.navigate(['/dashboards/factures-pdf', nfact, true]);
     }
 }

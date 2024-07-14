@@ -87,6 +87,7 @@
                         ></mat-icon>
                         <span class="leading-none">{{currentUser.adresse}}</span>
                     </div>
+                    @if(currentUser.banque){
                     <div class="mt-4 flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"
@@ -96,6 +97,18 @@
                             >{{currentUser.banque}}</span
                         >
                     </div>
+                    }
+                    <!--rib-->
+                    @if(currentUser.rib){
+                    <div class="mt-4 flex items-center">
+                        <mat-icon
+                            class="mr-3 icon-size-5"
+                            [svgIcon]="'heroicons_solid:credit-card'"
+                        ></mat-icon>
+                        <span class="leading-none">{{currentUser.rib}}</span>
+                    </div>
+                    }
+                    @if(currentUser.tel1){
                     <div class="mt-4 flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"
@@ -103,6 +116,7 @@
                         ></mat-icon>
                         <span class="leading-none">{{currentUser.tel1}}</span>
                     </div>
+                    }
                     <div class="mt-4 flex items-center">
                         <mat-icon
                             class="mr-3 icon-size-5"

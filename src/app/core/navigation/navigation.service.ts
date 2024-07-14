@@ -8,7 +8,7 @@ import { AuthService } from '../auth/auth.service';
 const defaultNavigation: FuseNavigationItem[] = [
     {
         id:'home',
-        title: 'Home',
+        title: 'Accueil',
         type: 'basic',
         icon: 'heroicons_outline:home',
         link: '/home'
