@@ -79,6 +79,7 @@ export const appRoutes: Route[] = [
             // Dashboards
             {path: 'dashboards', children: [
                 {path: 'commandes', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes.routes')},
+                {path: 'commandes-pdf/:id', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes-pdf/commandes-pdf.routes')},
                 {path: 'factures', loadChildren: () => import('app/modules/admin/dashboards/factures/factures.routes')},
                 {path: 'factures-pdf/:nfact/:rs', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
                 

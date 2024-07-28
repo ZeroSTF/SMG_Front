@@ -1,0 +1,87 @@
+<div class="absolute inset-0 min-w-0 overflow-auto text-center print:overflow-visible" cdkScrollable>
+    <!-- Main -->
+    <div class="inline-block p-6 text-left sm:p-10 print:p-0">
+        <!-- Invoice -->
+        <div class="bg-card w-240 min-w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:p-0 print:shadow-none">
+            <!-- Header -->
+            <div class="flex items-start justify-between">
+                <div class="flex flex-col">
+                    <div class="text-4xl font-extrabold tracking-tight">COMMANDE</div>
+                    <div class="mt-2">
+                        <span class="font-medium">N° Commande: </span>
+                        <span>{{commande?.id}}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <img class="w-24" src="images/logo/invoice_logo.JPG" alt="SMG logo">
+                    <div>RUE AHMED ESSIKILLI IMM. ANBRA NUM 3</div>
+                    <div>3027 - SFAX - TUNISIE</div>
+                </div>
+            </div>
+
+            <!-- Client & Invoice Details -->
+            <div class="mt-8 flex items-start justify-between">
+                <div class="flex flex-col">
+                    <span class="text-lg font-medium">Facturé à:</span>
+                    <span class="mt-2">{{commande?.user?.nom}}</span>
+                    <span>{{commande?.user?.adresse}}</span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <div class="flex flex-col">
+                        <span class="font-medium">Date de commande:</span>
+                        <span>{{commande?.commandeDate | date:'dd/MM/yyyy'}}</span>
+                    </div>
+                    <div class="mt-2 flex flex-col">
+                        <span class="font-medium">Statut:</span>
+                        <span [ngClass]="{
+                            'text-green-600': commande?.status === 'COMPLETED',
+                            'text-yellow-600': commande?.status === 'PENDING',
+                            'text-red-600': commande?.status === 'CANCELLED'
+                        }">{{commande?.status}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Items Table -->
+            <table class="mt-8 w-full table-auto">
+                <thead>
+                    <tr>
+                        <th class="border-b py-2 text-left font-medium">Article</th>
+                        <th class="border-b py-2 text-right font-medium">Quantité</th>
+                        <th class="border-b py-2 text-right font-medium">Prix unitaire</th>
+                        <th class="border-b py-2 text-right font-medium">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of commande?.commandeItems">
+                        <td class="border-b py-2">{{item.article.designation}}</td>
+                        <td class="border-b py-2 text-right">{{item.quantity}}</td>
+                        <td class="border-b py-2 text-right">{{item.price | currency:'TND':'symbol':'1.3-3'}}</td>
+                        <td class="border-b py-2 text-right">{{item.quantity * item.price | currency:'TND':'symbol':'1.3-3'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Invoice Total -->
+            <div class="mt-8 flex justify-end">
+                <div class="flex flex-col items-end">
+                    <div class="flex justify-between">
+                        <span class="mr-4 font-medium">Total:</span>
+                        <span>{{commande?.total | currency:'TND':'symbol':'1.3-3'}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center text-sm">
+                Merci pour votre commande!
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print button -->
+<button mat-raised-button color="primary" class="fixed bottom-16 right-6 print:hidden" (click)="printInvoice()">
+    <mat-icon>print</mat-icon>
+    Imprimer
+</button>

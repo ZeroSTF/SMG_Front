@@ -52,10 +52,10 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
     commandesDataSource: MatTableDataSource<any> =
         new MatTableDataSource();
     commandesTableColumns: string[] = [
-        'nFact',
-        'datvte',
-        'brutht',
-        'etat',
+        'id',
+        'commandeDate',
+        'total',
+        'status',
         'pdf'
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -119,30 +119,7 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
         return item.id || index;
     }
 
-    convertToDate(rawDate:string): string {
-        // Assuming rawDate is in dd/MM/yyyy format
-        const parts = rawDate.split('/');
-        if (parts.length === 3) {
-          const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-          return formattedDate;
-        } else {
-          // Handle invalid date format
-          return '';
-        }
-      }
-
-    convertStringToDecimal(input: string): string {
-        // Replace comma with dot
-        const replacedString = input.replace(',', '.');
-    
-        // Parse as float and round to 3 decimal places
-        const parsedNumber = parseFloat(replacedString);
-        const roundedNumber = parsedNumber.toFixed(3);
-    
-        return roundedNumber;
-    }
-
-    openPdf(nfact: string): void {
-         this._router.navigate(['/dashboards/commandes-pdf', nfact]);
+    openPdf(id: string): void {
+         this._router.navigate(['/dashboards/commandes-pdf', id]);
     }
 }

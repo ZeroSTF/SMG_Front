@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class CommandeService {
-  private baseUrl = 'http://localhost:8080/vente';
+  private baseUrl = 'http://localhost:8080/commande';
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
 
   /**
@@ -42,7 +42,7 @@ export class CommandeService {
    * Get commande details
    */
   getCommandeDetails(id: string): Observable<any> {
-    return this._httpClient.get(this.baseUrl+'/getDetails/'+id);
+    return this._httpClient.get(this.baseUrl+'/'+id);
   }
 
 }
