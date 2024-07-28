@@ -17,6 +17,7 @@ import { Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
     selector: 'auth-sign-up',
@@ -48,6 +49,9 @@ export class AuthSignUpComponent implements OnInit {
     showAlert: boolean = false;
 
     imageSrc: string | ArrayBuffer | null = null;
+    fileData = new FormData();
+    isPhotoSelected = false;
+    selectedImageUrl: string | ArrayBuffer | null = null;
 
     /**
      * Constructor
@@ -55,7 +59,8 @@ export class AuthSignUpComponent implements OnInit {
     constructor(
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
+        private _router: Router,
+        private _userService: UserService
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -74,7 +79,9 @@ export class AuthSignUpComponent implements OnInit {
             adresse: ['', Validators.required],
             tel1: [''],
             tel2: ['', Validators.required],
-            mat: [null, Validators.required],
+            fax: [''],
+            idfiscal: ['', Validators.required],
+            mat: [null],
             agreements: ['', Validators.requiredTrue],
         });
     }
@@ -100,6 +107,19 @@ export class AuthSignUpComponent implements OnInit {
         // Sign up
         this._authService.signUp(this.signUpForm.value).subscribe(
             (response) => {
+
+                if (this.isPhotoSelected) {
+                    // Call the userService.uploadPhoto() function to upload the photo
+                    this._userService.uploadPhoto(this.fileData, response.id).subscribe(
+                      (response: any) => {
+                        console.log('Photo uploaded successfully:', response);
+                      },
+                      (error: any) => {
+                        console.error('Failed to upload photo:', error);
+                      }
+                    );
+                  }
+
                 // Navigate to the confirmation required page
                 this._router.navigateByUrl('/confirmation-required');
             },
@@ -127,7 +147,7 @@ export class AuthSignUpComponent implements OnInit {
         fileInput?.click();
       }
     
-      onFileChange(event: Event): void {
+    onFileChange(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length) {
           const file = input.files[0];
@@ -141,5 +161,20 @@ export class AuthSignUpComponent implements OnInit {
         } else {
           this.imageSrc = null;
         }
+    }
+
+    onFileSelected(event: any) {
+        const file = event.target.files[0];
+        if (!file) {
+          return;
+        }
+    
+        // Create a URL object from the file
+        const fileUrl = URL.createObjectURL(file);
+        this.selectedImageUrl = fileUrl;
+    
+        // Populate fileData object to send the file
+        this.fileData.append('file', file);
+        this.isPhotoSelected = true;
       }
 }

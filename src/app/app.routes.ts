@@ -81,14 +81,18 @@ export const appRoutes: Route[] = [
                 {path: 'commandes', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes.routes')},
                 {path: 'factures', loadChildren: () => import('app/modules/admin/dashboards/factures/factures.routes')},
                 {path: 'factures-pdf/:nfact/:rs', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
+                
                 {path: 'contacts',
                     canActivate: [RoleGuard],
                     data: { requiredRole: 'admin' },
                     loadChildren: () => import('app/modules/admin/dashboards/clients/clients.routes')},
+
                 {path: 'clients',
                     canActivate: [RoleGuard],
                     data: { requiredRole: 'admin' },
                     loadChildren: () => import('app/modules/admin/dashboards/contacts/contacts.routes')},
+
+                {path: 'articles', loadChildren: () => import('app/modules/admin/dashboards/articles/articles.routes')},
             ]},
             {path: 'pages', children:[
                 {path: 'profile', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')},

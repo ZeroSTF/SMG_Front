@@ -136,12 +136,14 @@
                                     <mat-icon>picture_as_pdf</mat-icon>
                                 </button>
                                 <!--RS button-->
+                                @if(convertStringToDecimal(facture.totttc)>=1000){
                                 <button
                                     mat-icon-button
                                     (click)="openRs(facture.nfact)"
                                 >
                                     <mat-icon>receipt</mat-icon>
                                 </button>
+                            }
                             </td>
                         </ng-container>
 

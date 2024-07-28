@@ -127,17 +127,33 @@
                     }
                 </mat-form-field>
 
+                <!--fax field-->
+                <mat-form-field class="w-full">
+                    <mat-label>Fax</mat-label>
+                    <input id="fax" matInput [formControlName]="'fax'" />
+                </mat-form-field>
+
+                <!--idfiscal field-->
+                <mat-form-field class="w-full">
+                    <mat-label>Identifiant Fiscal</mat-label>
+                    <input id="idfiscal" matInput [formControlName]="'idfiscal'" />
+                    @if (signUpForm.get('idfiscal').hasError('required')) {
+                        <mat-error> L'identifiant fiscal est requis. </mat-error>
+                    }
+                </mat-form-field>
+
+                <!-- mat field -->
                 <mat-form-field class="w-full">
                     <mat-label>Matricule</mat-label>
-                    <input type="file" id="mat" (change)="onFileChange($event)" accept="image/*" style="display: none;" />
-                    <input type="text" id="mat" matInput [formControlName]="'mat'" [value]="imageSrc" style="display: none;"/>
-                    <button mat-button (click)="openFileDialog()">Télécharger une image</button>
-                    @if(imageSrc){
+                    <input type="file"  #fileInput id="mat" (change)="onFileSelected($event)" accept="image/*" style="display: none;" />
+                    <input type="text" id="mat" matInput [formControlName]="'mat'" [value]="selectedImageUrl" style="display: none;"/>
+                    <button mat-button (click)="fileInput.click()">Télécharger une image</button>
+                    @if(selectedImageUrl){
                     <div style="margin-top: 10px;">
-                        <img [src]="imageSrc" alt="Matricule Image Preview" style="max-width: 100%; max-height: 200px; object-fit: cover;"/>
+                        <img [src]="selectedImageUrl" alt="Matricule Image Preview" style="max-width: 100%; max-height: 200px; object-fit: cover;"/>
                     </div>
                     }
-                    @if (signUpForm.get('mat').hasError('required')) {
+                    @if (!isPhotoSelected) {
                         <mat-error> Matricule est requise. </mat-error>
                     }
                 </mat-form-field>

@@ -7,6 +7,7 @@ import { map, Observable, ReplaySubject, tap } from 'rxjs';
 export class UserService {
     private _httpClient = inject(HttpClient);
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
+    private baseUrl = 'http://localhost:8080/user/';
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -34,7 +35,7 @@ export class UserService {
      * Get the current signed-in user data
      */
     get(): Observable<User> {
-        return this._httpClient.get<User>('http://localhost:8080/user/current').pipe(
+        return this._httpClient.get<User>(this.baseUrl+'current').pipe(
             tap((user) => {
                 this._user.next(user);
             })
@@ -45,7 +46,7 @@ export class UserService {
      * Get all of the current user's data
      */
     getDetails(): Observable<any> {
-        return this._httpClient.get('http://localhost:8080/user/currentDetails');
+        return this._httpClient.get(this.baseUrl+'currentDetails');
     }
 
     /**
@@ -54,8 +55,16 @@ export class UserService {
      * @param user
      */
     update(user: any): Observable<any> {
-        return this._httpClient.put('http://localhost:8080/user/update', user );
+        return this._httpClient.put(this.baseUrl+'update', user );
     }
 
+    /**
+     * Upload photo
+     *
+     * @param requestBody
+     */
+     uploadPhoto(requestBody: any, id:String) {
+        return this._httpClient.post(this.baseUrl +`upload/${id}`, requestBody)
+      }
 
 }

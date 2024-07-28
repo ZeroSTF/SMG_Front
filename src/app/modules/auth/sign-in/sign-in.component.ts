@@ -69,9 +69,9 @@ export class AuthSignInComponent implements OnInit {
     ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email: [
-                'riadh@esprit.tn',
-                [Validators.required, Validators.email],
+            code: [
+                '41000001',
+                [Validators.required],
             ],
             password: ['password', Validators.required],
             rememberMe: [''],
@@ -133,7 +133,7 @@ export class AuthSignInComponent implements OnInit {
                 // Set the alert
                 this.alert = {
                     type: 'error',
-                    message: 'Wrong email or password',
+                    message: 'Mot de passe ou code incorrect',
                 };
 
                 // Show the alert

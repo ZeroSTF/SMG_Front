@@ -119,7 +119,7 @@ export class NotificationsService {
             take(1),
             switchMap((notifications) =>
                 this._httpClient
-                    .delete<boolean>(this.baseUrl + 'delete/${id}')
+                    .delete<boolean>(this.baseUrl +'delete/'+id)
                     .pipe(
                         map((isDeleted: boolean) => {
                             // Find the index of the deleted notification

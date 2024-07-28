@@ -32,6 +32,13 @@ const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:document-text',
                 link: '/dashboards/factures'
+            },
+            {
+                id: 'dashboard.articles',
+                title: 'Articles',
+                type: 'basic',
+                icon: 'heroicons_outline:cog',
+                link: '/dashboards/articles'
             }
             
         ]

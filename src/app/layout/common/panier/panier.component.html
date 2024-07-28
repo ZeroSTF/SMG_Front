@@ -1,0 +1,75 @@
+<!-- Panier toggle -->
+<button mat-icon-button (click)="openPanel()" #panierOrigin>
+    @if (totalItems > 0) {
+        <span class="absolute left-0 right-0 top-0 flex h-3 items-center justify-center">
+            <span class="ml-4 mt-2.5 flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full bg-teal-600 px-1 text-xs font-medium text-indigo-50">
+                {{ totalItems }}
+            </span>
+        </span>
+    }
+    <mat-icon [svgIcon]="'heroicons_outline:shopping-cart'"></mat-icon>
+</button>
+
+<!-- Panier panel -->
+<ng-template #panierPanel>
+    <div class="fixed inset-0 flex flex-col overflow-hidden shadow-lg sm:static sm:inset-auto sm:w-90 sm:min-w-90 sm:rounded-2xl">
+        <!-- Header -->
+        <div class="flex shrink-0 items-center bg-primary py-4 pl-6 pr-4 text-on-primary">
+            <div class="-ml-1 mr-3 sm:hidden">
+                <button mat-icon-button (click)="closePanel()">
+                    <mat-icon class="text-current icon-size-5" [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
+                </button>
+            </div>
+            <div class="text-lg font-medium leading-10">Panier</div>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-card relative flex flex-auto flex-col divide-y overflow-y-auto sm:max-h-120">
+            <!-- Panier items -->
+            @for (pA of panierArticles; track trackByFn($index, pA)) {
+                <div class="group flex hover:bg-gray-50 dark:hover:bg-black dark:hover:bg-opacity-5">
+                    <div class="flex flex-auto py-5 pl-6">
+                        <div class="flex flex-col">
+                            <div class="font-semibold">{{ pA.article.designation }}</div>
+                            <div class="text-secondary">Prix: {{ pA.article.pvht }} TND</div>
+                            <div class="flex items-center mt-2">
+                                <button mat-icon-button (click)="updateQuantity(pA.article.id, pA.quantity - 1)" [disabled]="pA.quantity <= 1">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                                <span class="mx-2">{{ pA.quantity }}</span>
+                                <button mat-icon-button (click)="updateQuantity(pA.article.id, pA.quantity + 1)">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative my-5 ml-2 mr-6 flex flex-col">
+                        <button class="h-6 min-h-6 w-6 sm:opacity-0 sm:group-hover:opacity-100" mat-icon-button (click)="removeFromCart(pA.article.id)" [matTooltip]="'Supprimer'">
+                            <mat-icon class="icon-size-4" [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>
+                        </button>
+                    </div>
+                </div>
+            }
+
+            <!-- Empty panier -->
+            @if (!panierArticles || !panierArticles.length) {
+                <div class="flex flex-auto flex-col items-center justify-center px-8 py-12 sm:justify-start">
+                    <div class="flex h-14 w-14 flex-0 items-center justify-center rounded-full bg-primary-100 dark:bg-primary-600">
+                        <mat-icon class="text-primary-700 dark:text-primary-50" [svgIcon]="'heroicons_outline:shopping-cart'"></mat-icon>
+                    </div>
+                    <div class="mt-5 text-2xl font-semibold tracking-tight">Panier vide</div>
+                    <div class="text-secondary mt-1 w-full max-w-60 text-center text-md">Votre panier est actuellement vide.</div>
+                </div>
+            }
+        </div>
+
+        <!-- Footer -->
+        @if (panierArticles && panierArticles.length) {
+            <div class="flex justify-end items-center bg-gray-100 p-4">
+                <button mat-raised-button color="primary" (click)="checkout()">
+                    Passer la commande
+                </button>
+            </div>
+        }
+    </div>
+</ng-template>

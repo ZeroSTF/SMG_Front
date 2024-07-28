@@ -50,23 +50,18 @@
 
             <!-- Sign in form -->
             <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
-                <!-- Email field -->
+                <!-- Code field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Adresse e-mail</mat-label>
-                    <input id="email" matInput [formControlName]="'email'" />
-                    @if (signInForm.get('email').hasError('required')) {
-                        <mat-error> L'adresse e-mail est requise </mat-error>
-                    }
-                    @if (signInForm.get('email').hasError('email')) {
-                        <mat-error>
-                            Veuillez entrer une adresse e-mail valide.
-                        </mat-error>
+                    <mat-label>Code</mat-label>
+                    <input id="code" matInput [formControlName]="'code'" />
+                    @if (signInForm.get('code').hasError('required')) {
+                        <mat-error> Le code est requis </mat-error>
                     }
                 </mat-form-field>
 
                 <!-- Password field -->
                 <mat-form-field class="w-full">
-                    <mat-label>Password</mat-label>
+                    <mat-label>Mot de passe</mat-label>
                     <input
                         id="password"
                         matInput

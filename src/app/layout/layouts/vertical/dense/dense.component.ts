@@ -19,6 +19,7 @@ import { SearchComponent } from 'app/layout/common/search/search.component';
 import { ShortcutsComponent } from 'app/layout/common/shortcuts/shortcuts.component';
 import { UserComponent } from 'app/layout/common/user/user.component';
 import { Subject, takeUntil } from 'rxjs';
+import { PanierComponent } from "../../../common/panier/panier.component";
 
 @Component({
     selector: 'dense-layout',
@@ -26,20 +27,21 @@ import { Subject, takeUntil } from 'rxjs';
     encapsulation: ViewEncapsulation.None,
     standalone: true,
     imports: [
-        FuseLoadingBarComponent,
-        FuseVerticalNavigationComponent,
-        MatButtonModule,
-        MatIconModule,
-        LanguagesComponent,
-        FuseFullscreenComponent,
-        SearchComponent,
-        ShortcutsComponent,
-        MessagesComponent,
-        NotificationsComponent,
-        UserComponent,
-        RouterOutlet,
-        QuickChatComponent,
-    ],
+    FuseLoadingBarComponent,
+    FuseVerticalNavigationComponent,
+    MatButtonModule,
+    MatIconModule,
+    LanguagesComponent,
+    FuseFullscreenComponent,
+    SearchComponent,
+    ShortcutsComponent,
+    MessagesComponent,
+    NotificationsComponent,
+    UserComponent,
+    RouterOutlet,
+    QuickChatComponent,
+    PanierComponent
+],
 })
 export class DenseLayoutComponent implements OnInit, OnDestroy {
     isScreenSmall: boolean;
