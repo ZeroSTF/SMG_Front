@@ -8,6 +8,9 @@ export class HomeService {
     private _data: BehaviorSubject<any> = new BehaviorSubject(null);
     private _currentUser: BehaviorSubject<any> = new BehaviorSubject(null);
     private _authService = inject(AuthService);
+    private _solde: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _commandeCount: BehaviorSubject<any> = new BehaviorSubject(null);
+    private _baseUrl = 'http://localhost:8080/';
 
     /**
      * Constructor
@@ -32,6 +35,20 @@ export class HomeService {
         return this._currentUser.asObservable();
     }
 
+    /**
+     * Getter for solde
+     */
+    get solde$(): Observable<any> {
+        return this._solde.asObservable();
+    }
+
+    /**
+     * Getter for commandeCount
+     */
+    get commandeCount$(): Observable<any> {
+        return this._commandeCount.asObservable();
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -52,6 +69,21 @@ export class HomeService {
             tap((response: any) => {
                 this._currentUser.next(response);
             })
+        );
+    }
+
+    getSolde(): Observable<any> {
+        return this._httpClient.get(this._baseUrl+'user/solde', { responseType: 'text' }).pipe(
+            tap((response: any) => {
+                this._solde.next(response);
+            }));
+    }
+
+    getCommandeCount(): Observable<any> {
+        return this._httpClient.get(this._baseUrl+'commande/count').pipe(
+            tap((response: any) => {
+                this._commandeCount.next(response);    
+    })
         );
     }
 }

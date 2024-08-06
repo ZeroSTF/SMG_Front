@@ -29,6 +29,14 @@ get articles$(): Observable<any[]> {
   return this._articles.asObservable();
 }
 
+/**
+ * 
+ * Setter for articles
+ */
+setArticles(articles: any[] | null): void {
+  this._articles.next(articles);
+}
+
   constructor(private http: HttpClient) { }
 
   getAllArticles(): Observable<any[]> {
@@ -75,5 +83,17 @@ get articles$(): Observable<any[]> {
 
   getUserPanierId(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}user/current/panier-id`);
+  }
+
+  advancedSearchArticles(designation: string, frn: string): Observable<any[]> {
+    return this.http
+        .get<any[]>(`${this.apiUrl}article/advanced-search`, {
+            params: { designation, frn }
+        })
+        .pipe(
+            tap((articles) => {
+                this._articles.next(articles);
+            })
+        );
   }
 }

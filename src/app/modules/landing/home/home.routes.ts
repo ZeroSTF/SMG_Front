@@ -10,6 +10,8 @@ export default [
         resolve: {
             data: () => inject(HomeService).getData(),
             currentUser: () => inject(HomeService).getCurrentUser(),
+            solde: () => inject(HomeService).getSolde(),
+            commandeCount: () => inject(HomeService).getCommandeCount(),
         },
     },
 ] as Routes;

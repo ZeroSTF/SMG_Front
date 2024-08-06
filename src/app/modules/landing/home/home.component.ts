@@ -15,6 +15,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { TranslocoModule } from '@ngneat/transloco';
+import { AuthService } from 'app/core/auth/auth.service';
 import { HomeService } from 'app/modules/landing/home/home.service';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
@@ -48,6 +49,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     chartYearlyExpenses: ApexOptions = {};
     data: any;
     currentUser: any;
+    solde: any;
+    commandeCount: any;
     selectedProject: string = 'ACME Corp. Backend App';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -56,7 +59,8 @@ export class HomeComponent implements OnInit, OnDestroy {
      */
     constructor(
         private _homeService: HomeService,
-        private _router: Router
+        private _router: Router,
+        private _authService: AuthService
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -73,6 +77,18 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.currentUser = currentUser;
                 console.log(currentUser);
             });
+        if(this._authService.hasRole('admin')){
+            this._homeService.solde$.pipe(takeUntil(this._unsubscribeAll)).subscribe((solde) => {
+                this.solde = solde;
+            }
+            );}
+            else{
+                this.solde=this.currentUser.solde;
+            }
+
+        this._homeService.commandeCount$.pipe(takeUntil(this._unsubscribeAll)).subscribe((commandeCount) => {
+            this.commandeCount = commandeCount;
+        })
         // Get the data
         this._homeService.data$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -460,5 +476,9 @@ export class HomeComponent implements OnInit, OnDestroy {
                 },
             },
         };
+    }
+
+    settings(): void {
+        this._router.navigate(['pages/settings']);
     }
 }

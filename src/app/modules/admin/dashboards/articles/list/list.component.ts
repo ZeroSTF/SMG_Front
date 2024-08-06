@@ -10,6 +10,8 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import {
+    FormBuilder,
+    FormGroup,
     FormsModule,
     ReactiveFormsModule,
     UntypedFormControl,
@@ -32,9 +34,11 @@ import {
     Subject,
     filter,
     fromEvent,
+    of,
     switchMap,
     takeUntil,
 } from 'rxjs';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @Component({
     selector: 'articles-list',
@@ -55,6 +59,7 @@ import {
         RouterLink,
         AsyncPipe,
         I18nPluralPipe,
+        MatTabsModule
     ],
 })
 export class ArticlesListComponent implements OnInit, OnDestroy {
@@ -62,13 +67,15 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
 
     articles$: Observable<any[]>;
 
-    articlesCount: number = 0;
     articlesTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
     //countries: Country[];
     drawerMode: 'side' | 'over';
     searchInputControl: UntypedFormControl = new UntypedFormControl();
     selectedArticle: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    advancedSearchForm: FormGroup;
+
 
     /**
      * Constructor
@@ -79,7 +86,8 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
         private _articlesService: ArticlesService,
         @Inject(DOCUMENT) private _document: any,
         private _router: Router,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private _formBuilder: FormBuilder
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -90,17 +98,14 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
+        // Initialize advanced search form
+        this.advancedSearchForm = this._formBuilder.group({
+            designation: [''],
+            frn: ['']
+        });
+
         // Get the articles
         this.articles$ = this._articlesService.articles$;
-        this._articlesService.articles$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((articles: any[]) => {
-                // Update the counts
-                this.articlesCount = articles.length;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
 
         // Get the article
         this._articlesService.article$
@@ -113,27 +118,20 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
                 this._changeDetectorRef.markForCheck();
             });
 
-        // Get the countries
-        // this._articlesService.countries$
-        //     .pipe(takeUntil(this._unsubscribeAll))
-        //     .subscribe((countries: Country[]) => {
-        //         // Update the countries
-        //         this.countries = countries;
-
-        //         // Mark for check
-        //         this._changeDetectorRef.markForCheck();
-        //     });
-
-        // Subscribe to search input field value changes
-        this.searchInputControl.valueChanges
+            this.searchInputControl.valueChanges
             .pipe(
                 takeUntil(this._unsubscribeAll),
-                switchMap((query) =>
-                    // Search
-                    this._articlesService.searchArticles(query)
-                )
+                switchMap((query) => {
+                    if (query.length >= 3) {
+                        return this._articlesService.searchArticles(query);
+                    } else {
+                        return of(null);
+                    }
+                })
             )
-            .subscribe();
+            .subscribe((articles) => {
+                this._articlesService.setArticles(articles);
+            });
 
         // Subscribe to MatDrawer opened change
         this.matDrawer.openedChange.subscribe((opened) => {
@@ -160,20 +158,6 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
-
-        // Listen for shortcuts
-        // fromEvent(this._document, 'keydown')
-        //     .pipe(
-        //         takeUntil(this._unsubscribeAll),
-        //         filter<KeyboardEvent>(
-        //             (event) =>
-        //                 (event.ctrlKey === true || event.metaKey) && // Ctrl or Cmd
-        //                 event.key === '/' // '/'
-        //         )
-        //     )
-        //     .subscribe(() => {
-        //         this.createArticle();
-        //     });
     }
 
     /**
@@ -201,22 +185,6 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Create article
-     */
-    // createArticle(): void {
-    //     // Create the article
-    //     this._articlesService.createArticle().subscribe((newArticle) => {
-    //         // Go to the new article
-    //         this._router.navigate(['./', newArticle.id], {
-    //             relativeTo: this._activatedRoute,
-    //         });
-
-    //         // Mark for check
-    //         this._changeDetectorRef.markForCheck();
-    //     });
-    // }
-
-    /**
      * Track by function for ngFor loops
      *
      * @param index
@@ -224,5 +192,16 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
      */
     trackByFn(index: number, item: any): any {
         return item.id || index;
+    }
+
+    onAdvancedSearch(): void {
+        const { designation, frn } = this.advancedSearchForm.value;
+        if (designation || frn) {
+            this._articlesService.advancedSearchArticles(designation, frn)
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((articles) => {
+                    this._articlesService.setArticles(articles);
+                });
+        }
     }
 }

@@ -147,4 +147,15 @@ export class PanierComponent implements OnInit, OnDestroy {
     private _calculateTotalItems(): void {
         this.totalItems = this.panierArticles.reduce((sum, article) => sum + article.quantity, 0);
     }
+
+    convertStringToDecimal(input: string): string {
+        // Replace comma with dot
+        const replacedString = input.replace(',', '.');
+
+        // Parse as float and round to 3 decimal places
+        const parsedNumber = parseFloat(replacedString);
+        const roundedNumber = parsedNumber.toFixed(3);
+
+        return roundedNumber;
+    }
 }

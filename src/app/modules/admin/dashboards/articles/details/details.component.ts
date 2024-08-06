@@ -75,7 +75,7 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
     private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-    quantity: number = 1;
+    quantity: number = 0;
 
     /**
      * Constructor
@@ -174,7 +174,14 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
         return item.id || index;
     }
 
-    // activate(article: any): void {
-    //     this._articlesService.activate(article);
-    //   }
+    convertStringToDecimal(input: string): string {
+        // Replace comma with dot
+        const replacedString = input.replace(',', '.');
+
+        // Parse as float and round to 3 decimal places
+        const parsedNumber = parseFloat(replacedString);
+        const roundedNumber = parsedNumber.toFixed(3);
+
+        return roundedNumber;
+    }
 }

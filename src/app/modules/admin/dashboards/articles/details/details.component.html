@@ -13,7 +13,7 @@
         <div class="w-full max-w-3xl">
             <!-- Nom de l'Article -->
             <div class="mt-3 truncate text-4xl font-bold">
-                {{ article.designation }}
+                {{ article.reference }}
             </div>
 
             <div class="mt-4 flex flex-col space-y-8 border-t pt-6">
@@ -21,7 +21,7 @@
                 <div class="flex sm:items-center">
                     <mat-icon [svgIcon]="'heroicons_outline:identification'"></mat-icon>
                     <div class="ml-6 leading-6">
-                        Référence : {{ article.reference }}
+                        Désignation : {{ article.designation }}
                     </div>
                 </div>
 
@@ -29,17 +29,17 @@
                 <div class="flex sm:items-center">
                     <mat-icon [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
                     <div class="ml-6 leading-6">
-                        Prix : {{ article.pvht }} TND
+                        Prix HT : {{ convertStringToDecimal(article.pvht) }} TND
                     </div>
                 </div>
 
                 <!-- Stock -->
-                <div class="flex sm:items-center">
+                <!-- <div class="flex sm:items-center">
                     <mat-icon [svgIcon]="'heroicons_outline:cube'"></mat-icon>
                     <div class="ml-6 leading-6">
                         Stock : {{ article.stock }}
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Ajouter au Panier -->
                 <div class="flex sm:items-center">

@@ -29,59 +29,32 @@
                         >
                             Articles
                         </div>
-                        <div class="text-secondary ml-0.5 font-medium">
-                            @if (articlesCount > 0) {
-                                {{ articlesCount }}
-                            }
-                            {{
-                                articlesCount
-                                    | i18nPlural
-                                        : {
-                                              '=0': 'pas de articles',
-                                              '=1': 'article',
-                                              other: 'articles',
-                                          }
-                            }}
-                        </div>
                     </div>
-
-                    <!-- Main actions -->
-                    <div class="mt-4 flex items-center sm:mt-0 md:mt-4">
-                        <!-- Search -->
-                        <div class="flex-auto">
-                            <mat-form-field
-                                class="fuse-mat-dense fuse-mat-rounded w-full min-w-50"
-                                subscriptSizing="dynamic"
-                            >
-                                <mat-icon
-                                    class="icon-size-5"
-                                    matPrefix
-                                    [svgIcon]="
-                                        'heroicons_solid:magnifying-glass'
-                                    "
-                                ></mat-icon>
-                                <input
-                                    matInput
-                                    [formControl]="searchInputControl"
-                                    [autocomplete]="'off'"
-                                    [placeholder]="'Rechercher des articles'"
-                                />
-                            </mat-form-field>
-                        </div>
-                        <!-- Add article button -->
-                        <!-- <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="createArticle()"
-                        >
-                            <mat-icon
-                                [svgIcon]="'heroicons_outline:plus'"
-                            ></mat-icon>
-                            <span class="ml-2 mr-1">Ajouter</span>
-                        </button> -->
                     </div>
-                </div>
+                    <!-- Search Tabs -->
+                    <mat-tab-group>
+                        <mat-tab label="Recherche">
+                            <div class="p-6">
+                                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50" subscriptSizing="dynamic">
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                                    <input matInput [formControl]="searchInputControl" [autocomplete]="'on'" [placeholder]="'Rechercher un article par référence'">
+                                </mat-form-field>
+                            </div>
+                        </mat-tab>
+                        <mat-tab label="Recherche avancée">
+                            <form [formGroup]="advancedSearchForm" (ngSubmit)="onAdvancedSearch()" class="p-6">
+                                <mat-form-field class="w-full mb-4">
+                                    <mat-label>Désignation</mat-label>
+                                    <input matInput formControlName="designation" placeholder="Entrer la désignation">
+                                </mat-form-field>
+                                <mat-form-field class="w-full mb-4">
+                                    <mat-label>Fournisseur</mat-label>
+                                    <input matInput formControlName="frn" placeholder="Entrer le fournisseur">
+                                </mat-form-field>
+                                <button mat-raised-button color="primary" type="submit">Chercher</button>
+                            </form>
+                        </mat-tab>
+                    </mat-tab-group>
 
                 <!-- Articles list -->
                 <div class="relative">
@@ -93,7 +66,7 @@
                                 let i = $index
                             ) {
                                 <!-- if article doesnt have a name, dont show him-->
-                                @if (article.designation) {
+                                @if (article.designation && article.pvht) {
                                 <!-- Group -->
                                 @if (
                                     i === 0 ||
@@ -128,22 +101,19 @@
                                         <div
                                             class="text-secondary truncate leading-5"
                                         >
-                                            {{ article.frn }}
+                                            {{ article.reference }}
+                                        </div>
+                                        <div
+                                            class="text-secondary truncate leading-5"
+                                            >
+                                            {{article.frn}}
                                         </div>
                                     </div>
                                 </a>
                             }
                             }
-                        } @else {
-                            <div
-                                class="border-t p-8 text-center text-4xl font-semibold tracking-tight sm:p-16"
-                            >
-                                Il n'y a pas de articles !
-                            </div>
-                        }
+                        } 
                     }
-
-                    <!-- No articles -->
                 </div>
             </div>
         </mat-drawer-content>

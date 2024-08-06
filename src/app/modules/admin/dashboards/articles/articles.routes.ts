@@ -92,8 +92,7 @@ export default [
                 path: '',
                 component: ArticlesListComponent,
                 resolve: {
-                    articles: () => inject(ArticlesService).getAllArticles(),
-                    //countries: () => inject(ArticlesService).getCountries(),
+                    //articles: () => inject(ArticlesService).getAllArticles(),
                 },
                 children: [
                     {
