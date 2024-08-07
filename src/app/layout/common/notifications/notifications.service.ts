@@ -80,7 +80,6 @@ export class NotificationsService {
      * @param notification
      */
     update(id: string, notification: Notification): Observable<Notification> {
-        console.log(notification);
         return this.notifications$.pipe(
             take(1),
             switchMap((notifications) =>

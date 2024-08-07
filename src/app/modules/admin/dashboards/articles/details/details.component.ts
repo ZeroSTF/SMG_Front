@@ -74,6 +74,8 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
 
     quantity: number = 0;
 
+    logoPath: any;
+
     /**
      * Constructor
      */
@@ -114,6 +116,8 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
 
                 // Get the article
                 this.article = article;
+                this.logoPath= "images/fournisseurs/"+article.frn+".png"
+
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();

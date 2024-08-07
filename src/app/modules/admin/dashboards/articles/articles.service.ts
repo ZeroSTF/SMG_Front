@@ -96,4 +96,8 @@ setArticles(articles: any[] | null): void {
             })
         );
   }
+
+  // getLogo(logo: string): Observable<Blob> {
+  //   return this.http.get(`${this.apiUrl}article/getLogo/${logo}`, {responseType: 'blob'});
+  // }
 }

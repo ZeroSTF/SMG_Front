@@ -75,7 +75,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((currentUser) => {
                 this.currentUser = currentUser;
-                console.log(currentUser);
             });
         if(this._authService.hasRole('admin')){
             this._homeService.solde$.pipe(takeUntil(this._unsubscribeAll)).subscribe((solde) => {

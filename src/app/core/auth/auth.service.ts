@@ -60,7 +60,6 @@ export class AuthService {
         return this._httpClient.post('http://localhost:8080/auth/login', credentials).pipe(
             switchMap((response: any) => {
                 // Store the access token in the local storage
-                console.log(response);
                 this.accessToken = response.jwt;
 
                 // Set the authenticated flag to true
@@ -141,7 +140,6 @@ export class AuthService {
         tel1?: string;
         tel2: string;
     }): Observable<any> {
-        console.log(user);
         return this._httpClient.post('http://localhost:8080/auth/register', user);
     }
 

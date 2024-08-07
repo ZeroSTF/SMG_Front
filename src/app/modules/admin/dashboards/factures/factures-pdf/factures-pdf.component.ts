@@ -42,7 +42,6 @@ export class FacturesPDFComponent implements OnInit, OnDestroy, AfterViewInit {
             .subscribe((response: any) => {
                 this.details = response;
                 this.groupVentesByNbon();
-                console.log(this.details);
             });
     }
     ngOnDestroy(): void {}

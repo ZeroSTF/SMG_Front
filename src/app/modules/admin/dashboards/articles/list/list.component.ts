@@ -39,6 +39,7 @@ import {
     takeUntil,
 } from 'rxjs';
 import { MatTabsModule } from '@angular/material/tabs';
+import { getFournisseurFullName } from '../fournisseur-utils';
 
 @Component({
     selector: 'articles-list',
@@ -204,4 +205,8 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
                 });
         }
     }
+
+    displayFournisseur(abbreviation: string): string {
+        return getFournisseurFullName(abbreviation);
+      }
 }

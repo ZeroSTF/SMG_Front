@@ -64,7 +64,7 @@ export class UserService {
      * @param requestBody
      */
      uploadPhoto(requestBody: any, id:String) {
-        return this._httpClient.post(this.baseUrl +`upload/${id}`, requestBody)
+        return this._httpClient.post(this.baseUrl +`upload/${id}`, requestBody, { responseType: 'text' });
       }
 
 }

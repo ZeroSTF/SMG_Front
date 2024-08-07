@@ -86,11 +86,12 @@
                                     }"
                                     [routerLink]="['./', article.id]"
                                 >
+                                <img [src]="'images/fournisseurs/'+article.frn+'.png'" alt="" class="w-10 h-10 rounded-full object-cover">
                                     <div class="ml-4 min-w-0">
                                         <div
                                             class="truncate font-medium leading-5"
                                         >
-                                            {{ article.designation }}
+                                        {{ article.designation }}
                                         </div>
                                         <div
                                             class="text-secondary truncate leading-5"
@@ -100,7 +101,7 @@
                                         <div
                                             class="text-secondary truncate leading-5"
                                             >
-                                            {{article.frn}}
+                                            {{displayFournisseur(article.frn)}}
                                         </div>
                                     </div>
                                 </a>

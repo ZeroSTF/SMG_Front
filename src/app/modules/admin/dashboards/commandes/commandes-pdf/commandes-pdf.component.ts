@@ -33,7 +33,6 @@ export class CommandesPdfComponent implements OnInit, OnDestroy {
                     .pipe(takeUntil(this._unsubscribeAll))
                     .subscribe((commande) => {
                         this.commande = commande;
-                        console.log(commande);
                     });
             });
     }

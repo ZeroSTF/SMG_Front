@@ -53,10 +53,10 @@
                     </table>
                   </div>
                   <div class="mt-2">
-                    <p>Dénomination de la personne ou organisme payeur: {{ details.client.nom }}</p>
+                    <p>Dénomination de la personne ou organisme payeur: {{ details.piedFact.nomclt }}</p>
                     <div class="flex justify-between">
-                      <p>Adresse: {{ details.client.adresse }}</p>
-                      <p>{{ details.client.code }}</p>
+                      <p>Adresse: {{ details.piedFact.adrclt }}</p>
+                      <p>{{ details.piedFact.codecl }}</p>
                     </div>
                   </div>
                 </div>
@@ -212,10 +212,10 @@
                                 <span class="font-bold">Client: </span>
                             </div>
                             <div class="text-lg" style="color: #2c2e35">
-                                <span style="font-size: 0.8em" class="font-medium">{{ details.client.nom }}</span>
+                                <span style="font-size: 0.8em" class="font-medium">{{ details.piedFact.nomclt }}</span>
                             </div>
                             <div class="text-lg" style="color: #2c2e35">
-                                <span style="font-size: 0.8em" class="font-medium">{{ details.client.adresse }}</span>
+                                <span style="font-size: 0.8em" class="font-medium">{{ details.piedFact.adrclt }}</span>
                             </div>
                             <div class="text-lg" style="color: #2c2e35">
                                 <span style="font-size: 0.8em" class="font-medium">{{ details.piedFact.tvaclt }}</span>
