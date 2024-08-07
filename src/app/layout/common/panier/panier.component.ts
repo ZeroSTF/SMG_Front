@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -33,6 +33,7 @@ import { Subject, takeUntil } from 'rxjs';
         NgTemplateOutlet,
         RouterLink,
         DatePipe,
+        DecimalPipe
     ],
 })
 export class PanierComponent implements OnInit, OnDestroy {
@@ -41,6 +42,8 @@ export class PanierComponent implements OnInit, OnDestroy {
 
     panierArticles: any[] = [];
     totalItems: number = 0;
+    totalPrice: number = 0;
+
     private _overlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
@@ -57,6 +60,7 @@ export class PanierComponent implements OnInit, OnDestroy {
             .subscribe((articles: any[]) => {
                 this.panierArticles = articles;
                 this._calculateTotalItems();
+                this.totalPrice = this.calculateTotal(articles);
                 this._changeDetectorRef.markForCheck();
             });
     }
@@ -158,4 +162,11 @@ export class PanierComponent implements OnInit, OnDestroy {
 
         return roundedNumber;
     }
+
+    calculateTotal(articles: any[]): number {
+        return articles.reduce((total, item) => {
+          const price = parseFloat(item.article.pvht.replace(',', '.'));
+          return total + (price * item.quantity);
+        }, 0);
+      }
 }

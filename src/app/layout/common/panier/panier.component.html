@@ -66,6 +66,9 @@
         <!-- Footer -->
         @if (panierArticles && panierArticles.length) {
             <div class="flex justify-end items-center bg-gray-100 p-4">
+                <div class="font-semibold mr-2">
+                    Total HT: {{ totalPrice | number:'1.3-3' }} TND
+                  </div>
                 <button mat-raised-button color="primary" (click)="checkout()">
                     Passer la commande
                 </button>

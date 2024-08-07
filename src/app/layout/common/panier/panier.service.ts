@@ -7,7 +7,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 })
 export class PanierService {
     private _panierArticles: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
-    private _apiUrl = 'http://localhost:8080/'; // Adjust this to match your backend URL
+    private _apiUrl = 'http://localhost:8080/';
 
     constructor(private _httpClient: HttpClient) {
         this.loadPanier();
@@ -55,5 +55,5 @@ export class PanierService {
       }).pipe(
           tap(() => this.loadPanier())
       );
-  }
+    }
 }

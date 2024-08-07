@@ -68,11 +68,8 @@ import { PanierService } from 'app/layout/common/panier/panier.service';
     ],
 })
 export class ArticlesDetailsComponent implements OnInit, OnDestroy {
-    editMode: boolean = false;
-    tagsEditMode: boolean = false;
     article: any;
     articles: any[];
-    private _tagsPanelOverlayRef: OverlayRef;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     quantity: number = 0;
@@ -130,11 +127,6 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
-
-        // Dispose the overlays if they are still on the DOM
-        if (this._tagsPanelOverlayRef) {
-            this._tagsPanelOverlayRef.dispose();
-        }
     }
 
     addToCart(): void {
@@ -142,7 +134,7 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
             this._panierService.addToCart(this.article.id, this.quantity).subscribe(
                 () => {
                     console.log('Ajouté au panier avec succès');
-                    this.quantity = 1; // Réinitialiser la quantité
+                    this.quantity = 0; // Réinitialiser la quantité
                     this._changeDetectorRef.markForCheck();
                 },
                 (error) => {
