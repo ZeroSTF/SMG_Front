@@ -41,7 +41,7 @@
                         <mat-label>Quantité</mat-label>
                         <input matInput type="number" [(ngModel)]="quantity" min="1" [max]="article.stock">
                     </mat-form-field>
-                    <button mat-raised-button color="primary" class="ml-4" (click)="addToCart()" [disabled]="!quantity || quantity > article.stock">
+                    <button mat-raised-button color="primary" class="ml-4" (click)="addToCart(article, quantity)" [disabled]="!quantity || quantity > article.stock">
                         Ajouter au Panier
                     </button>
                     <button mat-raised-button color="accent" class="ml-4" (click)="equivalents()">
@@ -49,6 +49,36 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Equivalent Article Details -->
+             @if(equivalentArticle){
+            <div class="mt-4 flex flex-col space-y-8 border-t pt-6">
+                <!-- Référence -->
+                <div class="flex sm:items-center">
+                <mat-icon [svgIcon]="'heroicons_outline:identification'"></mat-icon>
+                <div class="ml-6 leading-6">
+                    Désignation : {{ equivalentArticle.designation }}
+                </div>
+                </div>
+                <!-- Prix -->
+                <div class="flex sm:items-center">
+                <mat-icon [svgIcon]="'heroicons_outline:currency-dollar'"></mat-icon>
+                <div class="ml-6 leading-6">
+                    Prix HT : {{ convertStringToDecimal(equivalentArticle.pvht) }} TND
+                </div>
+                </div>
+                <!-- Ajouter au Panier -->
+                <div class="flex sm:items-center">
+                <mat-form-field>
+                    <mat-label>Quantité</mat-label>
+                    <input matInput type="number" [(ngModel)]="equivalentQuantity" min="1" [max]="equivalentArticle.stock">
+                </mat-form-field>
+                <button mat-raised-button color="primary" class="ml-4" (click)="addToCart(equivalentArticle, equivalentQuantity)" [disabled]="!equivalentQuantity || equivalentQuantity > equivalentArticle.stock">
+                    Ajouter au Panier
+                </button>
+                </div>
+            </div>
+            }
         </div>
     </div>
 </div>

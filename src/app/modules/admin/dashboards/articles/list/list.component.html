@@ -1,17 +1,8 @@
 <div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
-    <mat-drawer-container
-        class="bg-card h-full flex-auto dark:bg-transparent"
-        (backdropClick)="onBackdropClicked()"
-    >
+    <mat-drawer-container class="bg-card h-full flex-auto dark:bg-transparent" (backdropClick)="onBackdropClicked()">
         <!-- Drawer -->
-        <mat-drawer
-            class="w-full dark:bg-gray-900 md:w-160"
-            [mode]="drawerMode"
-            [opened]="false"
-            [position]="'end'"
-            [disableClose]="true"
-            #matDrawer
-        >
+        <mat-drawer class="w-full dark:bg-gray-900 md:w-160" [mode]="drawerMode" [opened]="false" [position]="'end'"
+            [disableClose]="true" #matDrawer>
             <router-outlet></router-outlet>
         </mat-drawer>
 
@@ -19,95 +10,112 @@
             <!-- Main -->
             <div class="flex-auto">
                 <!-- Header -->
-                <div
-                    class="flex flex-auto flex-col justify-between border-b px-6 py-8 sm:flex-row md:flex-col md:px-8"
-                >
+                <div class="flex flex-auto flex-col justify-between border-b px-6 py-8 sm:flex-row md:flex-col md:px-8">
                     <!-- Title -->
                     <div>
-                        <div
-                            class="text-4xl font-extrabold leading-none tracking-tight"
-                        >
+                        <div class="text-4xl font-extrabold leading-none tracking-tight">
                             Articles
                         </div>
                     </div>
-                    </div>
-                    <!-- Search Tabs -->
-                    <mat-tab-group>
-                        <mat-tab label="Recherche">
-                            <div class="p-6">
-                                <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50" subscriptSizing="dynamic">
-                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
-                                    <input matInput [formControl]="searchInputControl" [autocomplete]="'on'" [placeholder]="'Rechercher un article par référence'">
-                                </mat-form-field>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Recherche avancée">
-                            <form [formGroup]="advancedSearchForm" (ngSubmit)="onAdvancedSearch()" class="p-6">
-                                <mat-form-field class="w-full mb-4">
-                                    <mat-label>Désignation</mat-label>
-                                    <input matInput formControlName="designation" placeholder="Entrer la désignation">
-                                </mat-form-field>
-                                <mat-form-field class="w-full mb-4">
-                                    <mat-label>Fournisseur</mat-label>
-                                    <input matInput formControlName="frn" placeholder="Entrer le fournisseur">
-                                </mat-form-field>
-                                <button mat-raised-button color="primary" type="submit">Chercher</button>
-                            </form>
-                        </mat-tab>
-                    </mat-tab-group>
+                </div>
+                <!-- Search Tabs -->
+                <mat-tab-group>
+                    <mat-tab label="Recherche">
+                        <div class="p-6">
+                            <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50"
+                                subscriptSizing="dynamic">
+                                <mat-icon class="icon-size-5" matPrefix
+                                    [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                                <input matInput [formControl]="searchInputControl" [autocomplete]="'on'"
+                                    [placeholder]="'Rechercher un article par référence'">
+                            </mat-form-field>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Recherche avancée">
+                        <form [formGroup]="advancedSearchForm" (ngSubmit)="onAdvancedSearch()" class="p-6">
+                            <mat-form-field class="w-full mb-4">
+                                <mat-label>Désignation</mat-label>
+                                <input matInput formControlName="designation" placeholder="Entrer la désignation">
+                            </mat-form-field>
+                            <mat-form-field class="w-full mb-4">
+                                <mat-label>Fournisseur</mat-label>
+                                <input matInput formControlName="frn" placeholder="Entrer le fournisseur">
+                            </mat-form-field>
+                            <button mat-raised-button color="primary" type="submit">Chercher</button>
+                        </form>
+                    </mat-tab>
+                </mat-tab-group>
 
                 <!-- Articles list -->
                 <div class="relative">
                     @if (articles$ | async; as articles) {
-                        @if (articles.length) {
-                            <div
-                                        class="text-secondary sticky top-0 z-10 -mt-px border-b border-t bg-gray-50 px-6 py-1 font-medium uppercase dark:bg-gray-900 md:px-8"
-                                    >
-                                        {{articles.length}} Résultats: 
-                                    </div>
-                            @for (
-                                article of articles;
-                                track trackByFn(i, article);
-                                let i = $index
-                            ) {
-                                <!-- if article doesnt have a name, dont show him-->
-                                @if (article.designation && article.pvht) {
-                                    
-                                <!-- Article -->
-                                <a
-                                    class="z-20 flex cursor-pointer items-center border-b px-6 py-4 md:px-8"
-                                    [ngClass]="{
+                    @if (articles.length) {
+                    <div
+                        class="text-secondary sticky top-0 z-10 -mt-px border-b border-t bg-gray-50 px-6 py-1 font-medium uppercase dark:bg-gray-900 md:px-8">
+                        {{articles.length}} Résultats:
+                    </div>
+                    @for (
+                    article of articles;
+                    track trackByFn(i, article);
+                    let i = $index
+                    ) {
+                    <!-- if article doesnt have a name, dont show him-->
+                    @if (article.designation && article.pvht) {
+
+                    <!-- Article -->
+                    @if(!equivalentsView){
+                    <a class="z-20 flex cursor-pointer items-center border-b px-6 py-4 md:px-8" [ngClass]="{
                                         'dark:hover:bg-hover hover:bg-gray-100':
                                             !selectedArticle ||
                                             selectedArticle.id !== article.id,
                                         'bg-primary-50 dark:bg-hover':
                                             selectedArticle &&
                                             selectedArticle.id === article.id,
-                                    }"
-                                    [routerLink]="['./', article.id]"
-                                >
-                                <img [src]="'images/fournisseurs/'+article.frn+'.png'" alt="" class="w-10 h-10 rounded-full object-cover">
-                                    <div class="ml-4 min-w-0">
-                                        <div
-                                            class="truncate font-medium leading-5"
-                                        >
-                                        {{ article.designation }}
-                                        </div>
-                                        <div
-                                            class="text-secondary truncate leading-5"
-                                        >
-                                            {{ article.reference }}
-                                        </div>
-                                        <div
-                                            class="text-secondary truncate leading-5"
-                                            >
-                                            {{displayFournisseur(article.frn)}}
-                                        </div>
-                                    </div>
-                                </a>
-                            }
-                            }
-                        } 
+                                    }" [routerLink]="['./', article.id]" (click)="this._articlesService.setEquivalentArticle(null);">
+
+                        <img [src]="'images/fournisseurs/'+article.frn+'.png'" alt=""
+                            class="w-10 h-10 rounded-full object-cover">
+                        <div class="ml-4 min-w-0">
+                            <div class="truncate font-medium leading-5">
+                                {{ article.designation }}
+                            </div>
+                            <div class="text-secondary truncate leading-5">
+                                {{ article.reference }}
+                            </div>
+                            <div class="text-secondary truncate leading-5">
+                                {{displayFournisseur(article.frn)}}
+                            </div>
+                        </div>
+                    </a>
+                    }
+                    @else {
+                        <a class="z-20 flex cursor-pointer items-center border-b px-6 py-4 md:px-8" [ngClass]="{
+                            'dark:hover:bg-hover hover:bg-gray-100':
+                                !selectedArticle ||
+                                selectedArticle.id !== article.id,
+                            'bg-primary-50 dark:bg-hover':
+                                selectedArticle &&
+                                selectedArticle.id === article.id,
+                        }" (click)="passEquivalent(article)">
+
+            <img [src]="'images/fournisseurs/'+article.frn+'.png'" alt=""
+                class="w-10 h-10 rounded-full object-cover">
+            <div class="ml-4 min-w-0">
+                <div class="truncate font-medium leading-5">
+                    {{ article.designation }}
+                </div>
+                <div class="text-secondary truncate leading-5">
+                    {{ article.reference }}
+                </div>
+                <div class="text-secondary truncate leading-5">
+                    {{displayFournisseur(article.frn)}}
+                </div>
+            </div>
+        </a>
+                    }
+                    }
+                    }
+                    }
                     }
                 </div>
             </div>

@@ -73,8 +73,11 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     quantity: number = 0;
+    equivalentQuantity: number = 0;
 
     logoPath: any;
+
+    equivalentArticle: any = null;
 
     /**
      * Constructor
@@ -122,6 +125,14 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
+
+        // Get the equivalent article
+        this._articlesService.equivalentArticle$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((article) => {
+            this.equivalentArticle = article;
+            this._changeDetectorRef.markForCheck();
+            });
     }
 
     /**
@@ -133,12 +144,13 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
         this._unsubscribeAll.complete();
     }
 
-    addToCart(): void {
-        if (this.article && this.quantity > 0 && this.quantity <= this.article.stock) {
-            this._panierService.addToCart(this.article.id, this.quantity).subscribe(
+    addToCart(article: any, quantity: number): void {
+        if (article && quantity > 0 && quantity <= article.stock) {
+            this._panierService.addToCart(article.id, quantity).subscribe(
                 () => {
                     console.log('Ajouté au panier avec succès');
                     this.quantity = 0; // Réinitialiser la quantité
+                    this.equivalentQuantity = 0; // Réinitialiser la quantité équivalente
                     this._changeDetectorRef.markForCheck();
                 },
                 (error) => {
@@ -182,6 +194,7 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
     }
 
     equivalents() {
+        this._articlesListComponent.equivalentsView = true;
         this._articlesService.equivalents(this.article.id).subscribe((equivalentArticles) => {
           // Handle the equivalent articles here, e.g., display them in the UI
           console.log(equivalentArticles);

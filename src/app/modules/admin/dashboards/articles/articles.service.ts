@@ -15,6 +15,8 @@ private _articles: BehaviorSubject<any[] | null> = new BehaviorSubject(
     null
 );
 
+private _equivalentArticle: BehaviorSubject<any | null> = new BehaviorSubject<any | null>(null);
+
 /**
      * Getter for article
      */
@@ -35,6 +37,20 @@ get articles$(): Observable<any[]> {
  */
 setArticles(articles: any[] | null): void {
   this._articles.next(articles);
+}
+
+/**
+ * Getter for equivalent article 
+ */
+get equivalentArticle$(): Observable<any> {
+  return this._equivalentArticle.asObservable();
+}
+
+/**
+ * Setter for equivalent article
+ */
+setEquivalentArticle(equivalentArticle: any | null): void {
+  this._equivalentArticle.next(equivalentArticle);
 }
 
   constructor(private http: HttpClient) { }

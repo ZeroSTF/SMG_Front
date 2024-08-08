@@ -60,7 +60,7 @@ import { getFournisseurFullName } from '../fournisseur-utils';
         RouterLink,
         AsyncPipe,
         I18nPluralPipe,
-        MatTabsModule
+        MatTabsModule,
     ],
 })
 export class ArticlesListComponent implements OnInit, OnDestroy {
@@ -77,6 +77,8 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
 
     advancedSearchForm: FormGroup;
 
+    equivalentsView: boolean = false;
+
 
     /**
      * Constructor
@@ -89,7 +91,7 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _formBuilder: FormBuilder
-    ) {}
+        ) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -124,6 +126,7 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
                 takeUntil(this._unsubscribeAll),
                 switchMap((query) => {
                     if (query.length >= 3) {
+                        this.equivalentsView=false;
                         return this._articlesService.searchArticles(query);
                     } else {
                         return of(null);
@@ -196,6 +199,7 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
     }
 
     onAdvancedSearch(): void {
+        this.equivalentsView = false;
         const { designation, frn } = this.advancedSearchForm.value;
         if (designation || frn) {
             this._articlesService.advancedSearchArticles(designation, frn)
@@ -209,4 +213,8 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
     displayFournisseur(abbreviation: string): string {
         return getFournisseurFullName(abbreviation);
       }
+
+    passEquivalent(article: any): void{
+        this._articlesService.setEquivalentArticle(article);
+    }
 }
