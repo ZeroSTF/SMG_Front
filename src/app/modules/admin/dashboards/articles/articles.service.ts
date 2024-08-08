@@ -97,6 +97,19 @@ setArticles(articles: any[] | null): void {
         );
   }
 
+  equivalents(articleId: number): Observable<any[]> {
+    return this.http
+      .get<any[]>(`${this.apiUrl}article/equivalents`, {
+        params: { articleId: articleId.toString() }
+      })
+      .pipe(
+        tap((articles) => {
+          this._articles.next(articles);
+        })
+      );
+  }
+
+
   // getLogo(logo: string): Observable<Blob> {
   //   return this.http.get(`${this.apiUrl}article/getLogo/${logo}`, {responseType: 'blob'});
   // }

@@ -180,4 +180,11 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
 
         return roundedNumber;
     }
+
+    equivalents() {
+        this._articlesService.equivalents(this.article.id).subscribe((equivalentArticles) => {
+          // Handle the equivalent articles here, e.g., display them in the UI
+          console.log(equivalentArticles);
+        });
+      }
 }
