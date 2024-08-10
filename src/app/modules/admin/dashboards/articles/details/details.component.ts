@@ -40,6 +40,7 @@ import { ArticlesService } from '../articles.service';
 import { ArticlesListComponent } from '../list/list.component';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { PanierService } from 'app/layout/common/panier/panier.service';
+import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
 
 @Component({
     selector: 'articles-details',
@@ -76,8 +77,11 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
     equivalentQuantity: number = 0;
 
     logoPath: any;
+    equivalentLogoPath: any;
 
     equivalentArticle: any = null;
+
+    isTabletOrMobile: boolean;
 
     /**
      * Constructor
@@ -86,7 +90,8 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
         private _changeDetectorRef: ChangeDetectorRef,
         private _articlesListComponent: ArticlesListComponent,
         private _articlesService: ArticlesService,
-        private _panierService: PanierService 
+        private _panierService: PanierService,
+        private _fuseMediaWatcherService: FuseMediaWatcherService
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -131,7 +136,22 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((article) => {
             this.equivalentArticle = article;
+            this.equivalentLogoPath= "images/fournisseurs/"+article.frn+".png"
             this._changeDetectorRef.markForCheck();
+            });
+
+        this._fuseMediaWatcherService.onMediaChange$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe(({ matchingAliases }) => {
+                // Set the drawerMode if the given breakpoint is active
+                if (matchingAliases.includes('lg')) {
+                    this.isTabletOrMobile = false;
+                } else {
+                    this.isTabletOrMobile = true;
+                }
+
+                // Mark for check
+                this._changeDetectorRef.markForCheck();
             });
     }
 
@@ -194,10 +214,13 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
     }
 
     equivalents() {
+        if (this.isTabletOrMobile) {
+            this.closeDrawer();
+        }
         this._articlesListComponent.equivalentsView = true;
         this._articlesService.equivalents(this.article.id).subscribe((equivalentArticles) => {
           // Handle the equivalent articles here, e.g., display them in the UI
           console.log(equivalentArticles);
         });
-      }
+    }
 }

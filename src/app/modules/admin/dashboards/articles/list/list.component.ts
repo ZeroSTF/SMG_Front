@@ -215,6 +215,9 @@ export class ArticlesListComponent implements OnInit, OnDestroy {
       }
 
     passEquivalent(article: any): void{
+        console.log("passing equivalent")
+        //open drawer
+        this.matDrawer.open();
         this._articlesService.setEquivalentArticle(article);
     }
 }

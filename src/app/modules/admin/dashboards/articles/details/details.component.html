@@ -15,7 +15,7 @@
             
             <!-- Nom de l'Article -->
             <div class="mt-3 truncate text-4xl font-bold">
-                {{ article.reference }}
+                Réf: {{ article.reference }}
             </div>
 
             <div class="mt-4 flex flex-col space-y-8 border-t pt-6">
@@ -52,6 +52,12 @@
 
             <!-- Equivalent Article Details -->
              @if(equivalentArticle){
+                <div class="relative h-40 w-full bg-accent-100 px-8 dark:bg-accent-700 sm:h-48 sm:px-12">
+                    <img class="absolute inset-0 h-full w-full object-contain" [src]="equivalentLogoPath"/>
+                </div>
+                <div class="mt-3 truncate text-4xl font-bold">
+                    Réf: {{ equivalentArticle.reference }}
+                </div>
             <div class="mt-4 flex flex-col space-y-8 border-t pt-6">
                 <!-- Référence -->
                 <div class="flex sm:items-center">
