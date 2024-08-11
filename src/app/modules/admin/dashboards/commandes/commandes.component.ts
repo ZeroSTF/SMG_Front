@@ -3,10 +3,12 @@ import {
     AfterViewInit,
     ChangeDetectionStrategy,
     Component,
+    Input,
     OnDestroy,
     OnInit,
     ViewChild,
     ViewEncapsulation,
+    input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -17,7 +19,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { AuthService } from 'app/core/auth/auth.service';
 import { CommandeService } from 'app/modules/admin/dashboards/commandes/commande.service';
+import { HomeService } from 'app/modules/landing/home/home.service';
 import { ApexOptions, NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -49,6 +53,7 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     data: any;
+    //oldData: any;
     commandesDataSource: MatTableDataSource<any> =
         new MatTableDataSource();
     commandesTableColumns: string[] = [
@@ -59,11 +64,16 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
         'pdf'
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+
+    currentUser: any;
+    solde: number;
+    commandeCount: number;
+    isVentes: boolean = false;
    
     /**
      * Constructor
      */
-    constructor(private _commandeService: CommandeService, private _router: Router) {}
+    constructor(private _commandeService: CommandeService, private _router: Router, private _homeService: HomeService, private _authService: AuthService) {}
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -74,16 +84,47 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
      */
     ngOnInit(): void {
         // Get the data
+        if(!this.isVentes){
         this._commandeService.data$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((data) => {
                 // Store the data
                 this.data = data;
-
+                console.log(data);
                 // Store the table data
                 this.commandesDataSource.data =
                     data;//.recentTransactions;
             });
+        }else{
+        this._commandeService.oldData$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((oldData) => {
+                // Store the data
+                this.data = oldData;
+                console.log(oldData);
+                // Store the table data
+                this.commandesDataSource.data =
+                    oldData;//.recentTransactions;
+            });
+        }
+
+            this._homeService.currentUser$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((currentUser) => {
+                this.currentUser = currentUser;
+            });
+        if(this._authService.hasRole('admin')){
+            this._homeService.solde$.pipe(takeUntil(this._unsubscribeAll)).subscribe((solde) => {
+                this.solde = solde;
+            }
+            );}
+            else{
+                this.solde=this.currentUser.solde;
+            }
+
+        this._homeService.commandeCount$.pipe(takeUntil(this._unsubscribeAll)).subscribe((commandeCount) => {
+            this.commandeCount = commandeCount;
+        })
     }
 
     /**
@@ -120,6 +161,51 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     openPdf(id: string): void {
+        if(!this.isVentes){
          this._router.navigate(['/dashboards/commandes-pdf', id]);
+        }else{
+            this._router.navigate(['/dashboards/ventes-pdf', id]);
+        }
     }
+
+    toggleCmd(){
+        this.isVentes = !this.isVentes
+        // Get the data
+        if(!this.isVentes){
+            this._commandeService.data$
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((data) => {
+                    // Store the data
+                    this.data = data;
+                    console.log(data);
+                    // Store the table data
+                    this.commandesDataSource.data =
+                        data;//.recentTransactions;
+                });
+            }else{
+            this._commandeService.oldData$
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((oldData) => {
+                    // Store the data
+                    this.data = oldData;
+                    console.log(oldData);
+                    // Store the table data
+                    this.commandesDataSource.data =
+                        oldData;//.recentTransactions;
+                });
+            }
+        
+    }
+
+    convertStringToDecimal(input: string): string {
+        // Replace comma with dot
+        const replacedString = input.replace(',', '.');
+
+        // Parse as float and round to 3 decimal places
+        const parsedNumber = parseFloat(replacedString);
+        const roundedNumber = parsedNumber.toFixed(3);
+
+        return roundedNumber;
+    }
+    
 }

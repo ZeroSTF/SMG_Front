@@ -18,8 +18,10 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
+import { AuthService } from 'app/core/auth/auth.service';
 import { UserService } from 'app/core/user/user.service';
 import { FactureService } from 'app/modules/admin/dashboards/factures/facture.service';
+import { HomeService } from 'app/modules/landing/home/home.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -62,12 +64,20 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
+    currentUser: any;
+    solde: number;
+    commandeCount: number;
+
+
     /**
      * Constructor
      */
     constructor(
         private _factureService: FactureService,
-        private _router: Router
+        private _router: Router,
+        private _homeService: HomeService,
+        private _authService: AuthService
+
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -88,6 +98,24 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
                 // Store the table data
                 this.facturesDataSource.data = data; //.recentTransactions;
             });
+
+            this._homeService.currentUser$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((currentUser) => {
+                this.currentUser = currentUser;
+            });
+        if(this._authService.hasRole('admin')){
+            this._homeService.solde$.pipe(takeUntil(this._unsubscribeAll)).subscribe((solde) => {
+                this.solde = solde;
+            }
+            );}
+            else{
+                this.solde=this.currentUser.solde;
+            }
+
+        this._homeService.commandeCount$.pipe(takeUntil(this._unsubscribeAll)).subscribe((commandeCount) => {
+            this.commandeCount = commandeCount;
+        })
     }
 
     /**

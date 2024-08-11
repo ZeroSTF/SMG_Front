@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 export class CommandeService {
   private baseUrl = 'http://localhost:8080/commande';
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
+  private _oldData: BehaviorSubject<any> = new BehaviorSubject(null);
 
   /**
      * Constructor
@@ -21,6 +22,10 @@ export class CommandeService {
      */
     get data$(): Observable<any> {
       return this._data.asObservable();
+  }
+
+    get oldData$(): Observable<any> {
+      return this._oldData.asObservable();
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -39,10 +44,29 @@ export class CommandeService {
   }
 
   /**
+   * Get old data (ventes)
+   */
+
+  getOldData(): Observable<any> {
+    return this._httpClient.get('http://localhost:8080/vente/getAll').pipe(
+      tap((response: any) => {
+          this._oldData.next(response);
+      })
+  );
+  }
+
+  /**
    * Get commande details
    */
   getCommandeDetails(id: string): Observable<any> {
     return this._httpClient.get(this.baseUrl+'/'+id);
+  }
+
+  /**
+   * Get vente details
+   */
+  getVenteDetails(id: any): Observable<any> {
+    return this._httpClient.get('http://localhost:8080/vente/getDetails/'+id);
   }
 
 }

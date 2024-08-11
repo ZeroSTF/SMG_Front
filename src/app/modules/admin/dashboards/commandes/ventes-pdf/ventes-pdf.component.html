@@ -1,0 +1,158 @@
+<div class="absolute inset-0 min-w-0 overflow-auto text-center print:overflow-visible" cdkScrollable>
+    <!-- Main -->
+    <div class="inline-block p-6 text-left sm:p-10 print:p-0">
+        <!-- Invoice -->
+        <div class="bg-card w-240 min-w-240 rounded-2xl p-16 shadow print:w-auto print:rounded-none print:bg-transparent print:p-0 print:shadow-none">
+            <!-- Header -->
+            <div class="flex items-start justify-between">
+                <div class="flex flex-col">
+                    <div class="text-4xl font-extrabold tracking-tight">COMMANDE</div>
+                    <div class="mt-2">
+                        <span class="font-medium">N° Commande: </span>
+                        <span>{{vente?.piedVte.nbon}}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <img class="w-24" src="images/logo/invoice_logo.png" alt="SMG logo">
+                    <div>RUE AHMED ESSIKILLI IMM. ANBRA NUM 3</div>
+                    <div>3027 - SFAX - TUNISIE</div>
+                </div>
+            </div>
+
+            <!-- Client & Invoice Details -->
+            <div class="mt-8 flex items-start justify-between">
+                <div class="flex flex-col">
+                    <span class="text-lg font-medium">Client:</span>
+                    <span class="mt-2">{{vente?.piedVte.nomclt}}</span>
+                    <span>{{vente?.piedVte.adrclt}}</span>
+                    <span>@if(vente.piedVte.tvaclt){
+                        Matricule Fiscale: {{vente.piedVte.tvaclt}}
+                        }
+                        @else{
+                        Patente Fiscale: {{vente.piedVte.patclt}}
+                        }</span>
+                    <span>{{vente?.piedVte.codecl}}</span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <div class="flex flex-col">
+                        <span class="font-medium">Date de commande:</span>
+                        <span>{{vente?.piedVte.datvte}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoice Items Table -->
+            <table class="mt-8 w-full table-auto">
+                <thead>
+                    <tr>
+                        <th class="border-b py-2 text-left font-medium">Fab</th>
+                        <th class="border-b py-2 text-left font-medium">Réf</th>
+                        <th class="border-b py-2 text-left font-medium">Désignation</th>
+                        <th class="border-b py-2 text-left font-medium">N° Ordre</th>
+                        <th class="border-b py-2 text-left font-medium">Qte</th>
+                        <th class="border-b py-2 text-left font-medium">PVHT</th>
+                        <th class="border-b py-2 text-left font-medium">Rem</th>
+                        <th class="border-b py-2 text-left font-medium">TVA</th>
+                        <th class="border-b py-2 text-right font-medium">PVTTC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ligne of vente?.lignes">
+                        <td class="border-b py-2">{{ligne.fab}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.reference}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.instance}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.nordre}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.qte}}</td>
+                        <td class="border-b py-2 text-left">{{convertStringToDecimal(ligne.pvht)}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.remise}}</td>
+                        <td class="border-b py-2 text-left">{{ligne.tva}}</td>
+                        <td class="border-b py-2 text-right">{{convertStringToDecimal(ligne.pvttc)}}</td>
+                        <!-- <td class="border-b py-2 text-right">{{ligne.quantity * ligne.price | currency:'TND':'symbol':'1.3-3'}}</td> -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Invoice Total -->
+            <!-- <div class="mt-8 flex justify-end">
+                <div class="flex flex-col items-end">
+                    <div class="flex justify-between">
+                        <span class="mr-4 font-medium">Total:</span>
+                        <span>{{convertStringToDecimal(vente?.piedVte.totttc)}} TND</span>
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Footer -->
+            <div class="container mx-auto p-4">
+                <div class="flex">
+                    <!-- Tax/Base/MontantTVA Table -->
+                    <table class="w-1/2 border-collapse border border-gray-300">
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2">Taux</th>
+                            <th class="border border-gray-300 px-4 py-2">Base</th>
+                            <th class="border border-gray-300 px-4 py-2">Montant TVA</th>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">7%</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(vente.piedVte.btva6)}}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(vente.piedVte.mtva6)}}</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">13%</td>
+                            <td class="border border-gray-300 px-4 py-2"></td>
+                            <td class="border border-gray-300 px-4 py-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-2">19%</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(vente.piedVte.btva18)}}</td>
+                            <td class="border border-gray-300 px-4 py-2">{{convertStringToDecimal(vente.piedVte.mtva18)}}</td>
+                        </tr>
+                    </table>
+            
+                    <!-- Signature Box -->
+                    <!-- <div class="w-1/5 p-4 ml-4">
+                        
+                    </div> -->
+            
+                    <!-- Net a Payer Box -->
+                    <div class="w-1/2 border border-gray-300 p-4 ml-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <p class="font-bold">TOTAL H.T</p>
+                                <p class="font-bold">TOTAL T.V.A</p>
+                                <p class="font-bold">TIMBRE</p>
+                                <p class="font-bold">NET A PAYER</p>
+                            </div>
+                            <div class="text-right">
+                                <p>{{convertStringToDecimal(vente.piedVte.brutht)}}</p>
+                                <p>{{convertStringToDecimal(vente.piedVte.tottva)}}</p>
+                                <p>{{vente.piedVte.timbre}}</p>
+                                <p class="font-bold">{{convertStringToDecimal(vente.piedVte.totttc)}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="flex mt-4">
+                    <!-- Arrêtée la présente Facture Box -->
+                    <div class="w-1/2 border border-gray-300 p-4">
+                        <p class="font-bold">Arrêtée la présente Commande à la somme de :</p>
+                        <p>{{floatToFrenchWords(convertStringToDecimal(vente.piedVte.totttc))}}</p>
+                    </div>
+            
+                    <!-- Condition de Vente Box -->
+                    <div class="w-1/2 border border-gray-300 p-4 ml-4">
+                        <p class="font-bold">CONDITION DE VENTE:</p>
+                        <p class="text-sm">Aucune réclamation ou restitution ne sera admise après 8 jours et doit être accompagnée d'un bon de livraison. En cas de poursuite les tribunaux de Sfax seront compétents ainsi que tous les frais honoraires seront à la charge du client.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Print button -->
+<button mat-raised-button color="primary" class="fixed bottom-16 right-6 print:hidden" (click)="printInvoice()">
+    <mat-icon>print</mat-icon>
+    Imprimer
+</button>

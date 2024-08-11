@@ -75,11 +75,12 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            {path: 'home', loadChildren: () => import('app/modules/landing/home/home.routes')},
+            {path: 'home', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')} //import('app/modules/landing/home/home.routes')},
             // Dashboards
             {path: 'dashboards', children: [
                 {path: 'commandes', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes.routes')},
                 {path: 'commandes-pdf/:id', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes-pdf/commandes-pdf.routes')},
+                {path: 'ventes-pdf/:id', loadChildren: () => import('app/modules/admin/dashboards/commandes/ventes-pdf/ventes-pdf.routes')},
                 {path: 'factures', loadChildren: () => import('app/modules/admin/dashboards/factures/factures.routes')},
                 {path: 'factures-pdf/:nfact/:rs', loadChildren: () => import('app/modules/admin/dashboards/factures/factures-pdf/factures-pdf.routes')},
                 

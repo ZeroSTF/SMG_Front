@@ -10,6 +10,32 @@ import { CommonModule } from '@angular/common';
     selector: 'app-commandes-pdf',
     templateUrl: './commandes-pdf.component.html',
     standalone: true,
+    // styles: [
+    //     `@media print {
+    //         body * {
+    //             visibility: hidden;
+    //         }
+    //         .print-section, .print-section * {
+    //             visibility: visible;
+    //         }
+    //         .print-section {
+    //             position: absolute;
+    //             left: 0;
+    //             top: 0;
+    //         }
+    //         .no-print {
+    //             display: none !important;
+    //         }
+        
+    //         /* New styles to remove header and footer */
+    //         @page {
+    //             margin: 0;
+    //         }
+    //         body {
+    //             margin: 1.6cm;
+    //         }
+    //     }`
+    // ],
     imports: [CommonModule, MatButtonModule, MatIconModule],
 })
 export class CommandesPdfComponent implements OnInit, OnDestroy {
@@ -44,6 +70,13 @@ export class CommandesPdfComponent implements OnInit, OnDestroy {
     }
 
     printInvoice(): void {
+        // const printContents = document.querySelector('.print-section')?.innerHTML;
+        // const originalContents = document.body.innerHTML;
+    
+        // document.body.innerHTML = printContents || '';
+    
         window.print();
+    
+        // document.body.innerHTML = originalContents;
     }
 }
