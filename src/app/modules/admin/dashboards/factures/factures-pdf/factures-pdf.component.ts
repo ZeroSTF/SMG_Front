@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { FactureService } from '../facture.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-factures-pdf',
@@ -16,13 +18,14 @@ import { ActivatedRoute } from '@angular/router';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [NgFor],
+    imports: [NgFor, MatButtonModule, MatIconModule],
 })
 export class FacturesPDFComponent implements OnInit, OnDestroy, AfterViewInit {
     //get nfact from url
     nfact: string;
     rs: boolean;
-    details: any;
+    details: any = null;
+    
     groupedVentes: { nbon: string, datvte: string, ventes: any[] }[] = [];
     
 
@@ -160,5 +163,9 @@ export class FacturesPDFComponent implements OnInit, OnDestroy, AfterViewInit {
   makeTvaCltIntoArray(tvaclt: string): string[] {
     return tvaclt.split("/");
   }
+
+  printInvoice(): void {
+    window.print();
+}
     
 }

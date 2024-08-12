@@ -370,102 +370,6 @@
 
                 <!-- Spacer -->
                 <div class="col-span-12 mt-16"></div>
-
-                <!-- Subtotal -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    MONTANT HT
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.brutht) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Tax -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    REMISE
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.totrem) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    BASE TVA 6
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.btva6) }}
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    MONTANT TVA 6
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.mtva6) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    BASE TVA 18
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.btva18) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    MONTANT TVA 18
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.mtva18) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    TOTAL TVA
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ convertStringToDecimal(details.piedFact.tottva) }} TND
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Discount -->
-                <!-- <div class="text-secondary col-span-10 self-center font-medium tracking-tight">
-                    TIMBRE
-                </div>
-                <div class="col-span-2 text-right text-lg">
-                    {{ details.piedFact.timbre }}
-                </div> -->
-
-                <!-- Divider -->
-                <!-- <div class="col-span-12 my-3 border-b"></div> -->
-
-                <!-- Total -->
-                <!-- <div class="text-secondary col-span-10 self-center text-2xl font-medium tracking-tight">
-                    TOTAL TTC
-                </div>
-                <div class="col-span-2 text-right text-2xl font-medium">
-                    {{ convertStringToDecimal(details.piedFact.totttc) }} TND
-                </div>-->
             </div> 
 
             <div class="container mx-auto p-4">
@@ -537,3 +441,9 @@
     </div>
     </div>
 </div>
+
+<!-- Print button -->
+<button mat-raised-button color="primary" class="fixed bottom-16 right-6 print:hidden" (click)="printInvoice()">
+    <mat-icon>print</mat-icon>
+    Imprimer
+</button>
