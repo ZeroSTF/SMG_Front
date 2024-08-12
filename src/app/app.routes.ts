@@ -75,7 +75,7 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            {path: 'home', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')} //import('app/modules/landing/home/home.routes')},
+            {path: 'home', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')}, //import('app/modules/landing/home/home.routes')},
             // Dashboards
             {path: 'dashboards', children: [
                 {path: 'commandes', loadChildren: () => import('app/modules/admin/dashboards/commandes/commandes.routes')},

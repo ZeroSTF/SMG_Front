@@ -242,6 +242,10 @@ export class ContactsService {
     });
   }
 
+  getMat(mat: string): Observable<Blob> {
+    return this._httpClient.get(`${this.baseUrl}/getMat/${mat}`, {responseType: 'blob'});
+  }
+
     /**
      * Get countries
      */
