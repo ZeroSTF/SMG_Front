@@ -95,6 +95,7 @@ export const appRoutes: Route[] = [
                     loadChildren: () => import('app/modules/admin/dashboards/contacts/contacts.routes')},
 
                 {path: 'articles', loadChildren: () => import('app/modules/admin/dashboards/articles/articles.routes')},
+                {path: 'generate-post', loadChildren: () => import('app/modules/admin/dashboards/generate-post/generate-post.routes')},
             ]},
             {path: 'pages', children:[
                 {path: 'profile', loadChildren: () => import('app/modules/admin/pages/profile/profile.routes')},

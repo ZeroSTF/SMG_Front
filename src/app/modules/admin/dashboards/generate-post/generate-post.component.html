@@ -1,0 +1,77 @@
+<div class="flex w-full flex-auto flex-col">
+    <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-6 md:p-8">
+      <h2 class="text-2xl font-bold mb-6">Créer des <span class="text-indigo-500">posts sociaux</span></h2>
+      
+      <form [formGroup]="postForm" (ngSubmit)="generatePosts()" class="flex flex-col space-y-4 w-full">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Description</mat-label>
+          <textarea matInput rows="3" formControlName="description" placeholder="Décrivez le design que vous souhaitez créer."></textarea>
+        </mat-form-field>
+        
+        <div class="flex flex-wrap gap-4">
+          <button mat-stroked-button type="button" (click)="productImageInput.click()" class="h-14">
+            <mat-icon class="mr-2">image</mat-icon>
+            Ajouter un Produit
+          </button>
+          <input #productImageInput type="file" hidden multiple (change)="onFileSelected($event, 'productImages')">
+          
+          <button mat-stroked-button type="button" (click)="logoInput.click()" class="h-14">
+            <mat-icon class="mr-2">branding_watermark</mat-icon>
+            Ajouter un Logo
+          </button>
+          <input #logoInput type="file" hidden multiple (change)="onFileSelected($event, 'logos')">
+          
+          <div class="inline-flex items-center h-14 border border-gray-300 rounded-md px-3 flex-grow md:flex-grow-0 w-40">
+            <mat-icon class="mr-2 text-gray-500">aspect_ratio</mat-icon>
+            <mat-select formControlName="format" placeholder="Format" class="w-full text-base">
+              <mat-option value="portrait">Portrait</mat-option>
+              <mat-option value="paysage">Paysage</mat-option>
+              <mat-option value="carre">Carré</mat-option>
+            </mat-select>
+          </div>
+        </div>
+        
+        <div *ngIf="postForm.get('productImages')?.value?.length" class="flex flex-wrap gap-2">
+            <span class="text-sm text-gray-500">Images des Produits :</span>
+            <div *ngFor="let image of postForm.get('productImages')?.value; let i = index" class="relative">
+              <img [src]="image.url" class="w-20 h-20 object-cover">
+              <button mat-icon-button class="absolute top-0 right-0" type="button" (click)="removeImage(i, 'productImages')">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button class="absolute bottom-0 right-0" type="button" (click)="removeBackground(image.file, 'productImages', i)">
+                <mat-icon>auto_fix_high</mat-icon>
+              </button>
+            </div>
+          </div>
+          
+          <div *ngIf="postForm.get('logos')?.value?.length" class="flex flex-wrap gap-2">
+            <span class="text-sm text-gray-500">Images des Logos :</span>
+            <div *ngFor="let logo of postForm.get('logos')?.value; let i = index" class="relative">
+              <img [src]="logo.url" class="w-20 h-20 object-contain">
+              <button mat-icon-button class="absolute top-0 right-0" type="button" (click)="removeImage(i, 'logos')">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-icon-button class="absolute bottom-0 right-0" type="button" (click)="removeBackground(logo.file, 'logos', i)">
+                <mat-icon>auto_fix_high</mat-icon>
+              </button>
+            </div>
+          </div>
+        
+        <button mat-raised-button color="primary" type="submit" class="w-full md:w-auto md:self-end h-14">
+          Générer
+          <mat-icon class="ml-2">arrow_forward</mat-icon>
+        </button>
+      </form>
+      
+      <canvas #canvas hidden></canvas>
+      
+      <div *ngIf="generatedImages.length" class="mt-8">
+        <h3 class="text-xl font-bold mb-4">Posts générés</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div *ngFor="let imageUrl of generatedImages" class="border p-4 rounded-lg">
+            <img [src]="imageUrl" class="w-full">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

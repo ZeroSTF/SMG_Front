@@ -39,8 +39,14 @@ const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:cog',
                 link: '/dashboards/articles'
+            },
+            {
+                id: 'dashboard.generate-post',
+                title: 'Générer un post',
+                type: 'basic',
+                icon: 'heroicons_outline:paint-brush',
+                link: '/dashboards/generate-post'
             }
-            
         ]
     }
 ];
