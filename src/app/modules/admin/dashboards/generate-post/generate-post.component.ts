@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,12 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { RemoveBgService } from './remove-bg.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 interface PostTemplate {
   background: string;
-  productPositions: { x: number, y: number, width: number, height: number }[];
-  logoPositions: { x: number, y: number, width: number, height: number }[];
+  productPosition: { x: number, y: number, width: number, height: number };
+  logoPosition: { x: number, y: number, width: number, height: number };
   descriptionPosition: { x: number, y: number, maxWidth: number, maxHeight: number };
 }
 
@@ -27,7 +28,8 @@ interface PostTemplate {
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule
   ],
   templateUrl: './generate-post.component.html'
 })
@@ -41,8 +43,8 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
     portrait: [
       {
         background: '/images/templates/bg-portrait-1.png',
-        productPositions: [{ x: 150, y: 250, width: 780, height: 500 }],
-        logoPositions: [{ x: 800, y: 800, width: 200, height: 200 }],
+        productPosition: { x: 150, y: 250, width: 780, height: 500 },
+        logoPosition: { x: 800, y: 800, width: 200, height: 200 },
         descriptionPosition: { x: 150, y: 100, maxWidth: 700, maxHeight: 100 }
       },
       // TODO add more portrait templates...
@@ -50,8 +52,8 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
     paysage: [
       {
         background: '/images/templates/bg-paysage-1.png',
-        productPositions: [{ x: 150, y: 250, width: 780, height: 500 }],
-        logoPositions: [{ x: 800, y: 800, width: 200, height: 200 }],
+        productPosition: { x: 150, y: 250, width: 780, height: 500 },
+        logoPosition: { x: 800, y: 800, width: 200, height: 200 },
         descriptionPosition: { x: 150, y: 100, maxWidth: 700, maxHeight: 100 }
       },
       // TODO add more paysage templates...
@@ -59,20 +61,14 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
     carre: [
       {
         background: '/images/templates/bg-carre-1.png',
-        productPositions: [
-          { x: 150, y: 250, width: 380, height: 500 },
-          { x: 550, y: 250, width: 380, height: 500 }
-        ],
-        logoPositions: [
-          { x: 800, y: 800, width: 200, height: 200 },
-          { x: 600, y: 800, width: 200, height: 200 }
-        ],
+        productPosition: { x: 7, y: 220, width: 1065, height: 525 },
+        logoPosition: { x: 540, y: 744, width: 532, height: 326 },
         descriptionPosition: { x: 790, y: 235, maxWidth: 570, maxHeight: 100 }
       },
       {
         background: '/images/templates/bg-carre-2.png',
-        productPositions: [{ x: 150, y: 250, width: 780, height: 500 }],
-        logoPositions: [{ x: 800, y: 800, width: 200, height: 200 }],
+        productPosition: { x: 150, y: 250, width: 780, height: 500 },
+        logoPosition: { x: 800, y: 800, width: 200, height: 200 },
         descriptionPosition: { x: 150, y: 100, maxWidth: 700, maxHeight: 100 }
       }
     ]
@@ -80,7 +76,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
   
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   
-  constructor(private fb: FormBuilder, private removeBgService: RemoveBgService) {}
+  constructor(private fb: FormBuilder, private removeBgService: RemoveBgService, private changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
@@ -142,18 +138,20 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
         
         // Draw product images
-        for (let i = 0; i < Math.min(productImages.length, template.productPositions.length); i++) {
-          const productPos = template.productPositions[i];
-          const img = await this.loadImage(productImages[i]);
-          this.drawImageFit(ctx, img, productPos.x, productPos.y, productPos.width, productPos.height);
-        }
-        
+        // for (let i = 0; i < productImages.length; i++) {
+        //   const productPos = template.productPosition;
+        //   const img = await this.loadImage(productImages[i]);
+        //   this.drawImageFit(ctx, img, productPos.x, productPos.y, productPos.width, productPos.height);
+        // }
+        await this.drawMultipleImages(ctx, productImages, template.productPosition);
+
         // Draw logos
-        for (let i = 0; i < Math.min(logos.length, template.logoPositions.length); i++) {
-          const logoPos = template.logoPositions[i];
-          const logo = await this.loadImage(logos[i]);
-          this.drawImageFit(ctx, logo, logoPos.x, logoPos.y, logoPos.width, logoPos.height);
-        }
+        // for (let i = 0; i < logos.length; i++) {
+        //   const logoPos = template.logoPosition;
+        //   const logo = await this.loadImage(logos[i]);
+        //   this.drawImageFit(ctx, logo, logoPos.x, logoPos.y, logoPos.width, logoPos.height);
+        // }
+        await this.drawMultipleImages(ctx, logos, template.logoPosition);
         
         // Draw description
         ctx.font = 'bold 55px Monteserrat';
@@ -164,6 +162,29 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         
         this.generatedImages.push(canvas.toDataURL());
       }
+    }
+  }
+  
+  private async drawMultipleImages(ctx: CanvasRenderingContext2D, images: any[], position: { x: number, y: number, width: number, height: number }): Promise<void> {
+    const imageCount = images.length;
+    if (imageCount === 0) return;
+  
+    const gap = 10; // Gap between images
+    let totalWidth = position.width;
+    let totalHeight = position.height;
+  
+    if (imageCount > 1) {
+      totalWidth -= (imageCount - 1) * gap;
+    }
+  
+    const imageWidth = totalWidth / imageCount;
+    const imageHeight = position.height;
+  
+    for (let i = 0; i < imageCount; i++) {
+      const img = await this.loadImage(images[i]);
+      const x = position.x + (imageWidth + gap) * i;
+      const y = position.y;
+      this.drawImageFit(ctx, img, x, y, imageWidth, imageHeight);
     }
   }
 
@@ -219,8 +240,11 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
       const url = URL.createObjectURL(blob);
       
       const currentUrls = this.postForm.get(type)?.value || [];
-      currentUrls[index] = url;
+      currentUrls[index] = { url: url, file: new File([blob], file.name, { type: blob.type }) };
       this.postForm.patchValue({ [type]: currentUrls });
+      
+      // Force change detection
+      this.changeDetectorRef.detectChanges();
     } catch (error) {
       console.error('Error removing background:', error);
       // Handle error (e.g., show a message to the user)

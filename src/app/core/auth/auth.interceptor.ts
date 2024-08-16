@@ -8,33 +8,27 @@ import { inject } from '@angular/core';
 import { AuthService } from 'app/core/auth/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 
-/**
- * Intercept
- *
- * @param req
- * @param next
- */
+// Add this constant at the top of your file
+const EXCLUDE_URLS = ['https://api.remove.bg/v1.0/removebg'];
+
 export const authInterceptor = (
     req: HttpRequest<unknown>,
     next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> => {
     const authService = inject(AuthService);
+    
+    // Check if the request URL should be excluded
+    const shouldExclude = EXCLUDE_URLS.some(url => req.url.includes(url));
+    
+    // If the URL should be excluded, pass the request through without modification
+    if (shouldExclude) {
+        return next(req);
+    }
 
     // Clone the request object
     let newReq = req.clone();
 
-    // Request
-    //
-    // If the access token didn't expire, add the Authorization header.
-    // We won't add the Authorization header if the access token expired.
-    // This will force the server to return a "401 Unauthorized" response
-    // for the protected API routes which our response interceptor will
-    // catch and delete the access token from the local storage while logging
-    // the user out from the app.
-    if (
-        authService.accessToken //&&
-        //!authService.isTokenExpired(authService.accessToken)
-    ) {
+    if (authService.accessToken) {
         newReq = req.clone({
             headers: req.headers.set(
                 'Authorization',
@@ -46,15 +40,10 @@ export const authInterceptor = (
     // Response
     return next(newReq).pipe(
         catchError((error) => {
-            // Catch "401 Unauthorized" responses
             if (error instanceof HttpErrorResponse && error.status === 401) {
-                // Sign out
                 authService.signOut();
-
-                // Reload the app
                 location.reload();
             }
-
             return throwError(error);
         })
     );
