@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
-import { RemoveBgService } from './remove-bg.service';
+import { RemoveBgService } from './services/remove-bg.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 
@@ -138,19 +138,9 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
         
         // Draw product images
-        // for (let i = 0; i < productImages.length; i++) {
-        //   const productPos = template.productPosition;
-        //   const img = await this.loadImage(productImages[i]);
-        //   this.drawImageFit(ctx, img, productPos.x, productPos.y, productPos.width, productPos.height);
-        // }
         await this.drawMultipleImages(ctx, productImages, template.productPosition);
 
         // Draw logos
-        // for (let i = 0; i < logos.length; i++) {
-        //   const logoPos = template.logoPosition;
-        //   const logo = await this.loadImage(logos[i]);
-        //   this.drawImageFit(ctx, logo, logoPos.x, logoPos.y, logoPos.width, logoPos.height);
-        // }
         await this.drawMultipleImages(ctx, logos, template.logoPosition);
         
         // Draw description
