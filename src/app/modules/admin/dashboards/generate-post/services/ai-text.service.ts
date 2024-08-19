@@ -28,7 +28,7 @@ export class AiTextService {
   }
 
   generateTitle(description: string): Observable<string> {
-    const prompt = `Générez un titre attrayant pour la publicité d'aprés la description suivante: '${description}' (limité à 26 caracteres)`;
+    const prompt = `Générez un titre attrayant pour la publicité d'aprés la description suivante: '${description}' (limitez le titre à 30 caracteres maximum)`;
     return this.generateContent(prompt);
   }
 
