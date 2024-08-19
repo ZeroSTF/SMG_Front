@@ -9,7 +9,7 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { Observable, catchError, throwError } from 'rxjs';
 
 // Add this constant at the top of your file
-const EXCLUDE_URLS = ['https://api.remove.bg/v1.0/removebg'];
+const EXCLUDE_URLS = ['https://api.remove.bg/v1.0/removebg','https://api-inference.huggingface.co/models','https://api.anthropic.com/v1/messages','https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent'];
 
 export const authInterceptor = (
     req: HttpRequest<unknown>,

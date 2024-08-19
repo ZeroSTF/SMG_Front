@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,6 +9,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { Subject } from 'rxjs';
 import { RemoveBgService } from './services/remove-bg.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
+import { AiTextService } from './services/ai-text.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 interface PostTemplate {
@@ -29,7 +32,10 @@ interface PostTemplate {
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatCardModule,
+    MatSnackBarModule,
+    FormsModule
   ],
   templateUrl: './generate-post.component.html'
 })
@@ -38,6 +44,12 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
 
   postForm: FormGroup;
   generatedImages: string[] = [];
+
+  generatedAdCopy: string;
+  isEditing: boolean = false;
+  editedAdCopy: string = '';
+
+  generatedTitle: string;
   
   postTemplates: { [key: string]: PostTemplate[] } = {
     portrait: [
@@ -63,7 +75,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         background: '/images/templates/bg-carre-1.png',
         productPosition: { x: 7, y: 220, width: 1065, height: 525 },
         logoPosition: { x: 540, y: 744, width: 532, height: 326 },
-        descriptionPosition: { x: 790, y: 235, maxWidth: 570, maxHeight: 100 }
+        descriptionPosition: { x: 790, y: 235, maxWidth: 570, maxHeight: 132 }
       },
       {
         background: '/images/templates/bg-carre-2.png',
@@ -76,7 +88,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
   
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   
-  constructor(private fb: FormBuilder, private removeBgService: RemoveBgService, private changeDetectorRef: ChangeDetectorRef) {}
+  constructor(private fb: FormBuilder, private removeBgService: RemoveBgService, private changeDetectorRef: ChangeDetectorRef, private aiTextService: AiTextService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.postForm = this.fb.group({
@@ -111,6 +123,26 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
   }
 
   async generatePosts(): Promise<void> {
+    this.aiTextService.generateAdCopy(this.postForm.value.description).subscribe(
+      (generatedAdCopy: any) => {
+        console.log(generatedAdCopy);
+        this.generatedAdCopy = generatedAdCopy;
+        this.changeDetectorRef.detectChanges();
+      }
+    );
+
+    // Generate title and wait for it before creating the image
+  await new Promise<void>((resolve) => {
+    this.aiTextService.generateTitle(this.postForm.value.description).subscribe(
+      (generatedTitle: any) => {
+        console.log(generatedTitle);
+        this.generatedTitle = generatedTitle;
+        this.changeDetectorRef.detectChanges();
+        resolve();
+      }
+    );
+  });
+
     if (this.postForm.valid) {
       const { description, productImages, logos, format } = this.postForm.value;
       const templates = this.postTemplates[format];
@@ -144,11 +176,11 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         await this.drawMultipleImages(ctx, logos, template.logoPosition);
         
         // Draw description
-        ctx.font = 'bold 55px Monteserrat';
+        ctx.font = 'bold 80px Monteserrat';
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         const descPos = template.descriptionPosition;
-        this.wrapText(ctx, description, descPos.x, descPos.y, descPos.maxWidth, 40);
+        this.wrapText(ctx, this.generatedTitle, descPos.x, descPos.y, descPos.maxWidth, descPos.maxHeight, 80, 10);
         
         this.generatedImages.push(canvas.toDataURL());
       }
@@ -187,24 +219,55 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
     });
   }
 
-  private wrapText(context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, lineHeight: number) {
-    const words = text.split(' ');
-    let line = '';
+  private wrapText(context: CanvasRenderingContext2D, text: string, x: number, y: number, maxWidth: number, maxHeight: number, maxFontSize: number, minFontSize: number) {
+    let fontSize = maxFontSize;
+    let lineHeight = fontSize * 1.2;
+    
+    // Function to calculate the required height
+    const calculateHeight = (words: string[], testFontSize: number) => {
+        let testLine = '';
+        let testY = y;
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            const testLineWidth = context.measureText(testLine + word + ' ').width;
+            if (testLineWidth > maxWidth && testLine !== '') {
+                testLine = word + ' ';
+                testY += testFontSize * 1.2;
+            } else {
+                testLine += word + ' ';
+            }
+        }
+        return testY + testFontSize * 1.2 - y;
+    };
 
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line + words[n] + ' ';
-      const metrics = context.measureText(testLine);
-      const testWidth = metrics.width;
-      if (testWidth > maxWidth && n > 0) {
-        context.fillText(line, x, y);
-        line = words[n] + ' ';
-        y += lineHeight;
-      } else {
-        line = testLine;
-      }
+    // Decrease font size until the text fits within the designated height
+    let textHeight = calculateHeight(text.split(' '), fontSize);
+    while (textHeight > maxHeight && fontSize > minFontSize) {
+        fontSize--;
+        lineHeight = fontSize * 1.2;
+        context.font = `bold ${fontSize}px Monteserrat`;
+        textHeight = calculateHeight(text.split(' '), fontSize);
+    }
+
+    // Draw the text with the adjusted font size
+    let line = '';
+    for (let n = 0; n < text.split(' ').length; n++) {
+        const word = text.split(' ')[n];
+        const testLine = line + word + ' ';
+        const testWidth = context.measureText(testLine).width;
+        if (testWidth > maxWidth && n > 0) {
+          y-= lineHeight/2;
+            context.fillText(line, x, y);
+            line = word + ' ';
+            y += lineHeight;
+            console.log("here");
+        } else {
+            line = testLine;
+        }
     }
     context.fillText(line, x, y);
-  }
+}
+
 
   // Helper function to draw image fitting in a specified rectangle
   private drawImageFit(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, width: number, height: number) {
@@ -239,5 +302,34 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
       console.error('Error removing background:', error);
       // Handle error (e.g., show a message to the user)
     }
+  }
+
+  toggleEdit() {
+    if (this.isEditing) {
+      // Save the edited copy
+      this.generatedAdCopy = this.editedAdCopy.trim();
+      this.showSnackBar('Modifications enregistrées');
+    } else {
+      // Start editing
+      this.editedAdCopy = this.generatedAdCopy;
+    }
+    this.isEditing = !this.isEditing;
+  }
+
+  copyAdCopy() {
+    navigator.clipboard.writeText(this.generatedAdCopy).then(() => {
+      this.showSnackBar('Texte copié dans le presse-papiers');
+    }, (err) => {
+      console.error('Erreur lors de la copie du texte: ', err);
+      this.showSnackBar('Erreur lors de la copie du texte');
+    });
+  }
+
+  private showSnackBar(message: string) {
+    this.snackBar.open(message, 'Fermer', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+    });
   }
 }
