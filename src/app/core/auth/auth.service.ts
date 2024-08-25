@@ -57,20 +57,29 @@ export class AuthService {
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('http://localhost:8080/auth/login', credentials).pipe(
-            switchMap((response: any) => {
-                // Store the access token in the local storage
-                this.accessToken = response.jwt;
+        return this._httpClient
+            .post('http://localhost:8080/auth/login', credentials)
+            .pipe(
+                switchMap((response: any) => {
+                    // Store the access token in the local storage
+                    this.accessToken = response.jwt;
 
-                // Set the authenticated flag to true
-                this._authenticated = true;
+                    // Set the authenticated flag to true
+                    this._authenticated = true;
 
-                // Store the user on the user service
-                this._userService.user = {id: response.id, name: response.name, email: response.email, role: response.role, avatar: "", status: ""};
-                // Return a new observable with the response
-                return of(response);
-            })
-        );
+                    // Store the user on the user service
+                    this._userService.user = {
+                        id: response.id,
+                        name: response.name,
+                        email: response.email,
+                        role: response.role,
+                        avatar: '',
+                        status: '',
+                    };
+                    // Return a new observable with the response
+                    return of(response);
+                })
+            );
     }
 
     /**
@@ -98,14 +107,20 @@ export class AuthService {
                     /*if (response.accessToken) {
                         this.accessToken = response.accessToken;
                     }*/
-                   if (!response.jwt)
-                        return of(false);
+                    if (!response.jwt) return of(false);
 
                     // Set the authenticated flag to true
                     this._authenticated = true;
 
                     // Store the user on the user service
-                    this._userService.user = {id: response.id, name: response.name, email: response.email, role:response.role, avatar: "", status: ""};
+                    this._userService.user = {
+                        id: response.id,
+                        name: response.name,
+                        email: response.email,
+                        role: response.role,
+                        avatar: '',
+                        status: '',
+                    };
 
                     // Return true
                     return of(true);
@@ -132,7 +147,7 @@ export class AuthService {
      *
      * @param user
      */
-    signUp(user:{
+    signUp(user: {
         nom: string;
         email: string;
         password: string;
@@ -140,7 +155,10 @@ export class AuthService {
         tel1?: string;
         tel2: string;
     }): Observable<any> {
-        return this._httpClient.post('http://localhost:8080/auth/register', user);
+        return this._httpClient.post(
+            'http://localhost:8080/auth/register',
+            user
+        );
     }
 
     /**
@@ -157,36 +175,36 @@ export class AuthService {
 
     /**
      * Check if token is expired
-     * 
+     *
      * @param token
      * @param offsetSeconds
      */
     isTokenExpired(token: string, offsetSeconds?: number): boolean {
-        this._httpClient.get('http://localhost:8080/auth/check-token', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }).subscribe((response) => {
-            return response;
-        });
+        this._httpClient
+            .get('http://localhost:8080/auth/check-token', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .subscribe((response) => {
+                return response;
+            });
         return false;
     }
 
     /**
      * check if the user has a specific role
-     * 
+     *
      * @param role
      * @returns Observable<boolean>
      */
     hasRole(role: string): Observable<boolean> {
-        return this._userService.get().pipe(
-          map(user => user.role === role)
-        );
-      }
+        return this._userService.get().pipe(map((user) => user.role === role));
+    }
 
     /**
      * Get the current user
-     * 
+     *
      * @returns Observable<any>
      */
     getCurrentUser(): Observable<any> {
@@ -199,24 +217,24 @@ export class AuthService {
     check(): Observable<boolean> {
         // Check if the user is logged in
         if (this._authenticated) {
-            console.log("Authenticated");
+            console.log('Authenticated');
             return of(true);
         }
 
         // Check the access token availability
         if (!this.accessToken) {
-            console.log("No access token");
+            console.log('No access token');
             return of(false);
         }
 
         // Check the access token expire date
         if (this.isTokenExpired(this.accessToken)) {
-            console.log("Token expired");
+            console.log('Token expired');
             return of(false);
         }
 
         // If the access token exists, and it didn't expire, sign in using it
-        console.log("Sign in using token");
+        console.log('Sign in using token');
         return this.signInUsingToken();
     }
 }
