@@ -52,7 +52,7 @@
                             "src/styles/styles.scss",
                             "src/styles/tailwind.scss"
                         ],
-                        "scripts": ["node_modules/fabric/dist/fabric.min.js"]
+                        "scripts": []
                     },
                     "configurations": {
                         "production": {
