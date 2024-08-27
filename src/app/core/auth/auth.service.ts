@@ -1,11 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { UserService } from 'app/core/user/user.service';
-import { catchError, map, Observable, of, switchMap, throwError } from 'rxjs';
+import {
+    BehaviorSubject,
+    catchError,
+    map,
+    Observable,
+    of,
+    switchMap,
+    tap,
+    throwError,
+} from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private _authenticated: boolean = false;
+    private _refreshTokenSubject: BehaviorSubject<any> =
+        new BehaviorSubject<any>(null);
     private _httpClient = inject(HttpClient);
     private _userService = inject(UserService);
 
@@ -22,6 +33,17 @@ export class AuthService {
 
     get accessToken(): string {
         return localStorage.getItem('accessToken') ?? '';
+    }
+
+    /**
+     * Setter & getter for refresh token
+     */
+    set refreshToken(token: string) {
+        localStorage.setItem('refreshToken', token);
+    }
+
+    get refreshToken(): string {
+        return localStorage.getItem('refreshToken') ?? '';
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -63,6 +85,9 @@ export class AuthService {
                 switchMap((response: any) => {
                     // Store the access token in the local storage
                     this.accessToken = response.jwt;
+
+                    // Set the refresh token
+                    this.refreshToken = response.refreshToken;
 
                     // Set the authenticated flag to true
                     this._authenticated = true;
@@ -159,6 +184,26 @@ export class AuthService {
             'http://localhost:8080/auth/register',
             user
         );
+    }
+
+    /**
+     * Refresh access token
+     */
+    refreshAccessToken(): Observable<any> {
+        if (this.refreshToken) {
+            return this._httpClient.post('http://localhost:8080/auth/refresh-token', { refreshToken: this.refreshToken })
+                .pipe(
+                    tap((tokens: any) => {
+                        this.accessToken = tokens.accessToken;
+                        this.refreshToken = tokens.refreshToken;
+                    }),
+                    catchError((error) => {
+                        this.signOut();
+                        return throwError(error);
+                    })
+                );
+        }
+        return throwError('No refresh token available');
     }
 
     /**

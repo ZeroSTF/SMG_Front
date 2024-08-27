@@ -1,54 +1,126 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import Konva from 'konva';
+import { Subject } from 'rxjs';
 
 @Component({
-    selector     : 'example',
-    standalone   : true,
-    templateUrl  : './example.component.html',
-    encapsulation: ViewEncapsulation.None,
-    imports      : [
-        ReactiveFormsModule,
-        MatInputModule,
-        MatButtonModule,
-        MatCardModule
-    ]
+    selector: 'example',
+    templateUrl: './example.component.html',
+    standalone: true,
+    imports: [MatIconModule],
 })
-export class ExampleComponent
-{
-    form: FormGroup;
-  selectedImage: string | ArrayBuffer | null = null;
+export class ExampleComponent implements OnInit {
+    @ViewChild('container', { static: true })
+    containerEl: ElementRef<HTMLDivElement>;
+    private stage: Konva.Stage;
+    private layer: Konva.Layer;
+    private unsubscribe$ = new Subject<void>();
 
-    /**
-     * Constructor
-     */
-    constructor(private fb: FormBuilder)
-    {
-        this.form = this.fb.group({
-            prompt: [''],
-            image: [null]
-          });
+    constructor() {}
+
+    ngOnInit(): void {
+        this.initStage();
+        this.loadPostData();
     }
 
-    onFileSelected(event: Event): void {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.selectedImage = reader.result;
-          };
-          reader.readAsDataURL(file);
-        }
-      }
+    ngOnDestroy(): void {
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+    }
 
-      generateArt(): void {
-        const prompt = this.form.get('prompt')?.value;
-        const image = this.selectedImage;
-        // Implement your logic here to handle the prompt and image
-        console.log('Prompt:', prompt);
-        console.log('Image:', image);
-      }
-    
+    private initStage(): void {
+        this.stage = new Konva.Stage({
+            container: this.containerEl.nativeElement,
+            width: 1080,
+            height: 1080,
+        });
+        this.layer = new Konva.Layer();
+        this.stage.add(this.layer);
+    }
+
+    private loadPostData(): void {
+        // Load background
+        const backgroundImage = new Image();
+        backgroundImage.onload = () => {
+            const background = new Konva.Image({
+                image: backgroundImage,
+                width: this.stage.width(),
+                height: this.stage.height(),
+            });
+            this.layer.add(background);
+            this.layer.draw();
+        };
+        backgroundImage.src = '/images/templates/bg-carre-1.png';
+
+        // Add title text
+        const titleGroup = new Konva.Group({
+            x: 790,
+            y: 200,
+            width: 570,
+            height: 132,
+            draggable: true,
+        });
+
+        const text = new Konva.Text({
+            x: 0,
+            y: 0,
+            width: titleGroup.width(),
+            text: 'testing the alignement',
+            fontSize: 40,
+            fontFamily: 'Monteserrat',
+            fontStyle: 'bold',
+            fill: 'white',
+            align: 'right',
+        });
+        const text2 = new Konva.Text({
+            x: 0,
+            y: 50,
+            width: titleGroup.width(),
+            text: 'hello',
+            fontSize: 40,
+            fontFamily: 'Monteserrat',
+            fontStyle: 'bold',
+            fill: 'white',
+            align: 'right',
+        });
+        titleGroup.add(text);
+        titleGroup.add(text2);
+
+        // Added delay to allow Konva to render the stage
+        setTimeout(() => {
+            this.layer.add(titleGroup);
+            this.layer.draw();
+        }, 2000);
+    }
+
+    addImage(): void {
+        // Implement image upload and add to stage
+    }
+
+    addText(): void {
+        const text = new Konva.Text({
+            x: 100,
+            y: 100,
+            text: 'New Text',
+            fontSize: 20,
+            fontFamily: 'Monteserrat',
+            fill: 'black',
+            draggable: true,
+        });
+        this.layer.add(text);
+        this.layer.draw();
+    }
+
+    deleteSelected(): void {
+        const selectedShape = this.stage.findOne('.selected');
+        if (selectedShape) {
+            selectedShape.destroy();
+            this.layer.draw();
+        }
+    }
+
+    saveChanges(): void {
+        const dataUrl = this.stage.toDataURL();
+        // Implement save logic here
+    }
 }

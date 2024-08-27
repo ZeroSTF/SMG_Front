@@ -183,7 +183,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.postForm = this.fb.group({
-            description: ['', Validators.required],
+            description: [''],
             productImages: [[]],
             logos: [[]],
             format: ['carre', Validators.required],
@@ -214,25 +214,31 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
     }
 
     async generatePosts(): Promise<void> {
-        this.aiTextService
-            .generateAdCopy(this.postForm.value.description)
-            .subscribe((generatedAdCopy: any) => {
-                console.log(generatedAdCopy);
-                this.generatedAdCopy = generatedAdCopy;
-                this.changeDetectorRef.detectChanges();
-            });
-
-        // Generate title and wait for it before creating the image
-        await new Promise<void>((resolve) => {
+        if (this.postForm.value.description) {
+            // Generate ad copy
             this.aiTextService
-                .generateTitle(this.postForm.value.description)
-                .subscribe((generatedTitle: any) => {
-                    console.log(generatedTitle);
-                    this.generatedTitle = generatedTitle;
+                .generateAdCopy(this.postForm.value.description)
+                .subscribe((generatedAdCopy: any) => {
+                    console.log(generatedAdCopy);
+                    this.generatedAdCopy = generatedAdCopy;
                     this.changeDetectorRef.detectChanges();
-                    resolve();
                 });
-        });
+
+            // Generate title and wait for it before creating the image
+            await new Promise<void>((resolve) => {
+                this.aiTextService
+                    .generateTitle(this.postForm.value.description)
+                    .subscribe((generatedTitle: any) => {
+                        console.log(generatedTitle);
+                        this.generatedTitle = generatedTitle;
+                        this.changeDetectorRef.detectChanges();
+                        resolve();
+                    });
+            });
+        } else {
+            this.generatedTitle = 'Position du Titre';
+            //this.generatedAdCopy = 'Description du Produit';
+        }
 
         if (this.postForm.valid) {
             const { description, productImages, logos, format } =
@@ -466,7 +472,10 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
             }
         }
         lines.push(line);
-
+        // For one line
+        if (lines.length === 1) {
+            y += fontSize / 2;
+        }
         // Calculate the average line height based on the number of lines
         const averageLineHeight = maxHeight / lines.length;
 
@@ -479,9 +488,9 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
             })),
             gap: averageLineHeight,
         };
-
         // Draw the lines with consistent spacing
         for (let i = 0; i < lines.length; i++) {
+            console.log('y in generate is: ', y);
             context.fillText(lines[i], x, y + i * averageLineHeight);
         }
 

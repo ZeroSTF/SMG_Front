@@ -106,8 +106,12 @@ export class EditPostComponent implements OnInit {
 
         // Add title text
         const titleGroup = new Konva.Group({
-            x: this.postData.title.lines[0].x,
-            y: this.postData.title.lines[0].y,
+            x:
+                this.postData.template.title.x -
+                this.postData.template.title.maxWidth / 2,
+            y: this.postData.template.title.y - this.postData.title.fontSize,
+            width: this.postData.template.title.maxWidth,
+            height: this.postData.template.title.maxHeight,
             draggable: true,
         });
 
@@ -115,20 +119,26 @@ export class EditPostComponent implements OnInit {
             const text = new Konva.Text({
                 x: 0,
                 y: this.postData.title.gap * index,
+                width: titleGroup.width(),
                 text: line.text,
-                fontSize: parseFloat(
-                    this.postData.title.font.match(/\d+(\.\d+)?/)[0]
-                ),
+                fontSize: this.postData.title.fontSize,
                 fontFamily: this.postData.title.font.match(
                     /(?:\d+(?:\.\d+)?px|bold|italic|normal|light|medium|semi-bold|extra-bold|bolder|lighter)\s+([a-zA-Z]+(?:\s[a-zA-Z]+)*)*$/
                 )[1],
+                fontStyle: this.postData.title.font.match(
+                    /\b(italic bold|normal|italic|bold)\b/
+                )[0],
                 fill: this.postData.title.color,
                 align: this.postData.title.align,
             });
             titleGroup.add(text);
         });
-        this.layer.add(titleGroup);
-        this.layer.draw();
+
+        // Added delay to allow Konva to render the stage
+        setTimeout(() => {
+            this.layer.add(titleGroup);
+            this.layer.draw();
+        }, 100);
     }
 
     addImage(): void {

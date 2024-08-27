@@ -1,42 +1,30 @@
-<div class="flex min-w-0 flex-auto flex-col">
-    <!-- Main -->
-    <div class="flex-auto p-6 sm:p-10">
-        <!-- CONTENT GOES HERE -->
-        <div class="container" style="display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin-top: 20px;">
-            <mat-card style="width: 100%; max-width: 500px;">
-                <mat-card-title>Generate Art</mat-card-title>
-                <mat-card-content>
-                    <form [formGroup]="form">
-                        <mat-form-field appearance="fill" style="width: 100%;">
-                            <mat-label>Prompt</mat-label>
-                            <textarea matInput formControlName="prompt" rows="5"></textarea>
-                        </mat-form-field>
-
-                        <div class="file-input-wrapper" style="position: relative;
-                        overflow: hidden;
-                        display: inline-block;">
-                            <button mat-raised-button color="accent" class="file-input-button" style="display: inline-block;">
-                                Browse
-                            </button>
-                            <input type="file" (change)="onFileSelected($event)" class="file-input" style="position: absolute;
-                            top: 0;
-                            left: 0;
-                            font-size: 100px;
-                            text-align: right;
-                            opacity: 0;
-                            cursor: pointer;"/>
-                        </div>
-                        <div *ngIf="selectedImage">
-                            <img [src]="selectedImage" alt="Image preview" class="image-preview" style="width: 100%; margin-top: 16px;" />
-                        </div>
-
-                        <button mat-raised-button color="primary" (click)="generateArt()">Generate Art</button>
-                    </form>
-                </mat-card-content>
-            </mat-card>
+<div class="flex w-full flex-auto flex-col bg-gray-100 dark:bg-gray-900">
+    <div class="mx-auto w-full max-w-7xl p-6 md:p-8">
+      <h2 class="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
+        Modifier le <span class="text-indigo-500 dark:text-indigo-400">post social</span>
+      </h2>
+      
+      <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+        <div class="toolbar mb-4">
+          <button mat-raised-button color="primary" class="mr-2" (click)="addImage()">
+            <mat-icon>add_photo_alternate</mat-icon>
+            Ajouter une image
+          </button>
+          <button mat-raised-button color="primary" class="mr-2" (click)="addText()">
+            <mat-icon>text_fields</mat-icon>
+            Ajouter du texte
+          </button>
+          <button mat-raised-button color="warn" class="mr-2" (click)="deleteSelected()">
+            <mat-icon>delete</mat-icon>
+            Supprimer la sélection
+          </button>
+          <button mat-raised-button color="accent" (click)="saveChanges()">
+            <mat-icon>save</mat-icon>
+            Enregistrer les modifications
+          </button>
         </div>
+        <div #container></div>
+      </div>
     </div>
-</div>
+  </div>
+  
