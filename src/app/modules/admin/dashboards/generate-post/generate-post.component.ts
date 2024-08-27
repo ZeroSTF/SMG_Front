@@ -22,8 +22,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AiTextService } from './services/ai-text.service';
+import { PostDataService } from './services/post-data.service';
 import { RemoveBgService } from './services/remove-bg.service';
 
 interface PostTemplate {
@@ -77,6 +79,8 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
 
     generatedTitle: string;
 
+    generatedPostsData: any[] = [];
+
     postTemplates: { [key: string]: PostTemplate[] } = {
         portrait: [
             {
@@ -126,10 +130,10 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
             {
                 background: '/images/templates/bg-carre-1.png',
                 products: {
-                    x: 7,
-                    y: 220,
-                    width: 1065,
-                    height: 525,
+                    x: 48,
+                    y: 288,
+                    width: 996,
+                    height: 459,
                     style: 'horizontal',
                 },
                 logoPosition: { x: 550, y: 744, width: 502, height: 326 },
@@ -171,7 +175,10 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         private removeBgService: RemoveBgService,
         private changeDetectorRef: ChangeDetectorRef,
         private aiTextService: AiTextService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private router: Router,
+        private postDataService: PostDataService,
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -255,14 +262,14 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
                 ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
 
                 // Draw product images
-                await this.drawMultipleImages(
+                const productPositions = await this.drawMultipleImages(
                     ctx,
                     productImages,
                     template.products
                 );
 
                 // Draw logos
-                await this.drawMultipleImages(
+                const logoPositions = await this.drawMultipleImages(
                     ctx,
                     logos,
                     template.logoPosition,
@@ -274,7 +281,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
                 ctx.fillStyle = template.title.color;
                 ctx.textAlign = 'center';
                 const descPos = template.title;
-                this.wrapText(
+                const titleLayout = this.wrapText(
                     ctx,
                     this.generatedTitle,
                     descPos.x,
@@ -285,57 +292,108 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
                     10
                 );
 
+                this.generatedPostsData.push({
+                    imageUrl: canvas.toDataURL(),
+                    products: productPositions,
+                    logos: logoPositions,
+                    title: {
+                        ...titleLayout,
+                        color: template.title.color,
+                        align: 'center',
+                        font: template.title.font,
+                    },
+                    template: template,
+                    format: format,
+                });
+
                 this.generatedImages.push(canvas.toDataURL());
             }
         }
     }
 
     private async drawMultipleImages(
-      ctx: CanvasRenderingContext2D,
-      images: any[],
-      position: {
-          x: number;
-          y: number;
-          width: number;
-          height: number;
-          style?: 'vertical' | 'horizontal';
-      },
-      type?: 'productImages' | 'logos'
-  ): Promise<void> {
-      const imageCount = images.length;
-      if (imageCount === 0) return;
-      const gap = 10; // Gap between images
-      const isVertical = position.style === 'vertical';
-      let totalWidth = position.width;
-      let totalHeight = position.height;
-  
-      if (imageCount > 1) {
-          if (isVertical) {
-              totalHeight -= (imageCount - 1) * gap;
-          } else {
-              totalWidth -= (imageCount - 1) * gap;
-          }
-      }
-  
-      const imageWidth = isVertical ? totalWidth : totalWidth / imageCount;
-      const imageHeight = isVertical ? totalHeight / imageCount : totalHeight;
-  
-      if (type === 'logos' && imageCount === 1) {
-          const logoWidth = imageWidth / 2;
-          const logoHeight = imageHeight / 2;
-          const img = await this.loadImage(images[0]);
-          const x = position.x + (totalWidth - logoWidth) / 2;
-          const y = position.y + (totalHeight - logoHeight) / 2;
-          this.drawImageFit(ctx, img, x, y, logoWidth, logoHeight);
-      } else {
-          for (let i = 0; i < imageCount; i++) {
-              const img = await this.loadImage(images[i]);
-              const x = isVertical ? position.x : position.x + (imageWidth + gap) * i;
-              const y = isVertical ? position.y + (imageHeight + gap) * i : position.y;
-              this.drawImageFit(ctx, img, x, y, imageWidth, imageHeight);
-          }
-      }
-  }
+        ctx: CanvasRenderingContext2D,
+        images: any[],
+        position: {
+            x: number;
+            y: number;
+            width: number;
+            height: number;
+            style?: 'vertical' | 'horizontal';
+        },
+        type?: 'productImages' | 'logos'
+    ): Promise<
+        { url: string; x: number; y: number; width: number; height: number }[]
+    > {
+        const imageCount = images.length;
+        if (imageCount === 0) return;
+        const gap = 10; // Gap between images
+        const isVertical = position.style === 'vertical';
+        let totalWidth = position.width;
+        let totalHeight = position.height;
+
+        if (imageCount > 1) {
+            if (isVertical) {
+                totalHeight -= (imageCount - 1) * gap;
+            } else {
+                totalWidth -= (imageCount - 1) * gap;
+            }
+        }
+
+        const imageWidth = isVertical ? totalWidth : totalWidth / imageCount;
+        const imageHeight = isVertical ? totalHeight / imageCount : totalHeight;
+
+        const calculatedPositions = [];
+
+        if (type === 'logos' && imageCount === 1) {
+            const logoWidth = imageWidth / 2;
+            const logoHeight = imageHeight / 2;
+            const img = await this.loadImage(images[0]);
+            const x = position.x + (totalWidth - logoWidth) / 2;
+            const y = position.y + (totalHeight - logoHeight) / 2;
+            const fittedDims = this.drawImageFit(
+                ctx,
+                img,
+                x,
+                y,
+                logoWidth,
+                logoHeight
+            );
+            calculatedPositions.push({
+                url: images[0].url,
+                x: fittedDims.x,
+                y: fittedDims.y,
+                width: fittedDims.width,
+                height: fittedDims.height,
+            });
+        } else {
+            for (let i = 0; i < imageCount; i++) {
+                const img = await this.loadImage(images[i]);
+                const x = isVertical
+                    ? position.x
+                    : position.x + (imageWidth + gap) * i;
+                const y = isVertical
+                    ? position.y + (imageHeight + gap) * i
+                    : position.y;
+                const fittedDims = this.drawImageFit(
+                    ctx,
+                    img,
+                    x,
+                    y,
+                    imageWidth,
+                    imageHeight
+                );
+                calculatedPositions.push({
+                    url: images[i].url,
+                    x: fittedDims.x,
+                    y: fittedDims.y,
+                    width: fittedDims.width,
+                    height: fittedDims.height,
+                });
+            }
+        }
+        return calculatedPositions;
+    }
 
     private loadImage(
         src: string | { url: string; file: File }
@@ -357,7 +415,11 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         maxHeight: number,
         maxFontSize: number,
         minFontSize: number
-    ) {
+    ): {
+        fontSize: number;
+        lines: { text: string; x: number; y: number }[];
+        gap: number;
+    } {
         let fontSize = maxFontSize;
         let lineHeight = fontSize * 1.2;
 
@@ -408,10 +470,22 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         // Calculate the average line height based on the number of lines
         const averageLineHeight = maxHeight / lines.length;
 
+        const calculatedLayout = {
+            fontSize: fontSize,
+            lines: lines.map((line, i) => ({
+                text: line,
+                x: x,
+                y: y + i * averageLineHeight,
+            })),
+            gap: averageLineHeight,
+        };
+
         // Draw the lines with consistent spacing
         for (let i = 0; i < lines.length; i++) {
             context.fillText(lines[i], x, y + i * averageLineHeight);
         }
+
+        return calculatedLayout;
     }
 
     // Helper function to draw image fitting in a specified rectangle
@@ -422,7 +496,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         y: number,
         width: number,
         height: number
-    ) {
+    ): { x: number; y: number; width: number; height: number } {
         const aspectRatio = img.width / img.height;
         let drawWidth = width;
         let drawHeight = height;
@@ -437,6 +511,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         const drawY = y + (height - drawHeight) / 2;
 
         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+        return { x: drawX, y: drawY, width: drawWidth, height: drawHeight };
     }
 
     async removeBackground(
@@ -494,6 +569,36 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
+        });
+    }
+
+    editPost(index: number): void {
+        const postData = this.generatedPostsData[index];
+
+        const canvasData = {
+            width:
+                postData.format === 'portrait'
+                    ? 1080
+                    : postData.format === 'paysage'
+                      ? 1350
+                      : 1080,
+            height:
+                postData.format === 'portrait'
+                    ? 1350
+                    : postData.format === 'paysage'
+                      ? 1080
+                      : 1080,
+        };
+
+        const editData = {
+            ...postData,
+            canvas: canvasData,
+        };
+
+        this.postDataService.setPostData(editData);
+        this.router.navigate(['edit'], {
+            state: { postData: editData },
+            relativeTo: this.route,
         });
     }
 }

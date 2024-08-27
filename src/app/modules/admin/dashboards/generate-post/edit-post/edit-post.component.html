@@ -1,0 +1,29 @@
+<div class="flex w-full flex-auto flex-col bg-gray-100 dark:bg-gray-900">
+  <div class="mx-auto w-full max-w-7xl p-6 md:p-8">
+    <h2 class="mb-8 text-3xl font-bold text-gray-900 dark:text-white">
+      Modifier le <span class="text-indigo-500 dark:text-indigo-400">post social</span>
+    </h2>
+    
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
+      <div class="toolbar mb-4">
+        <button mat-raised-button color="primary" class="mr-2" (click)="addImage()">
+          <mat-icon>add_photo_alternate</mat-icon>
+          Ajouter une image
+        </button>
+        <button mat-raised-button color="primary" class="mr-2" (click)="addText()">
+          <mat-icon>text_fields</mat-icon>
+          Ajouter du texte
+        </button>
+        <button mat-raised-button color="warn" class="mr-2" (click)="deleteSelected()">
+          <mat-icon>delete</mat-icon>
+          Supprimer la sélection
+        </button>
+        <button mat-raised-button color="accent" (click)="saveChanges()">
+          <mat-icon>save</mat-icon>
+          Enregistrer les modifications
+        </button>
+      </div>
+      <div #container></div>
+    </div>
+  </div>
+</div>

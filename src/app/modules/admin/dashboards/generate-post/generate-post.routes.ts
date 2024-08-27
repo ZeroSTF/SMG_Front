@@ -1,13 +1,16 @@
 import { Routes } from '@angular/router';
-import { AuthService } from 'app/core/auth/auth.service';
-import { inject } from '@angular/core';
+import { EditPostComponent } from './edit-post/edit-post.component';
 import { GeneratePostComponent } from './generate-post.component';
 
 export default [
     {
         path: '',
         component: GeneratePostComponent,
-        resolve: {
-        },
+        resolve: {},
+    },
+    {
+        path: 'edit',
+        component: EditPostComponent,
+        resolve: {},
     },
 ] as Routes;
