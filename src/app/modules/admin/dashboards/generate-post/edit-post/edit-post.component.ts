@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import Konva from 'konva';
 import { Subject } from 'rxjs';
@@ -11,7 +17,7 @@ import { PostDataService } from '../services/post-data.service';
     standalone: true,
     imports: [MatIconModule],
 })
-export class EditPostComponent implements OnInit {
+export class EditPostComponent implements OnInit, OnDestroy {
     @ViewChild('container', { static: true })
     containerEl: ElementRef<HTMLDivElement>;
     private stage: Konva.Stage;
@@ -111,22 +117,20 @@ export class EditPostComponent implements OnInit {
                 this.postData.template.title.maxWidth / 2,
             y:
                 this.postData.template.title.y -
-                this.postData.template.title.maxHeight / 5,
+                this.postData.template.title.maxHeight / 2,
             width: this.postData.template.title.maxWidth,
             height: this.postData.template.title.maxHeight,
             draggable: true,
         });
-        console.log(
-            'the y im at is not 170: ',
-            this.postData.template.title.y -
-                this.postData.template.title.maxHeight / 5
-        );
-        console.log('max height is', this.postData.template.title.maxHeight);
+
+        const totalHeight =
+            this.postData.title.lines.length * this.postData.title.gap;
+        const startY = (titleGroup.height() - totalHeight) / 2;
 
         this.postData.title.lines.forEach((line: any, index: number) => {
             const text = new Konva.Text({
                 x: 0,
-                y: this.postData.title.gap * index,
+                y: startY + this.postData.title.gap * index,
                 width: titleGroup.width(),
                 text: line.text,
                 fontSize: this.postData.title.fontSize,
@@ -139,9 +143,9 @@ export class EditPostComponent implements OnInit {
                 fill: this.postData.title.color,
                 align: this.postData.title.align,
             });
+
             titleGroup.add(text);
         });
-        console.log('the texts y is: ', titleGroup.y());
 
         // Added delay to allow Konva to render the stage
         setTimeout(() => {

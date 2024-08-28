@@ -138,9 +138,9 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
                 },
                 logoPosition: { x: 550, y: 744, width: 502, height: 326 },
                 title: {
-                    x: 790,
-                    y: 200,
-                    maxWidth: 570,
+                    x: 780,
+                    y: 216,
+                    maxWidth: 550,
                     maxHeight: 132,
                     font: 'bold 80px Monteserrat',
                     color: 'white',
@@ -158,7 +158,7 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
                 logoPosition: { x: 50, y: 600, width: 505, height: 305 },
                 title: {
                     x: 297,
-                    y: 385,
+                    y: 485,
                     maxWidth: 433,
                     maxHeight: 230,
                     font: 'bold 80px Monteserrat',
@@ -426,74 +426,115 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         lines: { text: string; x: number; y: number }[];
         gap: number;
     } {
-        let fontSize = maxFontSize;
-        let lineHeight = fontSize * 1.2;
+        // Find the largest font size that fits the text within the given dimensions
+        const fontSize = this.findOptimalFontSize(
+            context,
+            text,
+            maxWidth,
+            maxHeight,
+            maxFontSize,
+            minFontSize
+        );
+        context.font = `bold ${fontSize}px Monteserrat`;
 
-        // Function to calculate the required height
-        const calculateHeight = (words: string[], testFontSize: number) => {
-            let testLine = '';
-            let testY = y;
-            for (let i = 0; i < words.length; i++) {
-                const word = words[i];
-                const testLineWidth = context.measureText(
-                    testLine + word + ' '
-                ).width;
-                if (testLineWidth > maxWidth && testLine !== '') {
-                    testLine = word + ' ';
-                    testY += testFontSize * 1.2;
-                } else {
-                    testLine += word + ' ';
-                }
-            }
-            return testY + testFontSize * 1.2 - y;
-        };
+        // Split text into lines
+        const words = text.split(' ');
+        const lines: string[] = [];
+        let currentLine = words[0];
 
-        // Decrease font size until the text fits within the designated height
-        let textHeight = calculateHeight(text.split(' '), fontSize);
-        while (textHeight > maxHeight && fontSize > minFontSize) {
-            fontSize--;
-            lineHeight = fontSize * 1.2;
-            context.font = `bold ${fontSize}px Monteserrat`;
-            textHeight = calculateHeight(text.split(' '), fontSize);
-        }
-
-        // Draw the text with the adjusted font size
-        let line = '';
-        let lines: string[] = [];
-        for (let n = 0; n < text.split(' ').length; n++) {
-            const word = text.split(' ')[n];
-            const testLine = line + word + ' ';
+        for (let i = 1; i < words.length; i++) {
+            const testLine = currentLine + ' ' + words[i];
             const testWidth = context.measureText(testLine).width;
-            if (testWidth > maxWidth && n > 0) {
-                lines.push(line);
-                line = word + ' ';
+
+            if (testWidth <= maxWidth) {
+                currentLine = testLine;
             } else {
-                line = testLine;
+                lines.push(currentLine);
+                currentLine = words[i];
             }
         }
-        lines.push(line);
-        // For one line
-        if (lines.length === 1) {
-            y += fontSize / 2;
-        }
-        // Calculate the average line height based on the number of lines
-        const averageLineHeight = maxHeight / lines.length;
+        lines.push(currentLine);
 
-        const calculatedLayout = {
+        // Calculate line height and total text height
+        const lineHeight = fontSize * 1.2;
+        const totalTextHeight = lineHeight * lines.length;
+
+        // Calculate starting Y position to center the text vertically
+        const startY = y - totalTextHeight / 2 + fontSize / 2;
+
+        // Create the layout
+        const layout = {
             fontSize: fontSize,
             lines: lines.map((line, i) => ({
                 text: line,
                 x: x,
-                y: y + i * averageLineHeight,
+                y: startY + i * lineHeight,
             })),
-            gap: averageLineHeight,
+            gap: lineHeight,
         };
-        // Draw the lines with consistent spacing
-        for (let i = 0; i < lines.length; i++) {
-            context.fillText(lines[i], x, y + i * averageLineHeight);
+
+        // Draw the text
+        context.textBaseline = 'middle';
+        lines.forEach((line, i) => {
+            context.fillText(line, x, layout.lines[i].y);
+        });
+
+        return layout;
+    }
+
+    private findOptimalFontSize(
+        context: CanvasRenderingContext2D,
+        text: string,
+        maxWidth: number,
+        maxHeight: number,
+        maxFontSize: number,
+        minFontSize: number
+    ): number {
+        let fontSize = maxFontSize;
+
+        while (fontSize > minFontSize) {
+            context.font = `bold ${fontSize}px Monteserrat`;
+            const lines = this.getLines(context, text, maxWidth);
+            const totalHeight = fontSize * 1.2 * lines.length;
+
+            if (
+                totalHeight <= maxHeight &&
+                lines.every(
+                    (line) => context.measureText(line).width <= maxWidth
+                )
+            ) {
+                return fontSize;
+            }
+
+            fontSize--;
         }
 
-        return calculatedLayout;
+        return minFontSize;
+    }
+
+    private getLines(
+        context: CanvasRenderingContext2D,
+        text: string,
+        maxWidth: number
+    ): string[] {
+        const words = text.split(' ');
+        const lines: string[] = [];
+        let currentLine = words[0];
+
+        for (let i = 1; i < words.length; i++) {
+            const testLine = currentLine + ' ' + words[i];
+            const testWidth = context.measureText(testLine).width;
+
+            if (testWidth <= maxWidth) {
+                currentLine = testLine;
+            } else {
+                lines.push(currentLine);
+                currentLine = words[i];
+            }
+        }
+        lines.push(currentLine);
+
+        return lines;
     }
 
     // Helper function to draw image fitting in a specified rectangle
