@@ -24,29 +24,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { PostTemplate } from './models/PostTemplate.model';
 import { AiTextService } from './services/ai-text.service';
 import { PostDataService } from './services/post-data.service';
 import { RemoveBgService } from './services/remove-bg.service';
-
-interface PostTemplate {
-    background: string;
-    products: {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
-        style: 'vertical' | 'horizontal';
-    };
-    logoPosition: { x: number; y: number; width: number; height: number };
-    title: {
-        x: number;
-        y: number;
-        maxWidth: number;
-        maxHeight: number;
-        font: string;
-        color: string;
-    };
-}
 
 @Component({
     selector: 'app-generate-post',
