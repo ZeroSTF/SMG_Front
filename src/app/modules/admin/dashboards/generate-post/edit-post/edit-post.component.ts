@@ -109,11 +109,19 @@ export class EditPostComponent implements OnInit {
             x:
                 this.postData.template.title.x -
                 this.postData.template.title.maxWidth / 2,
-            y: this.postData.template.title.y - this.postData.title.fontSize,
+            y:
+                this.postData.template.title.y -
+                this.postData.template.title.maxHeight / 5,
             width: this.postData.template.title.maxWidth,
             height: this.postData.template.title.maxHeight,
             draggable: true,
         });
+        console.log(
+            'the y im at is not 170: ',
+            this.postData.template.title.y -
+                this.postData.template.title.maxHeight / 5
+        );
+        console.log('max height is', this.postData.template.title.maxHeight);
 
         this.postData.title.lines.forEach((line: any, index: number) => {
             const text = new Konva.Text({
@@ -133,6 +141,7 @@ export class EditPostComponent implements OnInit {
             });
             titleGroup.add(text);
         });
+        console.log('the texts y is: ', titleGroup.y());
 
         // Added delay to allow Konva to render the stage
         setTimeout(() => {

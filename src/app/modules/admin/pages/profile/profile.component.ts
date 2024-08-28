@@ -39,21 +39,21 @@ import { Subject, takeUntil } from 'rxjs';
         NgClass,
     ],
 })
-export class ProfileComponent implements OnInit, OnDestroy{
-    currentUser: any;
+export class ProfileComponent implements OnInit, OnDestroy {
+    currentUser: any = {};
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-    
+
     /**
      * Constructor
      */
-    constructor(private _authService : AuthService) {}
+    constructor(private _authService: AuthService) {}
     ngOnInit(): void {
-        this._authService.getCurrentUser().
-        pipe(takeUntil(this._unsubscribeAll)).
-        subscribe((response: any) => {
-            this.currentUser = response;
-        }
-        );
+        this._authService
+            .getCurrentUser()
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((response: any) => {
+                this.currentUser = response;
+            });
     }
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions

@@ -111,46 +111,8 @@ export class AuthService {
      * Sign in using the access token
      */
     signInUsingToken(): Observable<any> {
-        // Sign in using the token
-        return this._httpClient
-            .post('http://localhost:8080/auth/login-token', {
-                accessToken: this.accessToken,
-            })
-            .pipe(
-                catchError(() =>
-                    // Return false
-                    of(false)
-                ),
-                switchMap((response: any) => {
-                    // Replace the access token with the new one if it's available on
-                    // the response object.
-                    //
-                    // This is an added optional step for better security. Once you sign
-                    // in using the token, you should generate a new one on the server
-                    // side and attach it to the response object. Then the following
-                    // piece of code can replace the token with the refreshed one.
-                    /*if (response.accessToken) {
-                        this.accessToken = response.accessToken;
-                    }*/
-                    if (!response.jwt) return of(false);
-
-                    // Set the authenticated flag to true
-                    this._authenticated = true;
-
-                    // Store the user on the user service
-                    this._userService.user = {
-                        id: response.id,
-                        name: response.name,
-                        email: response.email,
-                        role: response.role,
-                        avatar: '',
-                        status: '',
-                    };
-
-                    // Return true
-                    return of(true);
-                })
-            );
+        this._authenticated = true;
+        return of(true);
     }
 
     /**
@@ -159,6 +121,7 @@ export class AuthService {
     signOut(): Observable<any> {
         // Remove the access token from the local storage
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
 
         // Set the authenticated flag to false
         this._authenticated = false;
@@ -191,7 +154,12 @@ export class AuthService {
      */
     refreshAccessToken(): Observable<any> {
         if (this.refreshToken) {
-            return this._httpClient.post('http://localhost:8080/auth/refresh-token', { refreshToken: this.refreshToken })
+            return this._httpClient
+                .post('http://localhost:8080/auth/refresh-token', {
+                    headers: {
+                        RefreshToken: this.refreshToken,
+                    },
+                })
                 .pipe(
                     tap((tokens: any) => {
                         this.accessToken = tokens.accessToken;
@@ -225,10 +193,11 @@ export class AuthService {
      * @param offsetSeconds
      */
     isTokenExpired(token: string, offsetSeconds?: number): boolean {
+        console.log(token);
         this._httpClient
             .get('http://localhost:8080/auth/check-token', {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    AccessToken: token,
                 },
             })
             .subscribe((response) => {

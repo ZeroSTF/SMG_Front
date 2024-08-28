@@ -490,7 +490,6 @@ export class GeneratePostComponent implements OnInit, OnDestroy {
         };
         // Draw the lines with consistent spacing
         for (let i = 0; i < lines.length; i++) {
-            console.log('y in generate is: ', y);
             context.fillText(lines[i], x, y + i * averageLineHeight);
         }
 
