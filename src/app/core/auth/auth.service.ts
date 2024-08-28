@@ -11,6 +11,7 @@ import {
     tap,
     throwError,
 } from 'rxjs';
+import { JwtService } from './jwt.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
         new BehaviorSubject<any>(null);
     private _httpClient = inject(HttpClient);
     private _userService = inject(UserService);
+    private _jwtService = inject(JwtService);
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -155,11 +157,15 @@ export class AuthService {
     refreshAccessToken(): Observable<any> {
         if (this.refreshToken) {
             return this._httpClient
-                .post('http://localhost:8080/auth/refresh-token', {
-                    headers: {
-                        RefreshToken: this.refreshToken,
-                    },
-                })
+                .post(
+                    'http://localhost:8080/auth/refresh-token',
+                    {},
+                    {
+                        headers: {
+                            RefreshToken: this.refreshToken,
+                        },
+                    }
+                )
                 .pipe(
                     tap((tokens: any) => {
                         this.accessToken = tokens.accessToken;
@@ -187,26 +193,6 @@ export class AuthService {
     }
 
     /**
-     * Check if token is expired
-     *
-     * @param token
-     * @param offsetSeconds
-     */
-    isTokenExpired(token: string, offsetSeconds?: number): boolean {
-        console.log(token);
-        this._httpClient
-            .get('http://localhost:8080/auth/check-token', {
-                headers: {
-                    AccessToken: token,
-                },
-            })
-            .subscribe((response) => {
-                return response;
-            });
-        return false;
-    }
-
-    /**
      * check if the user has a specific role
      *
      * @param role
@@ -231,24 +217,23 @@ export class AuthService {
     check(): Observable<boolean> {
         // Check if the user is logged in
         if (this._authenticated) {
-            console.log('Authenticated');
             return of(true);
         }
 
         // Check the access token availability
         if (!this.accessToken) {
-            console.log('No access token');
             return of(false);
         }
 
         // Check the access token expire date
-        if (this.isTokenExpired(this.accessToken)) {
-            console.log('Token expired');
-            return of(false);
+        if (this._jwtService.isTokenExpired(this.accessToken)) {
+            return this.refreshAccessToken().pipe(
+                switchMap(() => of(true)),
+                catchError(() => of(false))
+            );
         }
 
         // If the access token exists, and it didn't expire, sign in using it
-        console.log('Sign in using token');
         return this.signInUsingToken();
     }
 }

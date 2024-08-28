@@ -40,7 +40,7 @@ import { Subject, takeUntil } from 'rxjs';
     ],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-    currentUser: any = {};
+    currentUser: any;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
