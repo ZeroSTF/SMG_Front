@@ -3,7 +3,7 @@ import { FacturesPDFComponent } from './factures-pdf.component';
 
 export default [
     {
-        path     : '',
+        path: '',
         component: FacturesPDFComponent,
     },
 ] as Routes;

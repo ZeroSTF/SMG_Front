@@ -7,7 +7,6 @@ import {
     OnInit,
     ViewChild,
     ViewEncapsulation,
-    inject,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -19,7 +18,6 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { NavigationExtras, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
-import { UserService } from 'app/core/user/user.service';
 import { FactureService } from 'app/modules/admin/dashboards/factures/facture.service';
 import { HomeService } from 'app/modules/landing/home/home.service';
 import { NgApexchartsModule } from 'ng-apexcharts';
@@ -47,7 +45,6 @@ import { Subject, takeUntil } from 'rxjs';
     ],
 })
 export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
-
     @ViewChild('facturesTable', { read: MatSort })
     facturesTableMatSort: MatSort;
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -68,7 +65,6 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
     solde: number;
     commandeCount: number;
 
-
     /**
      * Constructor
      */
@@ -77,7 +73,6 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
         private _router: Router,
         private _homeService: HomeService,
         private _authService: AuthService
-
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -99,23 +94,28 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.facturesDataSource.data = data; //.recentTransactions;
             });
 
-            this._homeService.currentUser$
+        this._homeService.currentUser$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((currentUser) => {
                 this.currentUser = currentUser;
             });
-        if(this._authService.hasRole('admin')){
-            this._homeService.solde$.pipe(takeUntil(this._unsubscribeAll)).subscribe((solde) => {
-                this.solde = solde;
-            }
-            );}
-            else{
-                this.solde=this.currentUser.solde;
-            }
+        if (this._authService.hasRole('admin')) {
+            this._homeService.solde$
+                .pipe(takeUntil(this._unsubscribeAll))
+                .subscribe((solde) => {
+                    this.solde = solde;
+                    console.log(solde);
+                });
+        } else {
+            this.solde = this.currentUser.solde;
+            console.log(this.solde);
+        }
 
-        this._homeService.commandeCount$.pipe(takeUntil(this._unsubscribeAll)).subscribe((commandeCount) => {
-            this.commandeCount = commandeCount;
-        })
+        this._homeService.commandeCount$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((commandeCount) => {
+                this.commandeCount = commandeCount;
+            });
     }
 
     /**
@@ -179,7 +179,7 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
 
     openRs(nfact: string): void {
         const navigationExtras: NavigationExtras = {
-            state: { rs: true }
+            state: { rs: true },
         };
         this._router.navigate(['/dashboards/factures-pdf', nfact, true]);
     }

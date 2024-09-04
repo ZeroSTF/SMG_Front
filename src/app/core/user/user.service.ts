@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from 'app/core/user/user.types';
-import { map, Observable, ReplaySubject, tap } from 'rxjs';
+import { Observable, ReplaySubject, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -35,7 +35,7 @@ export class UserService {
      * Get the current signed-in user data
      */
     get(): Observable<User> {
-        return this._httpClient.get<User>(this.baseUrl+'current').pipe(
+        return this._httpClient.get<User>(this.baseUrl + 'current').pipe(
             tap((user) => {
                 this._user.next(user);
             })
@@ -46,7 +46,7 @@ export class UserService {
      * Get all of the current user's data
      */
     getDetails(): Observable<any> {
-        return this._httpClient.get(this.baseUrl+'currentDetails');
+        return this._httpClient.get(this.baseUrl + 'currentDetails');
     }
 
     /**
@@ -55,7 +55,7 @@ export class UserService {
      * @param user
      */
     update(user: any): Observable<any> {
-        return this._httpClient.put(this.baseUrl+'update', user );
+        return this._httpClient.put(this.baseUrl + 'update', user);
     }
 
     /**
@@ -63,8 +63,11 @@ export class UserService {
      *
      * @param requestBody
      */
-     uploadPhoto(requestBody: any, id:String) {
-        return this._httpClient.post(this.baseUrl +`upload/${id}`, requestBody, { responseType: 'text' });
-      }
-
+    uploadPhoto(requestBody: any, id: String) {
+        return this._httpClient.post(
+            this.baseUrl + `upload/${id}`,
+            requestBody,
+            { responseType: 'text' }
+        );
+    }
 }

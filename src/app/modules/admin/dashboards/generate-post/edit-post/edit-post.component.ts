@@ -56,7 +56,48 @@ export class EditPostComponent implements OnInit, OnDestroy {
         this.stage.add(this.layer);
     }
 
-    private loadPostData(): void {
+    private drawTitle(): void {
+        const titleGroup = new Konva.Group({
+            x:
+                this.postData.template.title.x -
+                this.postData.template.title.maxWidth / 2,
+            y:
+                this.postData.template.title.y -
+                this.postData.template.title.maxHeight / 2,
+            width: this.postData.template.title.maxWidth,
+            height: this.postData.template.title.maxHeight,
+            draggable: true,
+        });
+
+        const totalHeight =
+            this.postData.title.lines.length * this.postData.title.gap;
+        const startY = (titleGroup.height() - totalHeight) / 2;
+
+        this.postData.title.lines.forEach((line: any, index: number) => {
+            const text = new Konva.Text({
+                x: 0,
+                y: startY + this.postData.title.gap * index,
+                width: titleGroup.width(),
+                text: line.text,
+                fontSize: this.postData.title.fontSize,
+                fontFamily: this.postData.title.font.match(
+                    /(?:\d+(?:\.\d+)?px|bold|italic|normal|light|medium|semi-bold|extra-bold|bolder|lighter)\s+([a-zA-Z]+(?:\s[a-zA-Z]+)*)*$/
+                )[1],
+                fontStyle: this.postData.title.font.match(
+                    /\b(italic bold|normal|italic|bold)\b/
+                )[0],
+                fill: this.postData.title.color,
+                align: this.postData.title.align,
+            });
+
+            titleGroup.add(text);
+        });
+
+        this.layer.add(titleGroup);
+        this.layer.draw();
+    }
+
+    private async loadPostData(): Promise<void> {
         // Load background
         const backgroundImage = new Image();
         backgroundImage.onload = () => {
@@ -110,48 +151,9 @@ export class EditPostComponent implements OnInit, OnDestroy {
             });
         }
 
-        // Add title text
-        const titleGroup = new Konva.Group({
-            x:
-                this.postData.template.title.x -
-                this.postData.template.title.maxWidth / 2,
-            y:
-                this.postData.template.title.y -
-                this.postData.template.title.maxHeight / 2,
-            width: this.postData.template.title.maxWidth,
-            height: this.postData.template.title.maxHeight,
-            draggable: true,
-        });
-
-        const totalHeight =
-            this.postData.title.lines.length * this.postData.title.gap;
-        const startY = (titleGroup.height() - totalHeight) / 2;
-
-        this.postData.title.lines.forEach((line: any, index: number) => {
-            const text = new Konva.Text({
-                x: 0,
-                y: startY + this.postData.title.gap * index,
-                width: titleGroup.width(),
-                text: line.text,
-                fontSize: this.postData.title.fontSize,
-                fontFamily: this.postData.title.font.match(
-                    /(?:\d+(?:\.\d+)?px|bold|italic|normal|light|medium|semi-bold|extra-bold|bolder|lighter)\s+([a-zA-Z]+(?:\s[a-zA-Z]+)*)*$/
-                )[1],
-                fontStyle: this.postData.title.font.match(
-                    /\b(italic bold|normal|italic|bold)\b/
-                )[0],
-                fill: this.postData.title.color,
-                align: this.postData.title.align,
-            });
-
-            titleGroup.add(text);
-        });
-
-        // Added delay to allow Konva to render the stage
-        setTimeout(() => {
-            this.layer.add(titleGroup);
-            this.layer.draw();
-        }, 100);
+        // Add title after 100 ms delay
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        this.drawTitle();
     }
 
     addImage(): void {
