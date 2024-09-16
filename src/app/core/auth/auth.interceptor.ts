@@ -59,7 +59,7 @@ export const authInterceptor = (
                         newReq = req.clone({
                             headers: req.headers.set(
                                 'Authorization',
-                                authService.accessToken
+                                'Bearer ' + authService.accessToken
                             ),
                         });
                         return next(newReq);
