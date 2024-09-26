@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ArticlesService {
-    private apiUrl = 'http://localhost:8080/';
+    private apiUrl = environment.apiUrl;
 
     private _article: BehaviorSubject<any | null> = new BehaviorSubject(null);
     private _articles: BehaviorSubject<any[] | null> = new BehaviorSubject(

@@ -4,6 +4,7 @@ import {
     HttpHeaders,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, retry } from 'rxjs/operators';
 
@@ -23,7 +24,7 @@ interface GeminiResponse {
 export class AiTextService {
     private API_URL =
         'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-    private API_TOKEN = 'AIzaSyD9q23v2dor09E7zRrTZr26g0g9xhH1qGg'; // TODO Store this securely
+    private API_TOKEN = environment.geminiToken; // TODO Store this securely
 
     constructor(private http: HttpClient) {}
 

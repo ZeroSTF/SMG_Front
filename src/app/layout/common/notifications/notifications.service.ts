@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Notification } from 'app/layout/common/notifications/notifications.types';
+import { environment } from 'environments/environment';
 import { map, Observable, ReplaySubject, switchMap, take, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +10,8 @@ export class NotificationsService {
         Notification[]
     >(1);
 
-    private baseUrl = 'http://localhost:8080/notification/';
+    private apiUrl=environment.apiUrl;
+    private baseUrl = `${this.apiUrl}notification/`;
 
     /**
      * Constructor

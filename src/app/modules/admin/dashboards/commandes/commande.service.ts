@@ -1,31 +1,33 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class CommandeService {
-  private baseUrl = 'http://localhost:8080/commande';
+  private apiUrl = environment.apiUrl;
+  private baseUrl = `${this.apiUrl}commande`;
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
   private _oldData: BehaviorSubject<any> = new BehaviorSubject(null);
 
   /**
-     * Constructor
-     */
+   * Constructor
+   */
   constructor(private _httpClient: HttpClient) {}
 
   // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
+  // @ Accessors
+  // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * Getter for data
-     */
-    get data$(): Observable<any> {
-      return this._data.asObservable();
+  /**
+   * Getter for data
+   */
+  get data$(): Observable<any> {
+    return this._data.asObservable();
   }
 
-    get oldData$(): Observable<any> {
-      return this._oldData.asObservable();
+  get oldData$(): Observable<any> {
+    return this._oldData.asObservable();
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -36,11 +38,11 @@ export class CommandeService {
    * Get all commandes
    */
   getData(): Observable<any> {
-    return this._httpClient.get(this.baseUrl+'/getAllCurrent').pipe(
+    return this._httpClient.get(this.baseUrl + '/getAllCurrent').pipe(
       tap((response: any) => {
-          this._data.next(response);
+        this._data.next(response);
       })
-  );
+    );
   }
 
   /**
@@ -48,25 +50,24 @@ export class CommandeService {
    */
 
   getOldData(): Observable<any> {
-    return this._httpClient.get('http://localhost:8080/vente/getAll').pipe(
+    return this._httpClient.get(`${this.apiUrl}vente/getAll`).pipe(
       tap((response: any) => {
-          this._oldData.next(response);
+        this._oldData.next(response);
       })
-  );
+    );
   }
 
   /**
    * Get commande details
    */
   getCommandeDetails(id: string): Observable<any> {
-    return this._httpClient.get(this.baseUrl+'/'+id);
+    return this._httpClient.get(this.baseUrl + '/' + id);
   }
 
   /**
    * Get vente details
    */
   getVenteDetails(id: any): Observable<any> {
-    return this._httpClient.get('http://localhost:8080/vente/getDetails/'+id);
+    return this._httpClient.get(`${this.apiUrl}vente/getDetails/` + id);
   }
-
 }

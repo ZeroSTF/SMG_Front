@@ -16,11 +16,12 @@ import {
     tap,
     throwError,
 } from 'rxjs';
+import { environment } from 'environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ContactsService {
-    // Private
-    private baseUrl = 'http://localhost:8080/user';
+    private apiUrl = environment.apiUrl;
+    private baseUrl = `${this.apiUrl}user`;
     private _contact: BehaviorSubject<any | null> = new BehaviorSubject(
         null
     );

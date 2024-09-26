@@ -90,7 +90,6 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((data) => {
                 // Store the data
                 this.data = data;
-                console.log(data);
                 // Store the table data
                 this.commandesDataSource.data =
                     data;//.recentTransactions;
@@ -101,7 +100,6 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
             .subscribe((oldData) => {
                 // Store the data
                 this.data = oldData;
-                console.log(oldData);
                 // Store the table data
                 this.commandesDataSource.data =
                     oldData;//.recentTransactions;
@@ -177,7 +175,6 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
                 .subscribe((data) => {
                     // Store the data
                     this.data = data;
-                    console.log(data);
                     // Store the table data
                     this.commandesDataSource.data =
                         data;//.recentTransactions;
@@ -188,7 +185,6 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy
                 .subscribe((oldData) => {
                     // Store the data
                     this.data = oldData;
-                    console.log(oldData);
                     // Store the table data
                     this.commandesDataSource.data =
                         oldData;//.recentTransactions;

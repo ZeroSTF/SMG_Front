@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from 'environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class ClientService {
-  private baseUrl = 'http://localhost:8080/user';
+  private apiUrl = environment.apiUrl;
+  private baseUrl = `${this.apiUrl}user`;
   private _data: BehaviorSubject<any> = new BehaviorSubject(null);
 
   /**
