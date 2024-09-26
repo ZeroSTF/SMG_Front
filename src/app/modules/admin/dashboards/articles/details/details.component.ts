@@ -219,8 +219,6 @@ export class ArticlesDetailsComponent implements OnInit, OnDestroy {
         }
         this._articlesListComponent.equivalentsView = true;
         this._articlesService.equivalents(this.article.id).subscribe((equivalentArticles) => {
-          // Handle the equivalent articles here, e.g., display them in the UI
-          console.log(equivalentArticles);
         });
     }
 }

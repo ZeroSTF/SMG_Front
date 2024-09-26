@@ -107,18 +107,22 @@ export class AuthSignUpComponent implements OnInit {
         // Sign up
         this._authService.signUp(this.signUpForm.value).subscribe(
             (response) => {
-
                 if (this.isPhotoSelected) {
                     // Call the userService.uploadPhoto() function to upload the photo
-                    this._userService.uploadPhoto(this.fileData, response.id).subscribe(
-                      (response: any) => {
-                        console.log('Photo uploaded successfully:', response);
-                      },
-                      (error: any) => {
-                        console.error('Failed to upload photo:', error);
-                      }
-                    );
-                  }
+                    this._userService
+                        .uploadPhoto(this.fileData, response.id)
+                        .subscribe(
+                            (response: any) => {
+                                console.log(
+                                    'Photo uploaded successfully:',
+                                    response
+                                );
+                            },
+                            (error: any) => {
+                                console.error('Failed to upload photo:', error);
+                            }
+                        );
+                }
 
                 // Navigate to the confirmation required page
                 this._router.navigateByUrl('/confirmation-required');
@@ -145,36 +149,36 @@ export class AuthSignUpComponent implements OnInit {
     openFileDialog(): void {
         const fileInput = document.getElementById('mat') as HTMLInputElement;
         fileInput?.click();
-      }
-    
+    }
+
     onFileChange(event: Event): void {
         const input = event.target as HTMLInputElement;
         if (input.files && input.files.length) {
-          const file = input.files[0];
-          this.signUpForm.get('mat')?.setValue(file);
-    
-          const reader = new FileReader();
-          reader.onload = () => {
-            this.imageSrc = reader.result;
-          };
-          reader.readAsDataURL(file);
+            const file = input.files[0];
+            this.signUpForm.get('mat')?.setValue(file);
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.imageSrc = reader.result;
+            };
+            reader.readAsDataURL(file);
         } else {
-          this.imageSrc = null;
+            this.imageSrc = null;
         }
     }
 
     onFileSelected(event: any) {
         const file = event.target.files[0];
         if (!file) {
-          return;
+            return;
         }
-    
+
         // Create a URL object from the file
         const fileUrl = URL.createObjectURL(file);
         this.selectedImageUrl = fileUrl;
-    
+
         // Populate fileData object to send the file
         this.fileData.append('file', file);
         this.isPhotoSelected = true;
-      }
+    }
 }

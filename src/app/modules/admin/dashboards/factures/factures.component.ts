@@ -104,11 +104,9 @@ export class FacturesComponent implements OnInit, AfterViewInit, OnDestroy {
                 .pipe(takeUntil(this._unsubscribeAll))
                 .subscribe((solde) => {
                     this.solde = solde;
-                    console.log(solde);
                 });
         } else {
             this.solde = this.currentUser.solde;
-            console.log(this.solde);
         }
 
         this._homeService.commandeCount$

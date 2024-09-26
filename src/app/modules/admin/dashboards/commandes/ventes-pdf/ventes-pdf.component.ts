@@ -33,7 +33,6 @@ export class VentesPdfComponent implements OnInit, OnDestroy{
                     .pipe(takeUntil(this._unsubscribeAll))
                     .subscribe((vente) => {
                         this.vente = vente;
-                        console.log(vente);
                     });
             });
     }
