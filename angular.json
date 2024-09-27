@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/fuse",
+            "outputPath": "dist/smg",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -88,10 +88,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "fuse:build:production"
+              "buildTarget": "smg:build:production"
             },
             "development": {
-              "buildTarget": "fuse:build:development"
+              "buildTarget": "smg:build:development"
             }
           },
           "defaultConfiguration": "development"
