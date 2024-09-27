@@ -14,7 +14,7 @@ RUN npm install && npm run build --prod
 FROM nginx:alpine
 
 # Copy the built app from the previous stage to Nginx's default public directory
-COPY --from=build /app/dist/my-angular-app /usr/share/nginx/html
+COPY --from=build /app/dist/smg /usr/share/nginx/html
 
 # Expose the port Nginx is running on
 EXPOSE 80
