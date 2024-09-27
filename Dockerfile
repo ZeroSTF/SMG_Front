@@ -17,7 +17,7 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the built app from the previous stage to Nginx's default public directory
-COPY --from=build /app/dist/smg /usr/share/nginx/html
+COPY --from=build /app/dist/smg/browser/ /usr/share/nginx/html
 
 # Expose the port Nginx is running on
 EXPOSE 80
