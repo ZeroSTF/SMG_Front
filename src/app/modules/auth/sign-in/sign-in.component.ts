@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
-    FormsModule,
-    NgForm,
-    ReactiveFormsModule,
-    UntypedFormBuilder,
-    UntypedFormGroup,
-    Validators,
+  FormsModule,
+  NgForm,
+  ReactiveFormsModule,
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -20,125 +20,119 @@ import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 
 @Component({
-    selector: 'auth-sign-in',
-    templateUrl: './sign-in.component.html',
-    encapsulation: ViewEncapsulation.None,
-    animations: fuseAnimations,
-    standalone: true,
-    imports: [
-        RouterLink,
-        FuseAlertComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCheckboxModule,
-        MatProgressSpinnerModule,
-    ],
+  selector: 'auth-sign-in',
+  templateUrl: './sign-in.component.html',
+  encapsulation: ViewEncapsulation.None,
+  animations: fuseAnimations,
+  standalone: true,
+  imports: [
+    RouterLink,
+    FuseAlertComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class AuthSignInComponent implements OnInit {
-    @ViewChild('signInNgForm') signInNgForm: NgForm;
+  @ViewChild('signInNgForm') signInNgForm: NgForm;
 
-    alert: { type: FuseAlertType; message: string } = {
-        type: 'success',
-        message: '',
-    };
-    signInForm: UntypedFormGroup;
-    showAlert: boolean = false;
+  alert: { type: FuseAlertType; message: string } = {
+    type: 'success',
+    message: '',
+  };
+  signInForm: UntypedFormGroup;
+  showAlert: boolean = false;
 
-    /**
-     * Constructor
-     */
-    constructor(
-        private _activatedRoute: ActivatedRoute,
-        private _authService: AuthService,
-        private _formBuilder: UntypedFormBuilder,
-        private _router: Router,
-        private _snackBar: MatSnackBar
-    ) { }
+  /**
+   * Constructor
+   */
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+    private _authService: AuthService,
+    private _formBuilder: UntypedFormBuilder,
+    private _router: Router,
+    private _snackBar: MatSnackBar
+  ) {}
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
+  // -----------------------------------------------------------------------------------------------------
+  // @ Lifecycle hooks
+  // -----------------------------------------------------------------------------------------------------
 
-    /**
-     * On init
-     */
-    ngOnInit(): void {
-        // Create the form
-        this.signInForm = this._formBuilder.group({
-            code: [
-                '41000001',
-                [Validators.required],
-            ],
-            password: ['password', Validators.required],
-            rememberMe: [''],
-        });
+  /**
+   * On init
+   */
+  ngOnInit(): void {
+    // Create the form
+    this.signInForm = this._formBuilder.group({
+      code: ['', [Validators.required]],
+      password: ['', Validators.required],
+      rememberMe: [''],
+    });
+  }
+
+  // -----------------------------------------------------------------------------------------------------
+  // @ Public methods
+  // -----------------------------------------------------------------------------------------------------
+
+  /**
+   * Sign in
+   */
+  signIn(): void {
+    // Return if the form is invalid
+    if (this.signInForm.invalid) {
+      return;
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
+    // Disable the form
+    this.signInForm.disable();
 
-    /**
-     * Sign in
-     */
-    signIn(): void {
-        // Return if the form is invalid
-        if (this.signInForm.invalid) {
-            return;
+    // Hide the alert
+    this.showAlert = false;
+
+    // Sign in
+    this._authService.signIn(this.signInForm.value).subscribe(
+      (response) => {
+        if (response.role === 'old') {
+          this._router.navigate(['/pages/settings']);
+          //prompt the user to verify his information in french
+          this._snackBar.open('Veuillez vérifier vos informations', 'OK', {
+            duration: 5000,
+          });
+        } else {
+          // Set the redirect url.
+          // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
+          // to the correct page after a successful sign in. This way, that url can be set via
+          // routing file and we don't have to touch here.
+          const redirectURL =
+            this._activatedRoute.snapshot.queryParamMap.get('redirectURL') ||
+            '/signed-in-redirect';
+
+          // Navigate to the redirect url
+          this._router.navigateByUrl(redirectURL);
         }
+      },
+      (response) => {
+        console.error(response);
+        // Re-enable the form
+        this.signInForm.enable();
 
-        // Disable the form
-        this.signInForm.disable();
+        // Reset the form
+        this.signInNgForm.resetForm();
 
-        // Hide the alert
-        this.showAlert = false;
+        // Set the alert
+        this.alert = {
+          type: 'error',
+          message: 'Mot de passe ou code incorrect',
+        };
 
-        // Sign in
-        this._authService.signIn(this.signInForm.value).subscribe(
-            (response) => {
-                if(response.role === 'old'){
-                    this._router.navigate(['/pages/settings']);
-                    //prompt the user to verify his information in french
-                    this._snackBar.open('Veuillez vérifier vos informations', 'OK', {
-                        duration: 5000,
-                    });
-                }
-                else {
-                    // Set the redirect url.
-                    // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
-                    // to the correct page after a successful sign in. This way, that url can be set via
-                    // routing file and we don't have to touch here.
-                    const redirectURL =
-                        this._activatedRoute.snapshot.queryParamMap.get(
-                            'redirectURL'
-                        ) || '/signed-in-redirect';
-    
-                    // Navigate to the redirect url
-                    this._router.navigateByUrl(redirectURL);
-                }
-
-            },
-            (response) => {
-                console.error(response);
-                // Re-enable the form
-                this.signInForm.enable();
-
-                // Reset the form
-                this.signInNgForm.resetForm();
-
-                // Set the alert
-                this.alert = {
-                    type: 'error',
-                    message: 'Mot de passe ou code incorrect',
-                };
-
-                // Show the alert
-                this.showAlert = true;
-            }
-        );
-    }
+        // Show the alert
+        this.showAlert = true;
+      }
+    );
+  }
 }

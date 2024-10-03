@@ -35,7 +35,7 @@ const defaultNavigation: FuseNavigationItem[] = [
       },
       {
         id: 'dashboard.articles',
-        title: 'Articles',
+        title: 'Pièces de rechange',
         type: 'basic',
         icon: 'heroicons_outline:cog',
         link: '/dashboards/articles',
