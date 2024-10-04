@@ -3,39 +3,28 @@
     <div class="bg-card flex flex-col shadow">
         <!-- Cover image -->
         <div>
-            <img
-                class="h-40 object-cover lg:h-80"
-                src="images/pages/profile/cover.png"
-                alt="Cover image"
-            />
+            <img class="h-40 object-cover lg:h-80" src="images/pages/profile/cover.png" alt="Cover image" />
         </div>
 
         <!-- User info -->
-        <div
-            class="bg-card mx-auto flex w-full max-w-5xl flex-0 flex-col items-center px-8 lg:h-18 lg:flex-row"
-        >
+        <div class="bg-card mx-auto flex w-full max-w-5xl flex-0 flex-col items-center px-8 lg:h-18 lg:flex-row">
             <!-- Avatar -->
             <div class="-mt-26 rounded-full lg:-mt-22">
-                <img
-                    class="ring-bg-card h-32 w-32 rounded-full ring-4"
-                    src="images/avatars/default.jpg"
-                    alt="User avatar"
-                />
+                <img class="ring-bg-card h-32 w-32 rounded-full ring-4" src="images/avatars/default.jpg"
+                    alt="User avatar" />
             </div>
 
             <!-- Details -->
-            <div
-                class="mt-4 flex flex-col items-center lg:ml-8 lg:mt-0 lg:items-start"
-            >
+            <div class="mt-4 flex flex-col items-center lg:ml-8 lg:mt-0 lg:items-start">
                 <div class="text-lg font-bold leading-none">{{currentUser.nom}}</div>
                 <div class="text-secondary">{{currentUser.adresse}}</div>
             </div>
 
             <!-- Separator -->
-            <div class="mx-8 hidden h-8 border-l-2 lg:flex"></div>
+            <!-- <div class="mx-8 hidden h-8 border-l-2 lg:flex"></div> -->
 
             <!-- Stats -->
-            <div class="mt-6 flex items-center space-x-6 lg:mt-0">
+            <!-- <div class="mt-6 flex items-center space-x-6 lg:mt-0">
                 <div class="flex flex-col items-center">
                     <span class="font-bold">200k</span>
                     <span class="text-secondary text-sm font-medium"
@@ -48,7 +37,7 @@
                         >FOLLOWING</span
                     >
                 </div>
-            </div>
+            </div> -->
 
             <!-- Menu -->
             <!-- <div
@@ -63,9 +52,7 @@
     </div>
 
     <!-- Main -->
-    <div
-        class="mx-auto flex w-full max-w-5xl flex-auto justify-center p-6 sm:p-8"
-    >
+    <div class="mx-auto flex w-full max-w-5xl flex-auto justify-center p-6 sm:p-8">
         <!-- Column -->
         <div class="mr-8 hidden flex-col items-start lg:flex">
             <!-- About me -->
@@ -81,58 +68,36 @@
                 <!-- <hr class="my-6 w-full border-t" /> -->
                 <div class="flex flex-col" style="margin-top: 5%;">
                     <div class="flex items-center">
-                        <mat-icon
-                            class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:map-pin'"
-                        ></mat-icon>
+                        <mat-icon class="mr-3 icon-size-5" [svgIcon]="'heroicons_solid:map-pin'"></mat-icon>
                         <span class="leading-none">{{currentUser.adresse}}</span>
                     </div>
                     @if(currentUser.banque){
                     <div class="mt-4 flex items-center">
-                        <mat-icon
-                            class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:building-library'"
-                        ></mat-icon>
-                        <span class="leading-none"
-                            >{{currentUser.banque}}</span
-                        >
+                        <mat-icon class="mr-3 icon-size-5" [svgIcon]="'heroicons_solid:building-library'"></mat-icon>
+                        <span class="leading-none">{{currentUser.banque}}</span>
                     </div>
                     }
                     <!--rib-->
                     @if(currentUser.rib){
                     <div class="mt-4 flex items-center">
-                        <mat-icon
-                            class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:credit-card'"
-                        ></mat-icon>
+                        <mat-icon class="mr-3 icon-size-5" [svgIcon]="'heroicons_solid:credit-card'"></mat-icon>
                         <span class="leading-none">{{currentUser.rib}}</span>
                     </div>
                     }
                     @if(currentUser.tel1){
                     <div class="mt-4 flex items-center">
-                        <mat-icon
-                            class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:phone'"
-                        ></mat-icon>
+                        <mat-icon class="mr-3 icon-size-5" [svgIcon]="'heroicons_solid:phone'"></mat-icon>
                         <span class="leading-none">{{currentUser.tel1}}</span>
                     </div>
                     }
                     @if(currentUser.tel2){
                     <div class="mt-4 flex items-center">
-                        <mat-icon
-                            class="mr-3 icon-size-5"
-                            [svgIcon]="'heroicons_solid:phone'"
-                        ></mat-icon>
+                        <mat-icon class="mr-3 icon-size-5" [svgIcon]="'heroicons_solid:phone'"></mat-icon>
                         <span class="leading-none">{{currentUser.tel2}}</span>
                     </div>
-                }
+                    }
                 </div>
-                <a
-                    class="mt-8 px-6"
-                    mat-flat-button
-                    [color]="'primary'"
-                    [routerLink]="['/pages/settings']"
-                >
+                <a class="mt-8 px-6" mat-flat-button [color]="'primary'" [routerLink]="['/pages/settings']">
                     Modifier mes informations
                 </a>
             </fuse-card>
@@ -694,23 +659,13 @@
                 <div class="text-xl font-semibold">Envoyez nous un message! </div>
                 <div class="mt-8 flex flex-col items-start sm:flex-row">
                     <div class="mb-6 flex items-center sm:mb-0">
-                        <img
-                            class="mr-4 h-12 w-12 min-w-12 rounded-full"
-                            src="images/avatars/default.jpg"
-                            alt="Card cover image"
-                        />
+                        <img class="mr-4 h-12 w-12 min-w-12 rounded-full" src="images/avatars/default.jpg"
+                            alt="Card cover image" />
                         <div class="sm:hidden">Brian Hughes</div>
                     </div>
-                    <mat-form-field
-                        class="w-full"
-                        [subscriptSizing]="'dynamic'"
-                    >
-                        <textarea
-                            matInput
-                            [placeholder]="'À quoi pensez-vous ?'"
-                            [rows]="3"
-                            cdkTextareaAutosize
-                        ></textarea>
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <textarea matInput [placeholder]="'À quoi pensez-vous ?'" [rows]="3"
+                            cdkTextareaAutosize></textarea>
                     </mat-form-field>
                 </div>
                 <!-- <div class="-mx-3 mt-6 flex items-center sm:mt-8">
@@ -796,23 +751,13 @@
             </fuse-card>
 
             <!-- Post 1 -->
-            <fuse-card
-                class="mt-8 flex w-full max-w-140 flex-col"
-                #expandableCard02="fuseCard"
-            >
+            <fuse-card class="mt-8 flex w-full max-w-140 flex-col" #expandableCard02="fuseCard">
                 <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
-                    <img
-                        class="mr-4 h-10 w-10 rounded-full"
-                        src="images/pages/profile/Logo.png"
-                        alt="Card cover image"
-                    />
+                    <img class="mr-4 h-10 w-10 rounded-full" src="images/pages/profile/Logo.png"
+                        alt="Card cover image" />
                     <div class="flex flex-col">
-                        <span class="font-semibold leading-none"
-                            >SMG</span
-                        >
-                        <span class="text-secondary mt-1 text-sm leading-none"
-                            >il y a 29 minutes</span
-                        >
+                        <span class="font-semibold leading-none">SMG</span>
+                        <span class="text-secondary mt-1 text-sm leading-none">il y a 29 minutes</span>
                     </div>
                     <!-- <button
                         class="-mr-4 ml-auto"
@@ -888,11 +833,7 @@
                     Nouvel Arrivage !
                 </div>
                 <div class="relative mb-4">
-                    <img
-                        class="h-80 object-cover"
-                        src="images/pages/profile/newsone.jpg"
-                        alt="Card cover image"
-                    />
+                    <img class="h-80 object-cover" src="images/pages/profile/newsone.jpg" alt="Card cover image" />
                     <!-- <div
                         class="absolute bottom-0 left-0 m-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-700"
                         [matTooltip]="'Barmouth / UK'"
@@ -1292,25 +1233,15 @@
             </fuse-card>
 
             <!-- Custom Post 2-->
-            <fuse-card
-            class="mt-8 flex w-full max-w-140 flex-col"
-            #expandableCard02="fuseCard"
-        >
-            <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
-                <img
-                    class="mr-4 h-10 w-10 rounded-full"
-                    src="images/pages/profile/Logo.png"
-                    alt="Card cover image"
-                />
-                <div class="flex flex-col">
-                    <span class="font-semibold leading-none"
-                        >SMG</span
-                    >
-                    <span class="text-secondary mt-1 text-sm leading-none"
-                        >il y a 32 minutes</span
-                    >
-                </div>
-                <!-- <button
+            <fuse-card class="mt-8 flex w-full max-w-140 flex-col" #expandableCard02="fuseCard">
+                <div class="mx-6 mb-4 mt-6 flex items-center sm:mx-8">
+                    <img class="mr-4 h-10 w-10 rounded-full" src="images/pages/profile/Logo.png"
+                        alt="Card cover image" />
+                    <div class="flex flex-col">
+                        <span class="font-semibold leading-none">SMG</span>
+                        <span class="text-secondary mt-1 text-sm leading-none">il y a 32 minutes</span>
+                    </div>
+                    <!-- <button
                     class="-mr-4 ml-auto"
                     mat-icon-button
                     [matMenuTriggerFor]="postCardMenu02"
@@ -1320,7 +1251,7 @@
                         [svgIcon]="'heroicons_solid:ellipsis-vertical'"
                     ></mat-icon>
                 </button> -->
-                <!-- <mat-menu #postCardMenu02="matMenu">
+                    <!-- <mat-menu #postCardMenu02="matMenu">
                     <button mat-menu-item>
                         <span class="flex items-center">
                             <mat-icon
@@ -1379,17 +1310,13 @@
                         </span>
                     </button>
                 </mat-menu> -->
-            </div>
-            <div class="mx-6 mb-6 mt-2 sm:mx-8">
-                Nouvel Arrivage !
-            </div>
-            <div class="relative mb-4">
-                <img
-                    class="h-80 object-cover"
-                    src="images/pages/profile/newstwo.jpg"
-                    alt="Card cover image"
-                />
-                <!-- <div
+                </div>
+                <div class="mx-6 mb-6 mt-2 sm:mx-8">
+                    Nouvel Arrivage !
+                </div>
+                <div class="relative mb-4">
+                    <img class="h-80 object-cover" src="images/pages/profile/newstwo.jpg" alt="Card cover image" />
+                    <!-- <div
                     class="absolute bottom-0 left-0 m-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-700"
                     [matTooltip]="'Barmouth / UK'"
                     [matTooltipPosition]="'right'"
@@ -1399,8 +1326,8 @@
                         [svgIcon]="'heroicons_solid:map-pin'"
                     ></mat-icon>
                 </div> -->
-            </div>
-            <!-- <div class="mx-3 flex items-center sm:mx-5">
+                </div>
+                <!-- <div class="mx-3 flex items-center sm:mx-5">
                 <button class="mr-1 px-3" mat-button>
                     <mat-icon
                         class="text-red-500 icon-size-5"
@@ -1425,8 +1352,8 @@
                     <span class="ml-2">Share</span>
                 </button>
             </div> -->
-            <!-- <hr class="mx-6 mb-6 mt-4 border-b sm:mx-8" /> -->
-            <!-- <div
+                <!-- <hr class="mx-6 mb-6 mt-4 border-b sm:mx-8" /> -->
+                <!-- <div
                 class="mx-6 mb-4 flex flex-col sm:mx-8 sm:mb-6 sm:flex-row sm:items-center"
             >
                 <div class="flex items-center">
@@ -1479,7 +1406,7 @@
                 </div>
             </div> -->
 
-            <!-- <ng-container fuseCardExpansion>
+                <!-- <ng-container fuseCardExpansion>
                 <hr class="m-0 border-b" />
                 <div class="mx-4 mb-3 mt-6 flex flex-col sm:mx-8">
                     <div class="flex items-start">
@@ -1785,7 +1712,7 @@
                     </div>
                 </div>
             </ng-container> -->
-        </fuse-card>
+            </fuse-card>
 
             <!-- Post 2 -->
             <!-- <fuse-card class="mt-8 flex w-full max-w-140 flex-col">
