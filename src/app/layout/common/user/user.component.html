@@ -2,21 +2,18 @@
 <button mat-icon-button [matMenuTriggerFor]="userActions">
     <span class="relative">
         @if (showAvatar && user.avatar) {
-            <img class="h-7 w-7 rounded-full" [src]="user.avatar" />
+        <img class="h-7 w-7 rounded-full" [src]="user.avatar" />
         }
         @if (!showAvatar || !user.avatar) {
-            <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+        <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
         }
-        <span
-            class="absolute bottom-0 right-0 h-2 w-2 rounded-full"
-            [ngClass]="{
+        <span class="absolute bottom-0 right-0 h-2 w-2 rounded-full" [ngClass]="{
                 'mb-px mr-px': !showAvatar || !user.avatar,
                 'bg-green-500': user.status === 'online',
                 'bg-amber-500': user.status === 'away',
                 'bg-red-500': user.status === 'busy',
                 'bg-gray-400': user.status === 'not-visible',
-            }"
-        ></span>
+            }"></span>
     </span>
 </button>
 
@@ -28,13 +25,13 @@
         </span>
     </button>
     <mat-divider class="my-2"></mat-divider>
-    <button mat-menu-item (click)="profile()">
+    <!-- <button mat-menu-item (click)="profile()">
         <mat-icon [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
         <span>Profile</span>
-    </button>
+    </button> -->
     <button mat-menu-item (click)="settings()">
         <mat-icon [svgIcon]="'heroicons_outline:cog-8-tooth'"></mat-icon>
-        <span >Paramètres</span>
+        <span>Paramètres</span>
     </button>
     <!-- <button mat-menu-item [matMenuTriggerFor]="userStatus">
         <mat-icon
@@ -44,9 +41,7 @@
     </button> -->
     <mat-divider class="my-2"></mat-divider>
     <button mat-menu-item (click)="signOut()">
-        <mat-icon
-            [svgIcon]="'heroicons_outline:arrow-right-on-rectangle'"
-        ></mat-icon>
+        <mat-icon [svgIcon]="'heroicons_outline:arrow-right-on-rectangle'"></mat-icon>
         <span>Déconnexion</span>
     </button>
 </mat-menu>

@@ -2,20 +2,14 @@
     <div class="mx-auto flex w-full max-w-screen-xl flex-wrap p-6 md:p-8">
         <!-- Title and action buttons -->
         <div class="flex w-full items-center justify-between">
-            <div
-                            class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4"
-                        >
-                            <!-- Summary -->
-                            <div
-                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
-                            >
-                                <div class="flex items-start justify-between">
-                                    <div
-                                        class="truncate text-lg font-medium leading-6 tracking-tight"
-                                    >
-                                        Solde
-                                    </div>
-                                    <div class="-mr-3 -mt-2 ml-2">
+            <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+                <!-- Summary -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Solde
+                        </div>
+                        <!-- <div class="-mr-3 -mt-2 ml-2">
                                         <button
                                             mat-icon-button
                                             [matMenuTriggerFor]="summaryMenu"
@@ -38,30 +32,24 @@
                                                 3 days ago
                                             </button>
                                         </mat-menu>
-                                    </div>
-                                </div>
-                                <div class="mt-2 flex flex-col items-center">
-                                    <div
-                                        class="text-7xl font-bold leading-none tracking-tight text-blue-500 sm:text-8xl">
-                                        {{solde}}
-                                    </div>
-                                    <div
-                                        class="text-lg font-medium text-blue-600 dark:text-blue-500">
-                                        TND
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Overdue -->
-                            <div
-                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
-                            >
-                                <div class="flex items-start justify-between">
-                                    <div
-                                        class="truncate text-lg font-medium leading-6 tracking-tight"
-                                    >
-                                        Commandes en cours
-                                    </div>
-                                    <div class="-mr-3 -mt-2 ml-2">
+                                    </div> -->
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-blue-500 sm:text-8xl">
+                            {{solde}}
+                        </div>
+                        <div class="text-lg font-medium text-blue-600 dark:text-blue-500">
+                            TND
+                        </div>
+                    </div>
+                </div>
+                <!-- Overdue -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Commandes en cours
+                        </div>
+                        <!-- <div class="-mr-3 -mt-2 ml-2">
                                         <button
                                             mat-icon-button
                                             [matMenuTriggerFor]="overdueMenu"
@@ -84,32 +72,24 @@
                                                 3 days ago
                                             </button>
                                         </mat-menu>
-                                    </div>
-                                </div>
-                                <div class="mt-2 flex flex-col items-center">
-                                    <div
-                                        class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl"
-                                    >
-                                        {{commandeCount}}
-                                    </div>
-                                    <div
-                                        class="text-lg font-medium text-red-600 dark:text-red-500"
-                                    >
-                                        Commandes
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Issues -->
-                            <div
-                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
-                            >
-                                <div class="flex items-start justify-between">
-                                    <div
-                                        class="truncate text-lg font-medium leading-6 tracking-tight"
-                                    >
-                                        Prochaine échance
-                                    </div>
-                                    <div class="-mr-3 -mt-2 ml-2">
+                                    </div> -->
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl">
+                            {{commandeCount}}
+                        </div>
+                        <div class="text-lg font-medium text-red-600 dark:text-red-500">
+                            Commandes
+                        </div>
+                    </div>
+                </div>
+                <!-- Issues -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Prochaine échance
+                        </div>
+                        <!-- <div class="-mr-3 -mt-2 ml-2">
                                         <button
                                             mat-icon-button
                                             [matMenuTriggerFor]="issuesMenu"
@@ -132,27 +112,21 @@
                                                 3 days ago
                                             </button>
                                         </mat-menu>
-                                    </div>
-                                </div>
-                                <div class="mt-2 flex flex-col items-center">
-                                    <div
-                                        class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl"
-                                    >
-                                        24
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Features -->
-                            <div
-                                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow"
-                            >
-                                <div class="flex items-start justify-between">
-                                    <div
-                                        class="truncate text-lg font-medium leading-6 tracking-tight"
-                                    >
-                                        Plus de 
-                                    </div>
-                                    <div class="-mr-3 -mt-2 ml-2">
+                                    </div> -->
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl">
+                            24
+                        </div>
+                    </div>
+                </div>
+                <!-- Features -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Plus de
+                        </div>
+                        <!-- <div class="-mr-3 -mt-2 ml-2">
                                         <button
                                             mat-icon-button
                                             [matMenuTriggerFor]="featuresMenu"
@@ -175,80 +149,56 @@
                                                 3 days ago
                                             </button>
                                         </mat-menu>
-                                    </div>
-                                </div>
-                                <div class="mt-2 flex flex-col items-center">
-                                    <div
-                                        class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl"
-                                    >
-                                        1547
-                                    </div>
-                                    <div
-                                        class="text-lg font-medium text-green-600 dark:text-green-500"
-                                    >
-                                        clients
-                                    </div>
-                                    <div
-                                        class="text-secondary mt-5 flex w-full items-baseline justify-center"
-                                    >
-                                    </div>
-                                </div>
-                            </div>
-                            
-            <div>
-                <h2 class="text-3xl font-semibold leading-8 tracking-tight">
-                    Liste des factures
-                </h2>
-                <div class="text-secondary font-medium tracking-tight">
-                    Consulter vos factures
+                                    </div> -->
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                            1547
+                        </div>
+                        <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                            clients
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-3xl font-semibold leading-8 tracking-tight">
+                        Liste des factures
+                    </h2>
+                    <div class="text-secondary font-medium tracking-tight">
+                        Consulter vos factures
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
         <div class="mt-8 grid w-full grid-cols-1 gap-8 xl:grid-cols-2">
             <div class="grid gap-8 sm:grid-flow-col xl:grid-flow-row">
             </div>
         </div>
-        
+
         <div class="mt-8 grid w-full grid-cols-1 gap-8 xl:grid-cols-3">
             <!-- Factures table -->
-            <div
-                class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl shadow xl:col-span-12"
-            >
+            <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl shadow xl:col-span-12">
                 <div class="mx-6 overflow-x-auto">
-                    <table
-                        class="w-full bg-transparent"
-                        mat-table
-                        matSort
-                        [dataSource]="facturesDataSource"
-                        [trackBy]="trackByFn"
-                        #facturesTable
-                    >
+                    <table class="w-full bg-transparent" mat-table matSort [dataSource]="facturesDataSource"
+                        [trackBy]="trackByFn" #facturesTable>
                         <!-- Facture ID -->
                         <ng-container matColumnDef="nFact">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                 N° Facture
                             </th>
                             <td mat-cell *matCellDef="let facture">
-                                <span
-                                    class="text-secondary whitespace-nowrap pr-6 text-sm font-medium"
-                                >
+                                <span class="text-secondary whitespace-nowrap pr-6 text-sm font-medium">
                                     {{ facture.nfact }}
                                 </span>
                             </td>
                         </ng-container>
                         <!-- Client -->
                         <ng-container matColumnDef="nomclt">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                 Client
                             </th>
                             <td mat-cell *matCellDef="let facture">
@@ -260,11 +210,7 @@
 
                         <!-- Date -->
                         <ng-container matColumnDef="datvte">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                 Date
                             </th>
                             <td mat-cell *matCellDef="let facture">
@@ -276,105 +222,62 @@
 
                         <!-- Amount -->
                         <ng-container matColumnDef="totttc">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                 Total
                             </th>
                             <td mat-cell *matCellDef="let facture">
-                                <span
-                                    class="whitespace-nowrap pr-6 font-medium"
-                                >
+                                <span class="whitespace-nowrap pr-6 font-medium">
                                     {{convertStringToDecimal(facture.totttc) }} TND
                                 </span>
                             </td>
                         </ng-container>
 
-                         <!-- Status -->
-                         <ng-container matColumnDef="etat">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                        <!-- Status -->
+                        <ng-container matColumnDef="etat">
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                                 Etat
                             </th>
                             <td mat-cell *matCellDef="let facture">
                                 <span
-                                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50"
-                                >
-                                    <span
-                                        class="whitespace-nowrap leading-relaxed"
-                                        > Validé </span
-                                    >
+                                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide bg-green-200 text-green-800 dark:bg-green-600 dark:text-green-50">
+                                    <span class="whitespace-nowrap leading-relaxed"> Validé </span>
                                 </span>
                             </td>
                         </ng-container>
 
                         <!--pdf button-->
                         <ng-container matColumnDef="pdf">
-                            <th
-                                mat-header-cell
-                                mat-sort-header
-                                *matHeaderCellDef
-                            >
+                            <th mat-header-cell mat-sort-header *matHeaderCellDef>
                             </th>
                             <td mat-cell *matCellDef="let facture">
                                 <!--pdf button-->
-                                <button
-                                    mat-icon-button
-                                    (click)="openPdf(facture.nfact)"
-                                >
+                                <button mat-icon-button (click)="openPdf(facture.nfact)">
                                     <mat-icon>picture_as_pdf</mat-icon>
                                 </button>
                                 <!--RS button-->
                                 @if(convertStringToDecimal(facture.totttc)>=1000){
-                                <button
-                                    mat-icon-button
-                                    (click)="openRs(facture.nfact)"
-                                >
+                                <button mat-icon-button (click)="openRs(facture.nfact)">
                                     <mat-icon>receipt</mat-icon>
                                 </button>
-                            }
+                                }
                             </td>
                         </ng-container>
 
                         <!-- Footer -->
                         <ng-container matColumnDef="recentOrdersTableFooter">
-                            <td
-                                class="border-0 px-0 py-6"
-                                mat-footer-cell
-                                *matFooterCellDef
-                                colspan="6"
-                            >
+                            <td class="border-0 px-0 py-6" mat-footer-cell *matFooterCellDef colspan="6">
                             </td>
                         </ng-container>
 
-                        <tr
-                            mat-header-row
-                            *matHeaderRowDef="facturesTableColumns"
-                        ></tr>
-                        <tr
-                            class="order-row h-16"
-                            mat-row
-                            *matRowDef="
+                        <tr mat-header-row *matHeaderRowDef="facturesTableColumns"></tr>
+                        <tr class="order-row h-16" mat-row *matRowDef="
                                 let row;
                                 columns: facturesTableColumns
-                            "
-                        ></tr>
-                        <tr
-                            class="h-16 border-0"
-                            mat-footer-row
-                            *matFooterRowDef="['recentOrdersTableFooter']"
-                        ></tr>
+                            "></tr>
+                        <tr class="h-16 border-0" mat-footer-row *matFooterRowDef="['recentOrdersTableFooter']"></tr>
                     </table>
-                    <mat-paginator
-                        [pageSizeOptions]="[5, 10, 25, 100]"
-                        showFirstLastButtons
-                        aria-label="Selectionnez la page de la liste des factures"
-                    ></mat-paginator>
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons
+                        aria-label="Selectionnez la page de la liste des factures"></mat-paginator>
                 </div>
             </div>
 

@@ -16,6 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
 import { CommandeService } from 'app/modules/admin/dashboards/commandes/commande.service';
@@ -30,6 +31,7 @@ import { Subject, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
+    MatTabsModule,
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
@@ -65,6 +67,7 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy {
   solde: number;
   commandeCount: number;
   isVentes: boolean = false;
+  selectedTabIndex = 0;
 
   /**
    * Constructor
@@ -83,6 +86,30 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy {
   /**
    * On init
    */
+
+  onTabChange(event: any): void {
+    this.isVentes = event.index === 1;
+    this.loadData();
+  }
+
+  loadData(): void {
+    if (!this.isVentes) {
+      this._commandeService.data$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((data) => {
+          this.data = data;
+          this.commandesDataSource.data = data;
+        });
+    } else {
+      this._commandeService.oldData$
+        .pipe(takeUntil(this._unsubscribeAll))
+        .subscribe((oldData) => {
+          this.data = oldData;
+          this.commandesDataSource.data = oldData;
+        });
+    }
+  }
+
   ngOnInit(): void {
     // Get the data
     if (!this.isVentes) {
@@ -92,8 +119,8 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy {
           // Store the data
           this.data = data;
           // Store the table data
-        this.commandesDataSource.data = data; 
-          });
+          this.commandesDataSource.data = data;
+        });
     } else {
       this._commandeService.oldData$
         .pipe(takeUntil(this._unsubscribeAll))
@@ -101,8 +128,8 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy {
           // Store the data
           this.data = oldData;
           // Store the table data
-        this.commandesDataSource.data = oldData; 
-          });
+          this.commandesDataSource.data = oldData;
+        });
     }
 
     this._homeService.currentUser$
@@ -164,30 +191,6 @@ export class CommandesComponent implements OnInit, AfterViewInit, OnDestroy {
       this._router.navigate(['/dashboards/commandes-pdf', id]);
     } else {
       this._router.navigate(['/dashboards/ventes-pdf', id]);
-    }
-  }
-
-  toggleCmd() {
-    this.isVentes = !this.isVentes;
-    // Get the data
-    if (!this.isVentes) {
-      this._commandeService.data$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((data) => {
-          // Store the data
-          this.data = data;
-          // Store the table data
-          this.commandesDataSource.data = data; //.recentTransactions;
-        });
-    } else {
-      this._commandeService.oldData$
-        .pipe(takeUntil(this._unsubscribeAll))
-        .subscribe((oldData) => {
-          // Store the data
-          this.data = oldData;
-          // Store the table data
-          this.commandesDataSource.data = oldData; //.recentTransactions;
-        });
     }
   }
 
